@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WalkWithMe</string>
+    <string name="ranking">Ranking</string>
+    <string name="login">Login</string>
+    <string name="sendnotification">SendNotification</string>
+    <string name="pedometer">Pedometer</string>
+    <string name="profile">Profile</string>
+</resources>

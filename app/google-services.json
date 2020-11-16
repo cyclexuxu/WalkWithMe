@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "930920744479",
+    "firebase_url": "https://finalproject-655cd.firebaseio.com",
+    "project_id": "finalproject-655cd",
+    "storage_bucket": "finalproject-655cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930920744479:android:6c04fcf8aad07645edf72a",
+        "android_client_info": {
+          "package_name": "neu.madcourse.walkwithme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930920744479-ke3mffi2f0ockjedbn2qgp68q2qitv3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt3cOF8l8IcXpDYvU64QugsJfAsqzIV8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930920744479-ke3mffi2f0ockjedbn2qgp68q2qitv3t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
