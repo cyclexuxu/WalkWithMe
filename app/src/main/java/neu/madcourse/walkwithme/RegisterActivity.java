@@ -24,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerButton;
     private DatabaseReference mDatabase;
 
-    private static final String TAG = "Login page";
+    private static final String TAG = "Rester page";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +38,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onRegisterClick(View view) {
+
         final String username = userName.getText().toString();
         final String password = Md5Encode.md5Encryption(this.password.getText().toString());
+        if (username.equals("") || password.equals("") || weight.getText().toString().equals("") || height.getText().toString().equals("")) {
+            Log.i(TAG, "checked out the null string");
+            Toast.makeText(getApplicationContext(), "All information needed", Toast.LENGTH_LONG).show();
+            return;
+        }
         final double wei = Double.parseDouble(weight.getText().toString());
         final double hei = Double.parseDouble(height.getText().toString());
         final User user = new User(username, password, System.currentTimeMillis(), wei, hei);
@@ -49,12 +55,14 @@ public class RegisterActivity extends AppCompatActivity {
                 if (dataSnapshot.hasChild(username)) {
                     Log.i(TAG, "" + getApplicationContext());
                     Toast.makeText(getApplicationContext(), "username is already registered", Toast.LENGTH_SHORT).show();
-                } else if (username.length() != 0 && password.length() != 0) {
+                } else if (username.length() != 0 && password.length() != 0 && weight.getText().toString() != "" && height.getText().toString() != "") {
                     mDatabase.child("users").child(user.getUsername()).setValue(user);
                     //Toast.makeText(getApplicationContext(), username + " successfully registered", Toast.LENGTH_SHORT).show();
                     // go to profile
                     Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "All information needed", Toast.LENGTH_SHORT).show();
                 }
             }
 
