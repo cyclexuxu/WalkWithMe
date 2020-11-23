@@ -1,7 +1,9 @@
 package neu.madcourse.walkwithme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,27 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         registerButton = (Button) findViewById(R.id.register );
     }
 
-    public void onRegisterClick(View view) {
-        final String username = userName.getText().toString();
-        final String password = Md5Encode.md5Encryption(this.password.getText().toString());
-        final User user = new User(username, password, System.currentTimeMillis());
-        mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(username)) {
-                    Log.i( TAG, "" + getApplicationContext());
-                    Toast.makeText(getApplicationContext(),"username is already registered", Toast.LENGTH_SHORT).show();
-                } else if (username.length() != 0 && password.length() != 0){
-                    mDatabase.child("users").child(user.getUsername()).setValue(user);
-                    Toast.makeText(getApplicationContext(),username + " successfully registered", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-
     public void onLoginClick(View view) {
         final String username = userName.getText().toString();
         final String password = Md5Encode.md5Encryption(this.password.getText().toString());
@@ -64,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(username) &&
                         (password.equals(dataSnapshot.child(username).child("password").getValue()))) {
+                    Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    startActivity(intent);
                     Log.i( TAG, "You successfully login");
                 } else {
                     Toast.makeText(getApplicationContext(),"Please login again", Toast.LENGTH_SHORT).show();
@@ -75,4 +58,24 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    public void onRegisterClick(View view) {
+        final String username = userName.getText().toString();
+        mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(username)) {
+                    Log.i(TAG, "" + getApplicationContext());
+                    Toast.makeText(getApplicationContext(), "username is already registered", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }
