@@ -1,69 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".LoginActivity">-->
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:paddingLeft="20dp"
-android:paddingRight="20dp"
-android:paddingTop="20dp"
-android:orientation="vertical">
-
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Username:"
-    android:fontFamily="Roboto"
-    android:textColor="#FF3F89E7"
-    android:textSize="20sp"/>
-
-<EditText
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fontFamily="Roboto"
-    android:id="@+id/editTextLogin"
-    android:layout_gravity="center_horizontal" />
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:fontFamily="Roboto"
-    android:textSize="20sp"
-    android:textColor="#FF3F89E7"
-    android:text="Password:" />
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onRegisterClick"
+        android:text="@string/register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submit"
+        app:layout_constraintVertical_bias="0.100000024" />
 
-<EditText
-    android:fontFamily="Roboto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/editTextPassword"
-    android:inputType="textPassword"
-    android:layout_gravity="center_horizontal" />
+    <EditText
+        android:id="@+id/editTextLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/username"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.164" />
 
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:text="Login"
-    android:fontFamily="Roboto"
-    android:textColor="@android:color/white"
-    android:background="@drawable/login_buttons"
-    android:id="@+id/submit" />
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin"
+        app:layout_constraintVertical_bias="0.050000012" />
 
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:layout_marginTop="10dp"
-    android:text="Register"
-    android:textColor="@android:color/white"
-    android:background="@drawable/login_buttons"
-    android:fontFamily="Roboto"
-    android:id="@+id/register" />
-</LinearLayout>
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onLoginClick"
+        android:text="@string/login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+        app:layout_constraintVertical_bias="0.13" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
