@@ -9,8 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
+<<<<<<< HEAD
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".ProfileActivity" />
+=======
+        <activity android:name=".ProgressActivity"></activity>
+>>>>>>> af7952683aa77f99e80699b1b85ed0bb0193e933
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

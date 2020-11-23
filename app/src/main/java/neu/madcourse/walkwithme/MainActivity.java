@@ -24,4 +24,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public void startProgressActivity(View view){
+        startActivity(new Intent(MainActivity.this, ProgressActivity.class));
+    }
+
 }
