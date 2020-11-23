@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onRegisterClick(View view) {
         final String username = userName.getText().toString();
-        final String password = Utils.md5Encryption(this.password.getText().toString());
+        final String password = Md5Encode.md5Encryption(this.password.getText().toString());
         final User user = new User(username, password, System.currentTimeMillis());
         mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginClick(View view) {
         final String username = userName.getText().toString();
-        final String password = Utils.md5Encryption(this.password.getText().toString());
+        final String password = Md5Encode.md5Encryption(this.password.getText().toString());
         mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
