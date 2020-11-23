@@ -1,4 +1,4 @@
-package neu.madcourse.walkwithme;
+package neu.madcourse.walkwithme.userlog;
 
 public class User {
     private String username;
