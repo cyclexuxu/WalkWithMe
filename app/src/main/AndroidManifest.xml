@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
+        <activity android:name=".stepcounter.ProgressActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
 
+        </activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".userlog.RegisterActivity"></activity>
         <activity android:name=".profile.ProfileActivity" />
         <activity android:name=".ProgressActivity"></activity>
