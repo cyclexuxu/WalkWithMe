@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
+
 public class MainActivity extends AppCompatActivity {
     private Button login;
     @Override
