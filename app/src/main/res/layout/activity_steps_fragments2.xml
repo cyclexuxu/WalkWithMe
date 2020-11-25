@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp">
+
+            <LinearLayout
+                android:id="@+id/llgoal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/stepLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llgoal"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="31dp"
+                android:text="Steps taken"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                />
+
+            <TextView
+                android:id="@+id/stepText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stepLabel"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="14dp"
+                android:gravity="center"
+                android:textColor="#03A9F4"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/accuracy_alert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/stepText"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:text="Alert will be dsplayed here"
+                />
+
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/accuracy_alert"
+                android:layout_marginTop="70dp"
+                tools:text="Time: "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/distanceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/timeText"
+                android:layout_marginTop="10dp"
+                tools:text="Distance: "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/orientationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/distanceText"
+                android:layout_marginTop="10dp"
+                tools:text="Orientation: "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/speedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/orientationText"
+                android:layout_marginTop="10dp"
+                tools:text="Average speed: "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:paddingLeft="10dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        android:text="Reset"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Start"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>
