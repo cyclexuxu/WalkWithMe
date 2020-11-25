@@ -48,6 +48,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
 
     //Variables used in calculations
+    private int step = 0;
     private long stepCount = 0;
     private long lastSteps = 0;
     private String compassOrientation;
@@ -105,7 +106,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
         try{
             String address = user.getString("address","");
-            step_ref = mdb.getReference(address).child("stepstat");
+            step_ref = mdb.getReference().child("users").child("Dan");
         }catch (Exception e){
         }
         Log.d(TAG,"increate");
@@ -168,6 +169,9 @@ public class StepService3 extends Service implements SensorEventListener {
         switch (event.sensor.getType()) {
             case (Sensor.TYPE_ACCELEROMETER):
                 accelValues = event.values;
+                step++;
+
+                step_ref.child("Test Accelerometer").setValue(step);
                 break;
             case (Sensor.TYPE_MAGNETIC_FIELD):
                 magnetValues = event.values;
@@ -176,6 +180,7 @@ public class StepService3 extends Service implements SensorEventListener {
                 if (prevStepCount < 1) {
                     prevStepCount = (int) event.values[0];
                 }
+                step_ref.child("Step Count").setValue("step counter");
                 calculateSpeed(event.timestamp, (int) (event.values[0] - prevStepCount - stepCount));
                 countSteps((int)(event.values[0] - prevStepCount - stepCount));
                 break;
@@ -369,6 +374,7 @@ public class StepService3 extends Service implements SensorEventListener {
         try {
                 final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             Steps steps = new Steps(stepCount + lastSteps, elapsedTime, (stepCount + lastSteps) * 0.8, timestamp);
+            step_ref.child("timestamp").setValue(100);
             step_ref.child(timestamp).setValue(steps);
         }catch (Exception e){
 

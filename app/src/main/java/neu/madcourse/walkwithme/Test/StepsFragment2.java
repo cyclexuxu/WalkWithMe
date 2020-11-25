@@ -100,7 +100,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
 
         try{
             String address = user.getString("address","");
-            step_ref = mdb.getReference(address).child("stepstat");
+            step_ref = mdb.getReference().child("users").child("Dan");
 
         }catch (Exception e){
 
