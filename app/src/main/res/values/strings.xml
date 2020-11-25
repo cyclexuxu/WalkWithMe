@@ -5,4 +5,9 @@
     <string name="sendnotification">SendNotification</string>
     <string name="pedometer">Pedometer</string>
     <string name="profile">Profile</string>
+    <string name="username">Please enter your username</string>
+    <string name="password">Please enter your Password</string>
+    <string name="weight">Please enter your Weight</string>
+    <string name="height">Please enter your Height</string>
+    <string name="register">Register</string>
 </resources>
