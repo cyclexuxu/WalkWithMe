@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="neu.madcourse.walkwithme">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,10 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
-        <activity android:name=".stepcounter.ProgressActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
-        </activity>
+        <service android:name=".Test.StepService3"
+            android:enabled="true"
+            android:exported="true"/>
+        <activity
+            android:name=".stepcounter.ProgressActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

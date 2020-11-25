@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pedometer"
-        android:onClick="startProgressActivity"
+        android:onClick="startStepsFragment"
         app:layout_constraintStart_toStartOf="@+id/btnSendNotification"
         app:layout_constraintTop_toBottomOf="@+id/btnSendNotification" />
 
@@ -49,6 +49,14 @@
         android:text="@string/profile"
         app:layout_constraintStart_toStartOf="@+id/btnRanking"
         app:layout_constraintTop_toBottomOf="@+id/btnRanking" />
+
+    <FrameLayout
+        android:id="@+id/nav_host_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
