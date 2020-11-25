@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="89dp"
         android:layout_marginTop="101dp"
+        android:onClick="onClick"
         android:text="@string/login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pedometer"
+        android:onClick="startProgressActivity"
         app:layout_constraintStart_toStartOf="@+id/btnSendNotification"
         app:layout_constraintTop_toBottomOf="@+id/btnSendNotification" />
 
