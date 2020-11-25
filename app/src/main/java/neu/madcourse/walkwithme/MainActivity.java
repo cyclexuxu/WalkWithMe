@@ -8,14 +8,22 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import android.widget.Button;
+
 
 import neu.madcourse.walkwithme.Test.Constants;
 import neu.madcourse.walkwithme.Test.StepService2;
 import neu.madcourse.walkwithme.Test.StepService3;
 import neu.madcourse.walkwithme.Test.StepsFragment;
 import neu.madcourse.walkwithme.Test.StepsFragment2;
+
+import neu.madcourse.walkwithme.NotiPet.PetActivity;
+
 import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
+
+
 
 public class MainActivity extends AppCompatActivity {
     private Button login;
@@ -31,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
         startService(startIntent);
 
     }
+
+
+    //Method for Notification Button
+    public void openPetActivity(View view){
+        Intent intent = new Intent(this, PetActivity.class);
+        startActivity(intent);
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:

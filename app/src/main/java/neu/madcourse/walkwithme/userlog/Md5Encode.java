@@ -1,4 +1,4 @@
-package neu.madcourse.walkwithme;
+package neu.madcourse.walkwithme.userlog;
 
 import org.apache.commons.codec.binary.Hex;
 
