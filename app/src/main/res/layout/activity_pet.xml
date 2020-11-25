@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PetActivity">
+    tools:context=".NotiPet.PetActivity">
+
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="356dp"
-        android:layout_height="255dp"
+        android:layout_width="256dp"
+        android:layout_height="243dp"
         android:duration="1000"
         android:fromXScale="0.0"
         android:fromYScale="0.0"
@@ -17,9 +18,222 @@
         android:toYScale="1.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.168"
+        app:layout_constraintVertical_bias="0.368"
         app:srcCompat="@drawable/run" />
+
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/meatGrid"
+        android:layout_width="311dp"
+        android:layout_height="42dp"
+        android:background="#FFFFFF"
+        app:columnCount="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.752"
+        app:rowCount="1">
+
+        <ImageView
+            android:id="@+id/meat1"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="0"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+
+        <ImageView
+            android:id="@+id/meat2"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="1"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+
+        <ImageView
+            android:id="@+id/meat3"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="2"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+
+        <ImageView
+            android:id="@+id/meat4"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="3"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+
+        <ImageView
+            android:id="@+id/meat5"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="4"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+
+        <ImageView
+            android:id="@+id/meat6"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="5"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+
+        <ImageView
+            android:id="@+id/meat7"
+            android:layout_width="43dp"
+            android:layout_height="39dp"
+            app:layout_column="6"
+            app:layout_row="0"
+            app:srcCompat="@drawable/ic_meat" />
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/funcGrid"
+        android:layout_width="333dp"
+        android:layout_height="68dp"
+        android:background="#FFFFFF"
+        app:columnCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.867"
+        app:rowCount="1">
+
+        <Button
+            android:id="@+id/feedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#E8A746"
+            android:text="Feed"
+            app:layout_column="0"
+            app:layout_row="0" />
+
+        <Button
+            android:id="@+id/musicButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#DD7474"
+            android:text="Music"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <Button
+            android:id="@+id/tipsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#278A51"
+            android:text="Tips"
+            app:layout_column="2"
+            app:layout_row="0" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/attriGrid"
+        android:layout_width="153dp"
+        android:layout_height="111dp"
+        android:background="#FFFFFF"
+        android:padding="5dp"
+        app:columnCount="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.988"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042"
+        app:rowCount="4">
+
+        <ImageView
+            android:id="@+id/starIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_column="0"
+            app:layout_row="0"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        <TextView
+            android:id="@+id/levelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:text="Level 0"
+            android:textSize="18sp"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/healthTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Health"
+            app:layout_column="0"
+            app:layout_row="1" />
+
+        <ProgressBar
+            android:id="@+id/healthProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_column="1"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/happinessTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Happiness"
+            app:layout_column="0"
+            app:layout_row="2" />
+
+        <ProgressBar
+            android:id="@+id/happinessProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_column="1"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/knowledgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Knowledge"
+            app:layout_column="0"
+            app:layout_row="3" />
+
+        <ProgressBar
+            android:id="@+id/knowledgeProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_column="1"
+            app:layout_row="3" />
+    </androidx.gridlayout.widget.GridLayout>
+
+    <!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:layout_editor_absoluteX="-36dp"-->
+<!--        tools:layout_editor_absoluteY="-96dp">-->
+
+<!--    </RelativeLayout>-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

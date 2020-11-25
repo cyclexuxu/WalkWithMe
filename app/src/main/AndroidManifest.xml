@@ -9,19 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
-<<<<<<< HEAD
-        <activity android:name=".PetActivity"></activity>
-=======
+
+        <activity android:name=".NotiPet.PetActivity"></activity>
         <activity android:name=".stepcounter.ProgressActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
 
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".userlog.LoginActivity" />
         <activity android:name=".userlog.RegisterActivity"></activity>
         <activity android:name=".profile.ProfileActivity" />
-        <activity android:name=".ProgressActivity"></activity>
-        <activity android:name=".userlog.LoginActivity" />
->>>>>>> 566061543d1a0bf786ae38ee9bb2da004b902b7f
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

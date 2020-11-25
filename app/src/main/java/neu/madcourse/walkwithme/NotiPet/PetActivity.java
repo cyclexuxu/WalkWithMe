@@ -1,4 +1,4 @@
-package neu.madcourse.walkwithme;
+package neu.madcourse.walkwithme.NotiPet;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+
+import neu.madcourse.walkwithme.R;
 
 public class PetActivity extends AppCompatActivity {
 

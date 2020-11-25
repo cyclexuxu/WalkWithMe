@@ -8,6 +8,7 @@ import android.view.View;
 
 import android.widget.Button;
 
+import neu.madcourse.walkwithme.NotiPet.PetActivity;
 import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
