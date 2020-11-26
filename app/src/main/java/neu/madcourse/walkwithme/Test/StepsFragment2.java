@@ -30,6 +30,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
@@ -75,6 +77,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         super.onCreate(savedInstanceState);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
+        setRetainInstance(true);
     }
 
     @Override

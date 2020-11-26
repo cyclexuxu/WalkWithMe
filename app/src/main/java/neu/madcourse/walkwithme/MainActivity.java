@@ -13,9 +13,7 @@ import android.widget.Button;
 
 
 import neu.madcourse.walkwithme.Test.Constants;
-import neu.madcourse.walkwithme.Test.StepService2;
 import neu.madcourse.walkwithme.Test.StepService3;
-import neu.madcourse.walkwithme.Test.StepsFragment;
 import neu.madcourse.walkwithme.Test.StepsFragment2;
 
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
@@ -34,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         login = (Button) findViewById(R.id.btnLogin);
 
-        Intent startIntent = new Intent(this, StepService2.class);
-        startIntent.setAction(Constants.START_FOREGROUND);
-        startService(startIntent);
+//        Intent startIntent = new Intent(this, StepService2.class);
+//        startIntent.setAction(Constants.START_FOREGROUND);
+//        startService(startIntent);
 
     }
 
