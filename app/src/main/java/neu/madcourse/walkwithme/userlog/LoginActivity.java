@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button registerButton;
     private DatabaseReference mDatabase;
-
+    private FirebaseAuth mAuth;
     private static final String TAG = "Login page";
 
     @Override
@@ -48,8 +50,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(username) &&
                         (password.equals(dataSnapshot.child(username).child("password").getValue()))) {
-                    Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                    startActivity(intent);
+
+                    Intent profileIntent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    profileIntent.putExtra("username", username);
+                    startActivity(profileIntent);
                     Log.i( TAG, "You successfully login");
                 } else {
                     Toast.makeText(getApplicationContext(),"Please login again", Toast.LENGTH_SHORT).show();
@@ -81,4 +85,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }
