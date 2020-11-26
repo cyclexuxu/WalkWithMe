@@ -48,6 +48,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
 
     //Variables used in calculations
+    private double preMagnitude = 0;
     private int step = 0;
     private long stepCount = 0;
     private long lastSteps = 0;
@@ -169,9 +170,20 @@ public class StepService3 extends Service implements SensorEventListener {
         switch (event.sensor.getType()) {
             case (Sensor.TYPE_ACCELEROMETER):
                 accelValues = event.values;
-                step++;
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
 
-                step_ref.child("Test Accelerometer").setValue(step);
+                double magnitude = Math.sqrt(x*x + y*y + z*z);
+                double delta = magnitude - preMagnitude;
+                preMagnitude = magnitude;
+
+                if(delta > 6){
+                    step++;
+                }
+                step_ref.child("Step Count").setValue(step);
+
+                //step_ref.child().setValue(step);
                 break;
             case (Sensor.TYPE_MAGNETIC_FIELD):
                 magnetValues = event.values;
@@ -347,7 +359,8 @@ public class StepService3 extends Service implements SensorEventListener {
         minutes = minutes % 60;
         timeString = String.format("%d:%s:%s", hours, String.format("%02d", minutes), String.format("%02d", seconds));
 
-        data.put("steps", lastSteps + stepCount+"");
+        //data.put("steps", lastSteps + stepCount+"");
+        data.put("steps", step+"");
         data.put("distance", distanceString);
         data.put("orientation", compassOrientation);
         data.put("duration", timeString);
@@ -373,8 +386,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
         try {
                 final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            Steps steps = new Steps(stepCount + lastSteps, elapsedTime, (stepCount + lastSteps) * 0.8, timestamp);
-            step_ref.child("timestamp").setValue(100);
+            Steps steps = new Steps(step, elapsedTime, (stepCount + lastSteps) * 0.8, timestamp);
             step_ref.child(timestamp).setValue(steps);
         }catch (Exception e){
 
@@ -424,13 +436,16 @@ public class StepService3 extends Service implements SensorEventListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG,"inside fetche");
-                    if(dataSnapshot.child(timestamp).exists()){
+                    //step = Integer.valueOf(dataSnapshot.child("Test Accelerometer").getValue().toString());
+                    if(dataSnapshot.child("Step Count").exists()){
                         Log.d(TAG,"fetched data");
-                        Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
-                        lastDistance = steps.getDistance();
-                        lastSteps = steps.getSteps();
-                        elapsedTime = steps.getDuration();
-                        updatedTime = elapsedTime;
+                        //Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
+                        String tmp= dataSnapshot.child("Step Count").getValue().toString();
+                        Log.e(TAG, tmp);
+//                        lastDistance = steps.getDistance();
+//                        lastSteps = steps.getSteps();
+//                        elapsedTime = steps.getDuration();
+//                        updatedTime = elapsedTime;
                     }
 
                     int seconds = (int) (elapsedTime/1000);
