@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         login = (Button) findViewById(R.id.btnLogin);
 
-//        Intent startIntent = new Intent(this, StepService2.class);
-//        startIntent.setAction(Constants.START_FOREGROUND);
-//        startService(startIntent);
+        Intent startIntent = new Intent(this, StepService3.class);
+        startIntent.setAction(Constants.START_FOREGROUND);
+        startService(startIntent);
 
     }
 
