@@ -1,6 +1,9 @@
 package neu.madcourse.walkwithme.stepcounter;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,41 +11,110 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
-public class StepService extends Service implements SensorEventListener {
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
+import neu.madcourse.walkwithme.R;
+
+public class StepService extends Service{
+
     private static final String TAG = "StepService: ";
-    private double preMagnitude = 0;
-    private double numSteps = 0;
+    private StepThread thread;
+    private PowerManager.WakeLock mWakeLock;
 
 
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-//        //sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        //accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//    }
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.e("service", "service create()");
+        thread = new StepThread(this);
+    }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SharedPreferences prefs = this.getSharedPreferences(
-                "user", Context.MODE_PRIVATE);
+        Log.d("service", "service start()");
+        //MyApplication app = (MyApplication) getApplication();
+        //app.setServiceRun(true);
 
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-        Log.d("Service Started","Service Started");
-        //mInitialized = false;
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        if (intent.getBooleanExtra("isActivity", false))
+            thread.setActivity(true);
+        String s = intent.getStringExtra("restart");
+        if (s != null) {
+            Log.d("restart", s);
+        }
+        if (thread.getState() == Thread.State.NEW)
+            thread.start();
+        SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
+        boolean foreground_model = sharedPreferences.getBoolean("foreground_model", false);
+
+        if (foreground_model) {
+
+            myStartForeground();
+            mWakeLock(this);
+        } else {
+            stopForeground(true);
+            if (mWakeLock != null) {
+                if (mWakeLock.isHeld())
+                    mWakeLock.release();
+                mWakeLock = null;
+            }
+        }
+
+
         return START_STICKY;
+    }
+
+    public void myStartForeground() {
+        Intent notificationIntent = new Intent(this, StepService.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(StepService.class);
+        stackBuilder.addNextIntent(notificationIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        Notification mBuilder =
+                new NotificationCompat.Builder(this, "123")
+                        .setSmallIcon(R.drawable.common_full_open_on_phone)
+                        .setContentTitle("walkwithme")
+                        .setContentText("running")
+                        .setContentIntent(resultPendingIntent)
+                        .build();
+
+
+        startForeground(1, mBuilder);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        Log.d("service", "service stop()");
+        if (mWakeLock != null) {
+            if (mWakeLock.isHeld())
+                mWakeLock.release();
+            mWakeLock = null;
+        }
+
+        stopForeground(true);
+        thread.mystop();
+//        MyApplication app = (MyApplication) getApplication();
+//
+//        app.setServiceRun(false);
+//        boolean temp = getSharedPreferences("conf", MODE_PRIVATE).getBoolean("switch_on", false);
+//        if (temp) {
+//            Log.d("restart", "auto restart");
+//            Intent intent = new Intent("cn.ikaze.pedometer.start");
+//            sendBroadcast(intent);
+//        }
+        super.onDestroy();
     }
 
     @Nullable
@@ -51,42 +123,30 @@ public class StepService extends Service implements SensorEventListener {
         return null;
     }
 
-    public double getStepCount(){
-        return numSteps;
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
-//            simpleStepDetector.updateAccel(
-//                    event.timestamp, event.values[0], event.values[1], event.values[2]);
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            double magnitude = Math.sqrt(x*x + y*y + z*z);
-            double delta = magnitude - preMagnitude;
-            preMagnitude = magnitude;
-
-            if(delta > 6){
-                numSteps++;
-            }
-            Log.e(TAG, "current step" + numSteps);
-            //textView.setText(""+numSteps);
+    synchronized private PowerManager.WakeLock mWakeLock(Context context) {
+        if (mWakeLock != null) {
+            if (mWakeLock.isHeld())
+                mWakeLock.release();
+            mWakeLock = null;
         }
-    }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+        if (mWakeLock == null) {
+            PowerManager mgr = (PowerManager) context
+                    .getSystemService(Context.POWER_SERVICE);
+            mWakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    StepService.class.getName());
+            mWakeLock.setReferenceCounted(true);
+            mWakeLock.acquire();
 
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
-        Log.d(TAG, "Service Destroyed");
-        sensorManager.unregisterListener(this);
+//            Calendar c = Calendar.getInstance();
+//            c.setTimeInMillis(System.currentTimeMillis());
+//            int hour = c.get(Calendar.HOUR_OF_DAY);
+//            if (hour >= 23 || hour <= 6) {
+//                mWakeLock.acquire(5000);
+//            } else {
+//                mWakeLock.acquire(300000);
+//            }
+        }
+        return (mWakeLock);
     }
 }
