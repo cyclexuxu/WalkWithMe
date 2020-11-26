@@ -2,8 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/petConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FCE38A"
     tools:context=".NotiPet.PetActivity">
 
 
@@ -27,9 +30,10 @@
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/meatGrid"
-        android:layout_width="311dp"
-        android:layout_height="42dp"
+        android:layout_width="330dp"
+        android:layout_height="49dp"
         android:background="#FFFFFF"
+        android:backgroundTint="#FCE38A"
         app:columnCount="7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,59 +44,59 @@
 
         <ImageView
             android:id="@+id/meat1"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="0"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
 
         <ImageView
             android:id="@+id/meat2"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="1"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
 
         <ImageView
             android:id="@+id/meat3"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="2"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
 
         <ImageView
             android:id="@+id/meat4"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="3"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
 
         <ImageView
             android:id="@+id/meat5"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="4"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
 
         <ImageView
             android:id="@+id/meat6"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="5"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
 
         <ImageView
             android:id="@+id/meat7"
-            android:layout_width="43dp"
-            android:layout_height="39dp"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
             app:layout_column="6"
             app:layout_row="0"
-            app:srcCompat="@drawable/ic_meat" />
+            app:srcCompat="@drawable/meat" />
     </androidx.gridlayout.widget.GridLayout>
 
     <androidx.gridlayout.widget.GridLayout
@@ -100,6 +104,7 @@
         android:layout_width="333dp"
         android:layout_height="68dp"
         android:background="#FFFFFF"
+        android:backgroundTint="#FCE38A"
         app:columnCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,6 +150,7 @@
         android:layout_width="153dp"
         android:layout_height="111dp"
         android:background="#FFFFFF"
+        android:backgroundTint="#FCE38A"
         android:padding="5dp"
         app:columnCount="2"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -228,12 +234,12 @@
     </androidx.gridlayout.widget.GridLayout>
 
     <!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        tools:layout_editor_absoluteX="-36dp"-->
-<!--        tools:layout_editor_absoluteY="-96dp">-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        tools:layout_editor_absoluteX="-36dp"-->
+    <!--        tools:layout_editor_absoluteY="-96dp">-->
 
-<!--    </RelativeLayout>-->
+    <!--    </RelativeLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
