@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="591dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp">
+
+            <LinearLayout
+                android:id="@+id/llgoal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dayRecordText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="30dp"
+                    android:autoSizeMinTextSize="2sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:textSize="22sp"
+                    tools:text="Today's Goal : " />
+
+                <Button
+                    android:id="@+id/setgoal"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:autoSizeMaxTextSize="30dp"
+                    android:autoSizeMinTextSize="2sp"
+                    android:autoSizeTextType="uniform"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:text="Set Goal"
+                    android:textAllCaps="false"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/stepLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llgoal"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="31dp"
+                android:text="Steps taken"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/stepText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stepLabel"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/accuracy_alert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stepText"
+                android:layout_alignParentStart="true"
+                android:padding="5dp"
+                android:text="Alert will be dsplayed here"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accuracy_alert"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="70dp"
+                android:paddingLeft="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Time: " />
+
+            <TextView
+                android:id="@+id/distanceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/timeText"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Distance: " />
+
+            <TextView
+                android:id="@+id/orientationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/distanceText"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Orientation: " />
+
+            <TextView
+                android:id="@+id/speedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/orientationText"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Average speed: " />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="209dp"
+        android:text="Reset"
+        android:textAllCaps="false"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="208dp"
+        android:text="Start"
+        android:textAllCaps="false"
+        android:textStyle="bold" />
+
+</RelativeLayout>
