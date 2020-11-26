@@ -441,7 +441,7 @@ public class StepService3 extends Service implements SensorEventListener {
                         Log.d(TAG,"fetched data");
                         //Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
                         String tmp= dataSnapshot.child("Step Count").getValue().toString();
-                        Log.e(TAG, tmp);
+                        step = Integer.parseInt(tmp);
 //                        lastDistance = steps.getDistance();
 //                        lastSteps = steps.getSteps();
 //                        elapsedTime = steps.getDuration();
