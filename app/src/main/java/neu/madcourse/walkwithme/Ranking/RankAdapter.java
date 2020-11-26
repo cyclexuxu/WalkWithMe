@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.Ranking;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.List;
 import neu.madcourse.walkwithme.R;
 
 public class RankAdapter extends RecyclerView.Adapter {
+    private String LOG = "RankAdapter";
     List<ItemRank> itemRankList;
 
 
@@ -34,10 +36,11 @@ public class RankAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ViewHolderClass viewHolderClass = (ViewHolderClass) holder;
         ItemRank itemRank = itemRankList.get(position);
-        viewHolderClass.tvRankId.setText(itemRank.getRankId());
+        Log.d(LOG, String.valueOf(itemRank.getRankId()));
+        viewHolderClass.tvRankId.setText(String.valueOf(itemRank.getRankId()));
         viewHolderClass.tvUsername.setText(itemRank.getUserName());
-        viewHolderClass.tvSteps.setText(itemRank.getSteps());
-        viewHolderClass.tvLikes.setText(itemRank.getLikesReceived());
+        viewHolderClass.tvSteps.setText(String.valueOf(itemRank.getSteps()));
+        viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
     }
 
     @Override

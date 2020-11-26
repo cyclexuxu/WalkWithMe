@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -17,15 +18,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import neu.madcourse.walkwithme.R;
 
 public class RankingActivity extends AppCompatActivity {
-    List<ItemRank> itemRankList;
-    RecyclerView recyclerView;
-    RankAdapter rankAdapter;
-    DatabaseReference databaseReference;
-
+    private List<ItemRank> itemRankList;
+    private RecyclerView recyclerView;
+    private RankAdapter rankAdapter;
+    private DatabaseReference databaseReference;
+    private String LOG = "RANKING_ACTIVITY";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,11 @@ public class RankingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    ItemRank itemRank = new ItemRank();
+                    String username = ds.child("username").getValue(String.class);
+                    Log.d(LOG, ds.child("Step Count").getValue(String.class));
+                    int steps = Integer.parseInt(Objects.requireNonNull(ds.child("Step Count").getValue(String.class)));
+                    int likesReceived =  Integer.parseInt(Objects.requireNonNull(ds.child("Likes").getValue(String.class)));
+                    ItemRank itemRank = new ItemRank(username, steps, likesReceived);
                     itemRankList.add(itemRank);
                 }
                 processItemRankList(itemRankList);
