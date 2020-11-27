@@ -28,6 +28,7 @@
         android:layout_marginTop="608dp"
         android:layout_marginEnd="52dp"
         android:layout_marginBottom="11dp"
+        android:onClick="openRankingActivity"
         android:text="@string/ranking"
         app:layout_constraintBottom_toTopOf="@+id/btnSendNotification"
         app:layout_constraintEnd_toStartOf="@+id/btnProfile"
