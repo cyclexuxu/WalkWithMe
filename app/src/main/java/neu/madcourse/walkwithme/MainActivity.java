@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 
+import neu.madcourse.walkwithme.ranking.RankingActivity;
 import neu.madcourse.walkwithme.Test.Constants;
 import neu.madcourse.walkwithme.Test.StepService3;
 import neu.madcourse.walkwithme.Test.StepsFragment2;
@@ -37,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
         startService(startIntent);
 
     }
+    // method for open ranking activity
+    public void openRankingActivity(View view) {
+        Intent intent = new Intent(this, RankingActivity.class);
+        startActivity(intent);
+    }
+
 
 
     //Method for Notification Button
