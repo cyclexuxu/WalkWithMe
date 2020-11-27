@@ -6,12 +6,12 @@ public class PetStarveState extends PetState{
 
     @Override
     public PetState music() {
-        return null;
+        return this;
     }
 
     @Override
     public PetState tip() {
-        return null;
+        return this;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class PetStarveState extends PetState{
 
     @Override
     public PetState timeout() {
-        return null;
+        return new PetSleepState();
     }
 
     @Override

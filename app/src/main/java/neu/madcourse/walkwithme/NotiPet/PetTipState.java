@@ -7,7 +7,7 @@ public class PetTipState extends PetState {
 
     @Override
     public PetState music() {
-        cHappiness = Math.max(100, cHappiness + ONE_MUSIC);
+        cHappiness = Math.min(100, cHappiness + ONE_MUSIC);
         PetState newState = new PetHappyState();
         return newState;
     }
@@ -24,7 +24,7 @@ public class PetTipState extends PetState {
 
     @Override
     public PetState timeout() {
-        return null;
+        return new PetSleepState();
     }
 
     @Override

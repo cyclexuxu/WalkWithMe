@@ -26,7 +26,6 @@ public class PetActivity extends AppCompatActivity {
     ProgressBar happinessBar;
     ProgressBar knowledgeBar;
 
-    Thread petThread = new Thread(new PetThread());
 
     AlarmManager alarmManager;
     Context context;
@@ -42,7 +41,6 @@ public class PetActivity extends AppCompatActivity {
         alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
         petState = new PetSleepState();
-        petThread.start();
         showCorgi();
         feedButton = (Button) findViewById(R.id.feedButton);
         feedButton.setOnClickListener(new View.OnClickListener() {

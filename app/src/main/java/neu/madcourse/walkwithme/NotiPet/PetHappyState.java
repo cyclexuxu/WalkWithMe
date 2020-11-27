@@ -13,7 +13,7 @@ public class PetHappyState extends PetState {
 
     @Override
     public PetState tip() {
-        cKnowledge = Math.max(100, cKnowledge + ONE_NEWS);
+        cKnowledge = Math.min(100, cKnowledge + ONE_NEWS);
         PetState newState = new PetTipState();
         return newState;
     }
