@@ -33,12 +33,11 @@
         android:layout_weight="0.4"
         android:textAlignment="center"
         />
-    <ImageView
-        android:id="@+id/ivLikeIcon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-
-        android:src="@drawable/like_grey"/>
+    <ImageButton
+        android:id="@+id/btnLikeIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_baseline_favorite_dislike_24"/>
 
     <TextView
         android:id="@+id/tvLikes"

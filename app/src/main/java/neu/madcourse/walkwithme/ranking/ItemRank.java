@@ -1,13 +1,13 @@
-package neu.madcourse.walkwithme.Ranking;
+package neu.madcourse.walkwithme.ranking;
 
 public class ItemRank {
     private int rankId;
-    private String userName;
+    private String username;
     private int steps;
     private int likesReceived;
 
-    public ItemRank(String userName, int steps, int likesReceived) {
-        this.userName = userName;
+    public ItemRank(String username, int steps, int likesReceived) {
+        this.username = username;
         this.steps = steps;
         this.likesReceived = likesReceived;
     }
@@ -20,12 +20,12 @@ public class ItemRank {
         this.rankId = rankId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getSteps() {

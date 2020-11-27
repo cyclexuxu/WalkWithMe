@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
-        <activity android:name=".Ranking.RankingActivity"></activity>
+        <activity android:name=".ranking.RankingActivity"></activity>
 
         <service
             android:name=".Test.StepService3"
