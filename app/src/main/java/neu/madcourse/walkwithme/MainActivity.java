@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-import neu.madcourse.walkwithme.Ranking.RankingActivity;
+import neu.madcourse.walkwithme.ranking.RankingActivity;
 import neu.madcourse.walkwithme.Test.Constants;
 import neu.madcourse.walkwithme.Test.StepService3;
 import neu.madcourse.walkwithme.Test.StepsFragment2;
