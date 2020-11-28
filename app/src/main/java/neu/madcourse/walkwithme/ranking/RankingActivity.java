@@ -25,14 +25,13 @@ public class RankingActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RankAdapter rankAdapter;
     private DatabaseReference databaseReference;
-    private DRankingData dRankingData;
     private String LOG = "RANKING_ACTIVITY";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
-        dRankingData = new DRankingData();
+        DRankingData dRankingData = new DRankingData();
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
