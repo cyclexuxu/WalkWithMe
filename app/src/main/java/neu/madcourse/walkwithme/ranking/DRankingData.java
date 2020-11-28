@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,11 +25,15 @@ public class DRankingData {
     private List<String> usernames;
     private List<ItemRank> itemRanks;
     private String LOG = "DRankingData";
+    // private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
     public DRankingData() {
+
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         usernames = new ArrayList<>();
         getUsername();
+        // Log.d(LOG, user.getDisplayName());
     }
 
     public void getUsername() {
@@ -55,7 +61,7 @@ public class DRankingData {
         for (String username : usernames) {
             int steps = random.nextInt(20000);
             int likes = random.nextInt(50);
-            Log.d(LOG, String.valueOf(steps));
+            // Log.d(LOG, String.valueOf(steps));
             ItemRank itemRank = new ItemRank(username, steps, likes);
             itemRanks.add(itemRank);
             // databaseReference.child("Rankings").child(RankingId)
