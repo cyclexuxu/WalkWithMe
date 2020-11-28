@@ -184,38 +184,6 @@ public class StepService3 extends Service implements SensorEventListener {
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             step_ref.child(timestamp).child("steps").setValue(step);
         }
-        //step_ref.child("Step Count").setValue(step);
-
-        //step_ref.child().setValue(step);
-
-//            case (Sensor.TYPE_MAGNETIC_FIELD):
-//                magnetValues = event.values;
-//                break;
-//            case (Sensor.TYPE_STEP_COUNTER):
-//                if (prevStepCount < 1) {
-//                    prevStepCount = (int) event.values[0];
-//                }
-//                step_ref.child("Step Count").setValue("step counter");
-//                calculateSpeed(event.timestamp, (int) (event.values[0] - prevStepCount - stepCount));
-//                countSteps((int)(event.values[0] - prevStepCount - stepCount));
-//                break;
-//            case (Sensor.TYPE_STEP_DETECTOR):
-//                if (stepCounter == null) {
-//                    countSteps((int) event.values[0]);
-//                    calculateSpeed(event.timestamp, 1);
-//                }
-//                break
-
-//        if (accelValues != null && magnetValues != null) {
-//            float rotation[] = new float[9];
-//            float orientation[] = new float[3];
-//            if (SensorManager.getRotationMatrix(rotation, null, accelValues, magnetValues)) {
-//                SensorManager.getOrientation(rotation, orientation);
-//                float azimuthDegree = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
-//                float orientationDegree = Math.round(azimuthDegree);
-//                getOrientation(orientationDegree);
-//            }
-//        }
     }
 
     public long getStepCount(){
@@ -256,47 +224,13 @@ public class StepService3 extends Service implements SensorEventListener {
 
     }
 
-    //Calculates the number of steps and the other calculations related to them
-//    private void countSteps(int step) {
-//        //Step count
-//        stepCount += step;
-//
-//        //Distance calculation
-//        distance = stepCount * 0.8; //Average step length in an average adult
-//    }
-
-    //Calculated the amount of steps taken per minute at the current rate
-//    private void calculateSpeed(long eventTimeStamp, int steps) {
-//
-//        long timestampDifference = eventTimeStamp - stepTimestamp;
-//        stepTimestamp = eventTimeStamp;
-//        double stepTime = timestampDifference /1000000000.0;
-//        speed = (int) (60 / stepTime);
-//    }
-
-    //Show cardinal point (compass orientation) according to degree
-    // private void getOrientation(float orientationDegree) {
-//
-//        if (orientationDegree >= 0 && orientationDegree < 90) {
-//            compassOrientation = "North";
-//        } else if (orientationDegree >= 90 && orientationDegree < 180) {
-//            compassOrientation = "East";
-//        } else if (orientationDegree >= 180 && orientationDegree < 270) {
-//            compassOrientation = "South";
-//        } else {
-//            compassOrientation = "West";
-//        }
-//    }
 
     //Runnable that calculates the elapsed time since the user presses the "start" button
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-            //timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-            //updatedTime = elapsedTime + timeInMilliseconds;
             Notification notification = updateNoification();
             startForeground(notification_id,notification);
-            //Log.d(TAG,timeString);
             handler.postDelayed(this, 1000);
         }
     };
@@ -314,27 +248,13 @@ public class StepService3 extends Service implements SensorEventListener {
         if(accelerometer != null)
             sensorManager.registerListener(StepService3.this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
 
-//        if(magnetometer != null)
-//            sensorManager.registerListener(StepService3.this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-//        if(stepCounter != null)
-//            sensorManager.registerListener(StepService3.this, stepCounter, SensorManager.SENSOR_DELAY_FASTEST);
-
     }
 
     private void unregisterSensors(){
 
-//        if(stepDetectorSensor != null)
-//            sensorManager.unregisterListener(StepService3.this, stepDetectorSensor);
 
         if(accelerometer != null)
             sensorManager.unregisterListener(StepService3.this, accelerometer);
-
-//        if(magnetometer != null)
-//            sensorManager.unregisterListener(StepService3.this, magnetometer);
-//
-//        if(stepCounter != null)
-//            sensorManager.unregisterListener(StepService3.this , stepCounter);
 
     }
 
@@ -352,21 +272,8 @@ public class StepService3 extends Service implements SensorEventListener {
 
     public HashMap<String, String> getData(){
         HashMap<String, String> data =  new HashMap<>();
-        String distanceString = String.format("%.2f",lastDistance + distance);
-//
-//        int seconds = (int) (updatedTime / 1000);
-//        int minutes = seconds / 60;
-//        int hours = minutes / 60;
-//        seconds = seconds % 60;
-//        minutes = minutes % 60;
-//        timeString = String.format("%d:%s:%s", hours, String.format("%02d", minutes), String.format("%02d", seconds));
 
-        //data.put("steps", lastSteps + stepCount+"");
         data.put("steps", step+"");
-//        data.put("distance", distanceString);
-//        data.put("orientation", compassOrientation);
-//        data.put("duration", timeString);
-//        data.put("speed", speed+"");
         return data;
     }
 
@@ -444,21 +351,11 @@ public class StepService3 extends Service implements SensorEventListener {
                         Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
                         String tmp= dataSnapshot.child("Step Count").getValue().toString();
                         step = (int)steps.getSteps();
-//                        lastDistance = steps.getDistance();
-//                        lastSteps = steps.getSteps();
-//                        elapsedTime = steps.getDuration();
-//                        updatedTime = elapsedTime;
+
                     }else{
                         persistSteps();
                     }
 
-//                    int seconds = (int) (elapsedTime/1000);
-//                    int minutes = seconds / 60;
-//                    int hours = minutes / 60;
-//                    seconds = seconds % 60;
-//                    minutes = minutes % 60;
-//
-//                    elapsedString = String.format("%d:%s:%s", hours, String.format("%02d", minutes), String.format("%02d", seconds));
                 }
 
                 @Override

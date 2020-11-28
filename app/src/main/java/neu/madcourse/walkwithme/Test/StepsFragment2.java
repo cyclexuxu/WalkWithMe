@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -34,17 +35,32 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.view.LineChartView;
 import neu.madcourse.walkwithme.R;
 
 public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChangeListener{
@@ -52,13 +68,11 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     //Activity Views
     private TextView dayRecordText;
     private TextView stepText;
-    private TextView timeText;
-    private TextView orientationText;
-    private TextView distanceText;
-    private TextView speedText;
     private TextView notices ;
     private Button startButton;
-
+    private String numSteps;
+    int[] data = new int[6];
+    LineChartView lineChart;
     private Handler handler = new Handler();
 
     private SharedPreferences user;
@@ -83,7 +97,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_steps, container, false);
+        View root = inflater.inflate(R.layout.test, container, false);
         return root;
     }
 
@@ -92,18 +106,17 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         super.onViewCreated(view, savedInstanceState);
 
         //Initialize views
-        dayRecordText = (TextView) view.findViewById(R.id.dayRecordText);
         stepText = (TextView) view.findViewById(R.id.stepText);
-        timeText = (TextView) view.findViewById(R.id.timeText);
-        speedText = (TextView) view.findViewById(R.id.speedText);
-        distanceText = (TextView) view.findViewById(R.id.distanceText);
-        orientationText = (TextView) view.findViewById(R.id.orientationText);
+        dayRecordText = view.findViewById(R.id.dayRecordText);
         notices = (TextView)view.findViewById(R.id.accuracy_alert);
         startButton = view.findViewById(R.id.startButton);
+        lineChart = (LineChartView) view.findViewById(R.id.line_chart);
 
         try{
             String address = user.getString("address","");
             step_ref = mdb.getReference().child("users").child("Dan");
+            Steps preStep = new Steps(150, "2020-11-26");
+            step_ref.child("2020-11-26").setValue(preStep);
 
         }catch (Exception e){
 
@@ -248,10 +261,6 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                     data = service.getData();
 
                     stepText.setText(data.get("steps")+"");
-                    timeText.setText(data.get("duration")+"");
-                    speedText.setText(data.get("speed")+"");
-                    distanceText.setText(data.get("distance")+"");
-                    orientationText.setText(data.get("orientation")+"");
 
                     if(service.isActive()){
                         startButton.setText("Stop");
@@ -265,104 +274,15 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
 
                 }
 
-                if(service.getStepCount() >= dayStepRecord && user.getBoolean(todayDate + "_step",true)){
-                    showPopUp();
-                }
             }
+            drawChart();
             handler.postDelayed(this, 1000);
         }
     };
 
-    private void showPopUp(){
 
-        user.edit().putBoolean(todayDate + "_step",false).apply();
-        final Dialog goalDialog = new Dialog(getContext());
 
-        goalDialog.setContentView(R.layout.dialog_congrats);
-        TextView goalText = goalDialog.findViewById(R.id.goalSteps);
-        goalText.setText(dayStepRecord + "");
-        ImageView closePopUp = (ImageView)goalDialog.findViewById(R.id.closePopUp);
-        Button sharebtn = (Button)goalDialog.findViewById(R.id.sharebutton);
 
-        closePopUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goalDialog.dismiss();
-            }
-        });
-
-        sharebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LinearLayout screenshotLayout = goalDialog.findViewById(R.id.screenshotlayout);
-                Bitmap bitmap = takeScreenShot(screenshotLayout);
-                File imagePath = saveScreenshot(bitmap);
-                if(imagePath != null){
-                    shareIt(1 , imagePath , dayStepRecord);
-                }else{
-                    shareIt(2 , null ,dayStepRecord);
-                }
-
-            }
-        });
-        Window window = goalDialog.getWindow();
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        goalDialog.show();
-    }
-
-    private void shareIt(int s, File imagePath, int dayStepRecord){
-
-        switch (s){
-
-            case 1 : Uri uri = FileProvider.getUriForFile(getActivity(),"com.blackcat.fileprovider",imagePath);
-                    getActivity().grantUriPermission(getActivity().getPackageName(),uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/*");
-                    String sharebody = "Hey , I just acheived my goal of walking "+dayStepRecord+" steps .\n Join me on Swasthya app to stay fit and healthy .Let's be health competitors ! \n  See you on the Swasthya ground !";
-                    String shareSubject  = "Goal Reached !! ";
-                    intent.putExtra(Intent.EXTRA_SUBJECT,shareSubject);
-                    intent.putExtra(Intent.EXTRA_TEXT,sharebody);
-                    intent.putExtra(Intent.EXTRA_STREAM,uri);
-                    intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION| Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    getActivity().startActivity(Intent.createChooser(intent,"Share via "));
-                    break;
-            default: Intent myIntent= new Intent(Intent.ACTION_SEND);
-                    myIntent.setType("text/plain");
-                    String shareBody = "Hey , I just acheived my goal of walking "+dayStepRecord+" steps .\n Join me on Swasthya app to stay fit and healthy .Let's be health competitors ! \n See you on the Swasthya ground !";
-                    String shareSub = "Goal Reached !! ";
-                    myIntent.putExtra(Intent.EXTRA_SUBJECT,shareSub);
-                    myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
-                    startActivity(Intent.createChooser(myIntent, "Share via "));
-
-        }
-    }
-    private Bitmap takeScreenShot(LinearLayout ss){
-        ss.setDrawingCacheEnabled(true);
-        return ss.getDrawingCache();
-    }
-
-    private File saveScreenshot(Bitmap ss){
-        File directory = new File(getActivity().getFilesDir() + "/goalReached");
-        if(!directory.exists())
-            if(!directory.mkdir())
-                Toast.makeText(getActivity(),"Error while creating directory", Toast.LENGTH_SHORT).show();
-        File imagePath = new File(getActivity().getFilesDir() + "/goalReached/screenshot.jpg");
-        FileOutputStream fos ;
-        try{
-            fos = new FileOutputStream(imagePath);
-            ss.compress(Bitmap.CompressFormat.JPEG,100,fos);
-            fos.flush();
-            fos.close();
-            return imagePath;
-        }catch (FileNotFoundException e){
-            Log.e("FNFE",e.getMessage(),e);
-        }catch (IOException e){
-            Log.e("IOE",e.getMessage(),e);
-        }
-
-        return  null;
-    }
 
     public void showDialog()
     {
@@ -411,5 +331,144 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 
     }
+
+    public void drawChart() {
+
+        // WeatherChartView mCharView = (WeatherChartView) findViewById(R.id.line_char);
+
+        Log.d("DrawChart", "start chart");
+        Date[] days = DateTimeHelper.get6days();
+
+        //Realm realm = Realm.getDefaultInstance();
+
+        int i = 0;
+
+
+
+        for (Date d : days) {
+            //Log.d("eee","date "+d);
+//            if (i == 5) {
+//                data[i] = Integer.parseInt(numSteps);
+//            }
+            try {
+                //int finalI = i;
+                final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+                step_ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                       int[] tmp = {0,0,0,0,0,0};
+                        //
+//                        if(dataSnapshot.child(timestamp).exists()) {
+//                            Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
+//                            tmp[5] =(int) steps.getSteps();
+//                        }
+                        Date[] days = DateTimeHelper.get6days();
+
+                            for(int i = 0; i < 6; i++) {
+
+                                int step = 0;
+                                Log.d("FIREBASE ", "FOR LOOP");
+                                Calendar cal = Calendar.getInstance();
+                                cal.add(Calendar.DATE, -i);
+                                Date todate1 = cal.getTime();
+                                String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(todate1);
+                                if (dataSnapshot.child(timestamp).exists()) {
+                                    Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
+                                    step = (int) steps.getSteps();
+                                    tmp[5 - i] = step;
+                                    //Log.d("onDataChange: ", step + "");
+                                }
+                                //Log.d("onDataChange: ", step + "");
+
+                                //Log.d("size of tmp: ", tmp.size() + "");
+
+
+                            }
+                        updateList(tmp);
+                        }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Log.d(TAG,"fetch canceled");
+                    }
+                });
+            } catch (Exception e) {
+                //Log.d(TAG,"fetch exception " + e.getLocalizedMessage());
+            }
+            i++;
+        }
+
+
+    }
+
+    private void updateList(int[] tmp) {
+        data = tmp;
+        //Log.d("current size: ", "" + data.length);
+        //Log.d("updateList: ", ""+data.get(data.size() - 1));
+        initLineChart();//初始化
+    }
+
+    //Use hellochart library to draw chart
+    private void initLineChart() {
+        List<PointValue> mPointValues = new ArrayList<>();
+        List<AxisValue> mAxisXValues = new ArrayList<>();
+
+        for (int i = 0; i < data.length; i++) {
+            Log.d("data: ", " y " + data[i] +" x " + i+"");
+            mPointValues.add(new PointValue(i, data[i]));
+        }
+
+        String[] xValues = DateTimeHelper.get6days(true);
+
+        for (int i = 0; i < xValues.length; i++) {
+            mAxisXValues.add(new AxisValue(i).setLabel(xValues[i]));
+        }
+
+
+        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFFAFA"));  //折线的颜色（橙色）
+        List<Line> lines = new ArrayList<>();
+        line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
+        line.setCubic(false);//曲线是否平滑，即是曲线还是折线
+        line.setFilled(false);//是否填充曲线的面积
+        line.setHasLabels(true);//曲线的数据坐标是否加上备注
+//      line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
+        line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
+        line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
+        lines.add(line);
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+
+        //坐标轴
+        Axis axisX = new Axis(); //X轴
+        axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
+        axisX.setTextColor(Color.WHITE);  //设置字体颜色
+        //axisX.setName("date");  //表格名称
+        axisX.setTextSize(10);//设置字体大小
+        axisX.setMaxLabelChars(7); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
+        axisX.setValues(mAxisXValues);  //填充X轴的坐标名称
+        data.setAxisXBottom(axisX); //x 轴在底部
+        //data.setAxisXTop(axisX);  //x 轴在顶部
+        axisX.setHasLines(true); //x 轴分割线
+
+        // Y轴是根据数据的大小自动设置Y轴上限(在下面我会给出固定Y轴数据个数的解决方案)
+        Axis axisY = new Axis();
+
+        axisY.setName("");//y轴标注
+        // axisY.setTextSize(10);//设置字体大小
+        axisY.setTextColor(Color.parseColor("#ffffff"));
+        data.setAxisYLeft(axisY);  //Y轴设置在左边
+        //data.setAxisYRight(axisY);  //y轴设置在右边
+
+
+        //设置行为属性，支持缩放、滑动以及平移
+        lineChart.setInteractive(true);
+        lineChart.setZoomType(ZoomType.HORIZONTAL);
+        lineChart.setMaxZoom((float) 2);//最大方法比例
+        lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        lineChart.setLineChartData(data);
+        lineChart.setVisibility(View.VISIBLE);
+    }
+
+
 
 }
