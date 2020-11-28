@@ -85,53 +85,7 @@
                 android:text="Alert will be dsplayed here"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/timeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/accuracy_alert"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="70dp"
-                android:paddingLeft="10dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Time: " />
 
-            <TextView
-                android:id="@+id/distanceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/timeText"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Distance: " />
-
-            <TextView
-                android:id="@+id/orientationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/distanceText"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Orientation: " />
-
-            <TextView
-                android:id="@+id/speedText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/orientationText"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Average speed: " />
 
         </RelativeLayout>
     </ScrollView>
@@ -161,5 +115,12 @@
         android:text="Start"
         android:textAllCaps="false"
         android:textStyle="bold" />
+
+    <lecho.lib.hellocharts.view.LineChartView
+        android:id="@+id/line_chart"
+        android:layout_width="297dp"
+        android:layout_height="202dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/chart_bk" />
 
 </RelativeLayout>
