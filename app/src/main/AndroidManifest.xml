@@ -18,6 +18,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".Notifications.NotificationService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".stepcounter.ProgressActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />

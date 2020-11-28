@@ -4,7 +4,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import neu.madcourse.walkwithme.Notifications.NotificationService;
 import neu.madcourse.walkwithme.R;
 
 public class PetActivity extends AppCompatActivity {
@@ -30,6 +33,7 @@ public class PetActivity extends AppCompatActivity {
     AlarmManager alarmManager;
     Context context;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +43,9 @@ public class PetActivity extends AppCompatActivity {
         happinessBar = (ProgressBar) findViewById(R.id.happinessProgress);
         knowledgeBar = (ProgressBar) findViewById(R.id.knowledgeProgress);
         alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 3000, 100000,
+               PendingIntent.getService(getApplicationContext(), 0, new Intent(this, NotificationService.class), 0) );
 
         petState = new PetSleepState();
         showCorgi();
