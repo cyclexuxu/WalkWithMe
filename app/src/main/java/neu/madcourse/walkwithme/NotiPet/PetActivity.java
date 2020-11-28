@@ -3,13 +3,19 @@ package neu.madcourse.walkwithme.NotiPet;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -39,6 +45,7 @@ public class PetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet);
         corgi = (ImageView)findViewById(R.id.corgiImage);
+
         healthBar = (ProgressBar)findViewById(R.id.healthProgress);
         happinessBar = (ProgressBar) findViewById(R.id.happinessProgress);
         knowledgeBar = (ProgressBar) findViewById(R.id.knowledgeProgress);
@@ -49,6 +56,36 @@ public class PetActivity extends AppCompatActivity {
 
         petState = new PetSleepState();
         showCorgi();
+
+        corgi.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //ObjectAnimator animation = ObjectAnimator.ofFloat(corgi, "translationX", 100f);
+                corgi.setImageResource(R.drawable.run);
+                ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f);
+                animation.setDuration(3000);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        showCorgi();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                corgi.setAnimation(animation);
+                corgi.animate().start();
+                return true;
+            }
+        });
+
         feedButton = (Button) findViewById(R.id.feedButton);
         feedButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -114,10 +151,7 @@ public class PetActivity extends AppCompatActivity {
         happinessBar.setProgress(petState.getcHappiness());
         knowledgeBar.setProgress(petState.getcKnowledge());
 
-        //ObjectAnimator animation = ObjectAnimator.ofFloat(corgi, "translationX", 100f);
-        //ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f);
-        //animation.setDuration(2000);
-        //corgi.startAnimation(animation);
+
     }
 
 }
