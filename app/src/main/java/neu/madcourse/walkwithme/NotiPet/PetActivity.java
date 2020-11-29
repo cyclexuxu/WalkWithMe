@@ -7,12 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +24,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,10 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import neu.madcourse.walkwithme.Notifications.NotificationService;
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class PetActivity extends AppCompatActivity {
-
-    String userName = "Claire ";
 
     ImageView corgi;
     PetState petState;
@@ -76,7 +79,11 @@ public class PetActivity extends AppCompatActivity {
         petState = new PetSleepState();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("users").child(userName).child("meatNum");
+
+        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("meatNum");
+        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("healthNum");
+        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("happinessNum");
+        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("knowledgeNum");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -86,7 +93,8 @@ public class PetActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                showToast("Waiting!");
+                Log.e("Database", error.toException().toString());
             }
         });
 
@@ -96,30 +104,32 @@ public class PetActivity extends AppCompatActivity {
         showCorgi();
 
         corgi.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 //ObjectAnimator animation = ObjectAnimator.ofFloat(corgi, "translationX", 100f);
                 corgi.setImageResource(R.drawable.run);
-                ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f);
-                animation.setDuration(3000);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        showCorgi();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                corgi.setAnimation(animation);
-                corgi.animate().start();
+                beginTranslationAnimation();
+//                ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f);
+//                animation.setDuration(3000);
+//                animation.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        showCorgi();
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animation animation) {
+//
+//                    }
+//                });
+//                corgi.setAnimation(animation);
+//                corgi.animate().start();
                 return true;
             }
         });
@@ -131,6 +141,7 @@ public class PetActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     petState = petState.feed();
+                    databaseReference.setValue(petState.getMeat());
                 } catch (InsufficientMeatException e) {
                     System.out.println("not enough meat");
                     return;
@@ -197,6 +208,35 @@ public class PetActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public class JumpInterpolator implements TimeInterpolator {
+        @Override
+        public float getInterpolation(float v) {
+            return (float) - Math.abs(Math.sin(v * 3 * Math.PI)) + 1;
+        }
+    }
+
+    private void beginTranslationAnimation(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(corgi, "translationY", -height / 6, 0);
+        animator.setInterpolator(new JumpInterpolator());
+        animator.setDuration(3000);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showCorgi();
+            }
+        });
+        animator.start();
+    }
+
+    private void showToast(String message){
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, message, duration);
+        toast.show();
     }
 
 }
