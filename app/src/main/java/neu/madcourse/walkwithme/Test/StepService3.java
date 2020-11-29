@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import neu.madcourse.walkwithme.MainActivity;
@@ -45,6 +46,8 @@ public class StepService3 extends Service implements SensorEventListener {
     private Sensor accelerometer;
     private Sensor magnetometer;
     private Sensor stepCounter;
+
+    int[] data = new int[6];
 
 
     //Variables used in calculations
@@ -74,7 +77,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
     private SharedPreferences user;
     private Handler handler = new Handler();
-    String CHANNEL_ID = "swasthya";
+    String CHANNEL_ID = "WalkWithMe";
     int notification_id = 1711101;
     String TAG = "service_error";
 
@@ -106,7 +109,7 @@ public class StepService3 extends Service implements SensorEventListener {
         mdb = FirebaseDatabase.getInstance();
 
         try{
-            String address = user.getString("address","");
+            //String address = user.getString("address","");
             step_ref = mdb.getReference().child("users").child("Dan");
         }catch (Exception e){
         }
@@ -182,12 +185,9 @@ public class StepService3 extends Service implements SensorEventListener {
             }
 
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            step_ref.child(timestamp).child("steps").setValue(step);
+            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+            data[5] = step;
         }
-    }
-
-    public long getStepCount(){
-        return stepCount;
     }
 
     public boolean isActive(){
@@ -219,11 +219,6 @@ public class StepService3 extends Service implements SensorEventListener {
         //startTime = SystemClock.uptimeMillis();
         //updatedTime = elapsedTime;
     }
-
-    private void resetVariables(){
-
-    }
-
 
     //Runnable that calculates the elapsed time since the user presses the "start" button
     private Runnable timerRunnable = new Runnable() {
@@ -258,18 +253,6 @@ public class StepService3 extends Service implements SensorEventListener {
 
     }
 
-    public HashMap<String, String> getPrevData(){
-
-        HashMap<String, String> data = new HashMap<>();
-        String distanceString = String.format("%.2f",lastDistance);
-
-        data.put("duration", elapsedString+"");
-        data.put("steps", lastSteps+"");
-        data.put("distance", distanceString+"");
-        data.put("speed",(int)(distance/(elapsedTime/(1000*60)))+"");
-        return data;
-    }
-
     public HashMap<String, String> getData(){
         HashMap<String, String> data =  new HashMap<>();
 
@@ -277,10 +260,13 @@ public class StepService3 extends Service implements SensorEventListener {
         return data;
     }
 
+    public int[] getDays(){
+        return data;
+    }
+
     private Notification updateNoification(){
 
         String body = "";
-        String title = "Step Counter ";
         HashMap<String, String> data = getData();
 
         body += data.get("distance") + "                ";
@@ -296,7 +282,7 @@ public class StepService3 extends Service implements SensorEventListener {
         try {
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             Steps steps = new Steps(step, timestamp);
-            step_ref.child(timestamp).setValue(steps);
+            step_ref.child("Step Count").child(timestamp).setValue(steps);
         }catch (Exception e){
 
         }
@@ -345,16 +331,30 @@ public class StepService3 extends Service implements SensorEventListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG,"inside fetche");
-                    //step = Integer.valueOf(dataSnapshot.child("Test Accelerometer").getValue().toString());
-                    if(dataSnapshot.child(timestamp).exists()){
+                    if(dataSnapshot.child("Step Count").child(timestamp).exists()){
                         Log.d(TAG,"fetched data");
-                        Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
-                        String tmp= dataSnapshot.child("Step Count").getValue().toString();
+                        Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
                         step = (int)steps.getSteps();
-
                     }else{
                         persistSteps();
                     }
+
+                    int[] tmp = {0, 0, 0, 0, 0, 0};
+                    for (int i = 0; i <= 5; i++) {
+
+                        int step = 0;
+                        Log.d("FIREBASE ", "FOR LOOP");
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DATE, -i);
+                        Date todate1 = cal.getTime();
+                        String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(todate1);
+                        if (dataSnapshot.child("Step Count").child(timestamp).exists()) {
+                            Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
+                            step = (int) steps.getSteps();
+                            tmp[5 - i] = step;
+                        }
+                    }
+                    data = tmp;
 
                 }
 
