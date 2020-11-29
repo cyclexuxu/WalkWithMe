@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.NotiPet;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -20,10 +22,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import neu.madcourse.walkwithme.Notifications.NotificationService;
 import neu.madcourse.walkwithme.R;
 
 public class PetActivity extends AppCompatActivity {
+
+    String userName = "Claire ";
+
     ImageView corgi;
     PetState petState;
 
@@ -35,9 +46,12 @@ public class PetActivity extends AppCompatActivity {
     ProgressBar happinessBar;
     ProgressBar knowledgeBar;
 
+    ImageView[] meatViews = new ImageView[7];
 
     AlarmManager alarmManager;
     Context context;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -51,10 +65,34 @@ public class PetActivity extends AppCompatActivity {
         knowledgeBar = (ProgressBar) findViewById(R.id.knowledgeProgress);
         alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 3000, 100000,
-               PendingIntent.getService(getApplicationContext(), 0, new Intent(this, NotificationService.class), 0) );
+        meatViews[0] = findViewById(R.id.meat1);
+        meatViews[1] = findViewById(R.id.meat2);
+        meatViews[2] = findViewById(R.id.meat3);
+        meatViews[3] = findViewById(R.id.meat4);
+        meatViews[4] = findViewById(R.id.meat5);
+        meatViews[5] = findViewById(R.id.meat6);
+        meatViews[6] = findViewById(R.id.meat7);
 
         petState = new PetSleepState();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("users").child(userName).child("meatNum");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                petState.setMeat(snapshot.getValue(Integer.class));
+                showCorgi();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+//        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 3000, 100000,
+//               PendingIntent.getService(getApplicationContext(), 0, new Intent(this, NotificationService.class), 0) );
+
         showCorgi();
 
         corgi.setOnTouchListener(new View.OnTouchListener() {
@@ -151,6 +189,13 @@ public class PetActivity extends AppCompatActivity {
         happinessBar.setProgress(petState.getcHappiness());
         knowledgeBar.setProgress(petState.getcKnowledge());
 
+        for (int i = 0; i < 7; i++) {
+            if (i < petState.getMeat()) {
+                meatViews[i].setVisibility(View.VISIBLE);
+            } else {
+                meatViews[i].setVisibility(View.INVISIBLE);
+            }
+        }
 
     }
 

@@ -60,5 +60,12 @@ public abstract class PetState {
         PetState.cKnowledge = cKnowledge;
     }
 
+    public void setMeat(int meat) {
+        PetState.meat = meat;
+    }
+
+    public int getMeat() {
+        return meat;
+    }
 
 }
