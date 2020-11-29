@@ -54,7 +54,10 @@ public class PetActivity extends AppCompatActivity {
     AlarmManager alarmManager;
     Context context;
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+    DatabaseReference knowledgeNumReference;
+    DatabaseReference meatNumReference;
+    DatabaseReference happinessNumReference;
+    DatabaseReference healthNumReference;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -80,14 +83,53 @@ public class PetActivity extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("meatNum");
-        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("healthNum");
-        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("happinessNum");
-        databaseReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("knowledgeNum");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        meatNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("meatNum");
+        healthNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("healthNum");
+        happinessNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("happinessNum");
+        knowledgeNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("knowledgeNum");
+        meatNumReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 petState.setMeat(snapshot.getValue(Integer.class));
+                showCorgi();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Waiting!");
+                Log.e("Database", error.toException().toString());
+            }
+        });
+        knowledgeNumReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                petState.setcKnowledge(snapshot.getValue(Integer.class));
+                showCorgi();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Waiting!");
+                Log.e("Database", error.toException().toString());
+            }
+        });
+        healthNumReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                petState.setcHealth(snapshot.getValue(Integer.class));
+                showCorgi();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Waiting!");
+                Log.e("Database", error.toException().toString());
+            }
+        });
+        happinessNumReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                petState.setcHappiness(snapshot.getValue(Integer.class));
                 showCorgi();
             }
 
@@ -141,7 +183,7 @@ public class PetActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     petState = petState.feed();
-                    databaseReference.setValue(petState.getMeat());
+                    meatNumReference.setValue(petState.getMeat());
                 } catch (InsufficientMeatException e) {
                     System.out.println("not enough meat");
                     return;
