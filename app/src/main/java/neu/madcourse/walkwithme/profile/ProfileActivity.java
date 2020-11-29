@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView userNameProfile;
@@ -38,7 +39,8 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseReference userRef = rootRef.child("users");
 
         Intent intent = getIntent();
-        String userLogin = intent.getStringExtra("username");
+        //String userLogin = intent.getStringExtra("username");
+        String userLogin = LoginActivity.currentUser;
         Log.i(TAG, userLogin);
 
         userRef.addValueEventListener(new ValueEventListener() {
