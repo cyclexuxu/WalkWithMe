@@ -71,7 +71,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     private TextView notices ;
     private Button startButton;
     private String numSteps;
-    int[] data = new int[6];
+    int[] days = new int[6];
     LineChartView lineChart;
     private Handler handler = new Handler();
 
@@ -116,7 +116,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
             String address = user.getString("address","");
             step_ref = mdb.getReference().child("users").child("Dan");
             Steps preStep = new Steps(150, "2020-11-26");
-            step_ref.child("2020-11-26").setValue(preStep);
+            step_ref.child("Step Count").child("2020-11-26").setValue(preStep);
 
         }catch (Exception e){
 
@@ -152,6 +152,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                 }
             });
         }
+        //();
 
 
         final Button setGoal = view.findViewById(R.id.setgoal);
@@ -171,6 +172,9 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                     service.resetCount();
             }
         });
+
+        //drawChart();
+
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -254,6 +258,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         @Override
         public void run() {
             HashMap<String, String> data ;
+            int[] days;
 
             if(isBound){
 
@@ -261,6 +266,9 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                     data = service.getData();
 
                     stepText.setText(data.get("steps")+"");
+                    //Chart(data.get("steps")+"");
+                    days = service.getDays();
+                    initLineChart(days);
 
                     if(service.isActive()){
                         startButton.setText("Stop");
@@ -275,7 +283,6 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                 }
 
             }
-            drawChart();
             handler.postDelayed(this, 1000);
         }
     };
@@ -332,90 +339,14 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
 
     }
 
-    public void drawChart() {
-
-        // WeatherChartView mCharView = (WeatherChartView) findViewById(R.id.line_char);
-
-        Log.d("DrawChart", "start chart");
-        Date[] days = DateTimeHelper.get6days();
-
-        //Realm realm = Realm.getDefaultInstance();
-
-        int i = 0;
-
-
-
-        for (Date d : days) {
-            //Log.d("eee","date "+d);
-//            if (i == 5) {
-//                data[i] = Integer.parseInt(numSteps);
-//            }
-            try {
-                //int finalI = i;
-                final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-                step_ref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                       int[] tmp = {0,0,0,0,0,0};
-                        //
-//                        if(dataSnapshot.child(timestamp).exists()) {
-//                            Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
-//                            tmp[5] =(int) steps.getSteps();
-//                        }
-                        Date[] days = DateTimeHelper.get6days();
-
-                            for(int i = 0; i < 6; i++) {
-
-                                int step = 0;
-                                Log.d("FIREBASE ", "FOR LOOP");
-                                Calendar cal = Calendar.getInstance();
-                                cal.add(Calendar.DATE, -i);
-                                Date todate1 = cal.getTime();
-                                String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(todate1);
-                                if (dataSnapshot.child(timestamp).exists()) {
-                                    Steps steps = dataSnapshot.child(timestamp).getValue(Steps.class);
-                                    step = (int) steps.getSteps();
-                                    tmp[5 - i] = step;
-                                    //Log.d("onDataChange: ", step + "");
-                                }
-                                //Log.d("onDataChange: ", step + "");
-
-                                //Log.d("size of tmp: ", tmp.size() + "");
-
-
-                            }
-                        updateList(tmp);
-                        }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Log.d(TAG,"fetch canceled");
-                    }
-                });
-            } catch (Exception e) {
-                //Log.d(TAG,"fetch exception " + e.getLocalizedMessage());
-            }
-            i++;
-        }
-
-
-    }
-
-    private void updateList(int[] tmp) {
-        data = tmp;
-        //Log.d("current size: ", "" + data.length);
-        //Log.d("updateList: ", ""+data.get(data.size() - 1));
-        initLineChart();//初始化
-    }
-
     //Use hellochart library to draw chart
-    private void initLineChart() {
+    private void initLineChart(int[] days) {
         List<PointValue> mPointValues = new ArrayList<>();
         List<AxisValue> mAxisXValues = new ArrayList<>();
 
-        for (int i = 0; i < data.length; i++) {
-            Log.d("data: ", " y " + data[i] +" x " + i+"");
-            mPointValues.add(new PointValue(i, data[i]));
+        for (int i = 0; i < days.length; i++) {
+            Log.d("days: ", " y " + days[i] +" x " + i+"");
+            mPointValues.add(new PointValue(i, days[i]));
         }
 
         String[] xValues = DateTimeHelper.get6days(true);

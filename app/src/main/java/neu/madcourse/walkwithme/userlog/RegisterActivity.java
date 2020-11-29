@@ -62,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mDatabase.child("users").child(user.getUsername()).setValue(user);
                     //Toast.makeText(getApplicationContext(), username + " successfully registered", Toast.LENGTH_SHORT).show();
                     // go to profile
+                    LoginActivity.currentUser = username;
                     Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
                     startActivity(intent);
                 } else {
