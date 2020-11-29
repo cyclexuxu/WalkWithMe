@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/tvRank"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:textAlignment="center" />
 
     <ImageView
@@ -21,15 +21,16 @@
 
     <TextView
         android:id="@+id/tvUserName"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:textAlignment="center"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_weight="0.4"
-        />
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/tvSteps"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_weight="0.4"
         android:textAlignment="center"
         />
@@ -41,8 +42,8 @@
 
     <TextView
         android:id="@+id/tvLikes"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:textAlignment="center"
         android:layout_weight="0.2"
         />
