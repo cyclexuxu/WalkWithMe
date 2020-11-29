@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/corgiImage"
         android:layout_width="256dp"
-        android:layout_height="243dp"
+        android:layout_height="240dp"
         android:duration="1000"
         android:fromXScale="0.0"
         android:fromYScale="0.0"
