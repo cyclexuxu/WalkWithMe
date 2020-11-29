@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:orientation="horizontal">
 
     <TextView
@@ -34,11 +34,15 @@
         android:layout_weight="0.4"
         android:textAlignment="center"
         />
+
     <ImageButton
         android:id="@+id/btnLikeIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_baseline_favorite_dislike_24"/>
+        android:background="#FFFFFF"
+        android:clickable="true"
+        android:soundEffectsEnabled="true"
+        android:src="@drawable/ic_action_dislike" />
 
     <TextView
         android:id="@+id/tvLikes"
