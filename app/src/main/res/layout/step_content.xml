@@ -4,21 +4,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="591dp">
+
+
+    <TextView
+        android:id="@+id/dayRecordText"
+        android:layout_width="252dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="9dp"
+        android:layout_weight="1"
+        android:autoSizeMaxTextSize="30dp"
+        android:autoSizeMinTextSize="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Today's Goal : " />
+
+    <Button
+        android:id="@+id/setgoal"
+        android:layout_width="100dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginBottom="14dp"
+        android:autoSizeMaxTextSize="30dp"
+        android:autoSizeMinTextSize="2sp"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:padding="5dp"
+        android:text="Set Goal"
+        android:textAllCaps="false"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/dayRecordText"
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="304dp"
-        android:layout_height="350dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="356dp"
+        android:layout_width="221dp"
+        android:layout_height="225dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="292dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/pngegg" />
 
     <TextView
 
-        android:id="@+id/todaystep"
+        android:id="@+id/stepText"
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
@@ -38,7 +74,7 @@
         android:id="@+id/steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/todaystep"
+        android:layout_below="@+id/stepText"
         android:layout_centerHorizontal="true"
         android:layout_margin="16dp"
         android:gravity="center"
@@ -58,11 +94,40 @@
         android:id="@+id/line_chart"
         android:layout_width="297dp"
         android:layout_height="202dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginEnd="56dp"
         android:background="@drawable/chart_bk"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.856" />
+        app:layout_constraintVertical_bias="0.958" />
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:text="Reset"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/startButton"
+        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:text="Start"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
