@@ -23,6 +23,7 @@ import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.R;
 
 public class LoginActivity extends AppCompatActivity {
+    public static String currentUser;
     private EditText userName;
     private EditText password;
     private Button loginButton;
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (dataSnapshot.hasChild(username) &&
                         (password.equals(dataSnapshot.child(username).child("password").getValue()))) {
 
+                    currentUser = username;
                     Intent profileIntent = new Intent(LoginActivity.this, ProfileActivity.class);
                     profileIntent.putExtra("username", username);
                     startActivity(profileIntent);

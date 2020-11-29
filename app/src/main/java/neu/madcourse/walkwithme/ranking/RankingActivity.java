@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class RankingActivity extends AppCompatActivity {
     private List<ItemRank> itemRankList;
@@ -26,12 +28,16 @@ public class RankingActivity extends AppCompatActivity {
     private RankAdapter rankAdapter;
     private DatabaseReference databaseReference;
     private String LOG = "RANKING_ACTIVITY";
+    private TextView tvCurrentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
         DRankingData dRankingData = new DRankingData();
+
+        tvCurrentUser = findViewById(R.id.tvUserName);
+        tvCurrentUser.setText("current user");
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
