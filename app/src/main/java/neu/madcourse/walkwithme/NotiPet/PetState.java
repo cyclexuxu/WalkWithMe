@@ -1,9 +1,5 @@
 package neu.madcourse.walkwithme.NotiPet;
 
-import android.app.AlarmManager;
-
-import neu.madcourse.walkwithme.R;
-
 public abstract class PetState {
 
     protected static int cHealth = 0;
@@ -14,8 +10,8 @@ public abstract class PetState {
     protected final static int ONE_MUSIC = 5;
     protected final static int ONE_NEWS = 5;
 
-    public abstract PetState music();
-    public abstract PetState tip();
+    public abstract PetState music() throws PetStarvingException;
+    public abstract PetState tip() throws PetStarvingException;
     public abstract PetState earnMeat();
     public abstract PetState timeout();
 
@@ -40,7 +36,7 @@ public abstract class PetState {
         return cHealth;
     }
 
-    public static void setcHealth(int cHealth) {
+    public void setcHealth(int cHealth) {
         PetState.cHealth = cHealth;
     }
 
@@ -48,7 +44,7 @@ public abstract class PetState {
         return cHappiness;
     }
 
-    public static void setcHappiness(int cHappiness) {
+    public void setcHappiness(int cHappiness) {
         PetState.cHappiness = cHappiness;
     }
 
@@ -56,7 +52,7 @@ public abstract class PetState {
         return cKnowledge;
     }
 
-    public static void setcKnowledge(int cKnowledge) {
+    public void setcKnowledge(int cKnowledge) {
         PetState.cKnowledge = cKnowledge;
     }
 

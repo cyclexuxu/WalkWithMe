@@ -8,7 +8,7 @@ public class PetSleepState extends PetState{
     @Override
     public PetState music() {
         if (cHealth != 0){
-            cHappiness = Math.max(100, cHappiness + ONE_MUSIC);
+            cHappiness = Math.min(100, cHappiness + ONE_MUSIC);
             PetState newState = new PetHappyState();
             return newState;
         } else {
