@@ -1,17 +1,19 @@
 package neu.madcourse.walkwithme.NotiPet;
 
+import android.widget.Toast;
+
 import neu.madcourse.walkwithme.R;
 
 public class PetStarveState extends PetState{
 
     @Override
-    public PetState music() {
-        return this;
+    public PetState music() throws PetStarvingException {
+        throw new PetStarvingException();
     }
 
     @Override
-    public PetState tip() {
-        return this;
+    public PetState tip() throws PetStarvingException {
+        throw new PetStarvingException();
     }
 
     @Override
@@ -28,4 +30,5 @@ public class PetStarveState extends PetState{
     public int getImage() {
         return R.drawable.starve;
     }
+
 }

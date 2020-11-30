@@ -16,14 +16,14 @@ public class PetEatState extends PetState {
 
     @Override
     public PetState music() {
-        cHappiness = Math.max(100, cHappiness + ONE_MUSIC);
+        cHappiness = Math.min(100, cHappiness + ONE_MUSIC);
         PetState newState = new PetHappyState();
         return newState;
     }
 
     @Override
     public PetState tip() {
-        cKnowledge = Math.max(100, cKnowledge + ONE_NEWS);
+        cKnowledge = Math.min(100, cKnowledge + ONE_NEWS);
         PetState newState = new PetTipState();
         return newState;
     }

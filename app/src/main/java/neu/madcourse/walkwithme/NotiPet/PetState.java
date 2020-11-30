@@ -10,8 +10,8 @@ public abstract class PetState {
     protected final static int ONE_MUSIC = 5;
     protected final static int ONE_NEWS = 5;
 
-    public abstract PetState music();
-    public abstract PetState tip();
+    public abstract PetState music() throws PetStarvingException;
+    public abstract PetState tip() throws PetStarvingException;
     public abstract PetState earnMeat();
     public abstract PetState timeout();
 

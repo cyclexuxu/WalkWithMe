@@ -7,7 +7,7 @@ public class PetHappyState extends PetState {
 
     @Override
     public PetState music() {
-
+        cHappiness = Math.min(100, cHappiness + ONE_MUSIC);
         return this;
     }
 

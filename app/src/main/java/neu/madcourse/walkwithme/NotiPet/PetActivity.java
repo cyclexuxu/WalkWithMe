@@ -79,9 +79,9 @@ public class PetActivity extends AppCompatActivity {
         meatViews[5] = findViewById(R.id.meat6);
         meatViews[6] = findViewById(R.id.meat7);
 
-        petState = new PetSleepState();
-
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        petState = new PetSleepState();
 
         meatNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("meatNum");
         healthNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("healthNum");
@@ -117,6 +117,11 @@ public class PetActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 petState.setcHealth(snapshot.getValue(Integer.class));
+                if (petState.getcHealth() <= 0) {
+                    petState = new PetStarveState();
+                } else {
+                    petState = new PetSleepState();
+                }
                 showCorgi();
             }
 
@@ -149,29 +154,8 @@ public class PetActivity extends AppCompatActivity {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //ObjectAnimator animation = ObjectAnimator.ofFloat(corgi, "translationX", 100f);
                 corgi.setImageResource(R.drawable.run);
                 beginTranslationAnimation();
-//                ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f);
-//                animation.setDuration(3000);
-//                animation.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animation animation) {
-//                        showCorgi();
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animation animation) {
-//
-//                    }
-//                });
-//                corgi.setAnimation(animation);
-//                corgi.animate().start();
                 return true;
             }
         });
@@ -184,8 +168,9 @@ public class PetActivity extends AppCompatActivity {
                 try {
                     petState = petState.feed();
                     meatNumReference.setValue(petState.getMeat());
+                    healthNumReference.setValue(petState.getcHealth());
                 } catch (InsufficientMeatException e) {
-                    System.out.println("not enough meat");
+                    showToast("Not enough meat");
                     return;
                 }
                 alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "eat", new AlarmManager.OnAlarmListener() {
@@ -204,7 +189,12 @@ public class PetActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                petState = petState.music();
+                try {
+                    petState = petState.music();
+                } catch (PetStarvingException e) {
+                    showToast("I'm starving, feed me first.");
+                    return;
+                }
                 alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "music", new AlarmManager.OnAlarmListener() {
                     @Override
                     public void onAlarm() {
@@ -212,7 +202,6 @@ public class PetActivity extends AppCompatActivity {
                         showCorgi();
                     }
                 }, null);
-
                 showCorgi();
             }
         });
@@ -222,7 +211,12 @@ public class PetActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                petState = petState.tip();
+                try {
+                    petState = petState.tip();
+                } catch (PetStarvingException e) {
+                    showToast("I'm starving, feed me first.");
+                    return;
+                }
                 alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "tips", new AlarmManager.OnAlarmListener() {
                     @Override
                     public void onAlarm() {
@@ -277,7 +271,7 @@ public class PetActivity extends AppCompatActivity {
 
     private void showToast(String message){
         int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, message, duration);
+        Toast toast = Toast.makeText(getApplicationContext(), message, duration);
         toast.show();
     }
 
