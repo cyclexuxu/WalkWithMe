@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -7,11 +8,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.Button;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import neu.madcourse.walkwithme.profile.ProfileActivity;
+import neu.madcourse.walkwithme.profile.ProfileFragment;
 import neu.madcourse.walkwithme.ranking.RankingActivity;
 import neu.madcourse.walkwithme.Test.Constants;
 import neu.madcourse.walkwithme.Test.StepService3;
@@ -21,7 +27,7 @@ import neu.madcourse.walkwithme.NotiPet.PetActivity;
 
 import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
-
+import neu.madcourse.walkwithme.userlog.LoginFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,21 +36,59 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        login = (Button) findViewById(R.id.btnLogin);
+        setContentView(R.layout.activity_main2);
+        //login = (Button) findViewById(R.id.btnLogin);
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        //I added this if statement to keep the selected fragment when rotating the device
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new LoginFragment()).commit();
+        }
 
         Intent startIntent = new Intent(this, StepService3.class);
         startIntent.setAction(Constants.START_FOREGROUND);
         startService(startIntent);
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+        item -> {
+            Fragment selectedFragment = null;
+            switch (item.getItemId()) {
+//                case R.id.nav_login:
+//                    selectedFragment = new LoginFragment();
+//                    break;
+                case R.id.nav_profile:
+                    selectedFragment = new ProfileFragment();
+                    break;
+                case R.id.nav_pedometer:
+                    selectedFragment = new PedometerFragment();
+                    break;
+                case R.id.nav_rank:
+                    selectedFragment = new RankFragment();
+                    break;
+                case R.id.nav_pet:
+                    selectedFragment = new PetFragment();
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    selectedFragment).commit();
+            return true;
+        };
+
+
     // method for open ranking activity
     public void openRankingActivity(View view) {
         Intent intent = new Intent(this, RankingActivity.class);
         startActivity(intent);
     }
 
-
+    public void openProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
     //Method for Notification Button
     public void openPetActivity(View view){

@@ -26,22 +26,20 @@
         <activity
             android:name=".stepcounter.ProgressActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".userlog.LoginActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".NotiPet.PetActivity" />
-        <activity
-            android:name=".stepcounter.ProgressActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
-        <activity android:name=".userlog.LoginActivity" />
         <activity android:name=".userlog.RegisterActivity" />
         <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

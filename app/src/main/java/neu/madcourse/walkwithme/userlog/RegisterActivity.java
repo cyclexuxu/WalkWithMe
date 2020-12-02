@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.R;
 
@@ -67,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), username + " successfully registered", Toast.LENGTH_SHORT).show();
                     // go to profile
                     LoginActivity.currentUser = username;
-                    Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getApplicationContext(), "All information needed", Toast.LENGTH_SHORT).show();
