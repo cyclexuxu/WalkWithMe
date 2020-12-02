@@ -7,9 +7,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="410dp"
-        android:layout_height="172dp"
-        android:background="@drawable/bacround_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="177dp"
+        android:layout_centerHorizontal="true"
+        android:background="#FCE38A"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="TextView"
-            android:textColor="@color/white"
+            android:textColor="@color/teal_700"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,15 +45,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="342dp"
-        android:layout_height="378dp"
+        android:layout_width="match_parent"
+        android:layout_height="434dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="171dp"
-        android:layout_marginEnd="128dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="197dp"
+        android:layout_marginEnd="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
         app:layout_constraintHorizontal_bias="0.5"
@@ -65,8 +66,9 @@
             android:id="@+id/weight_linearLayout"
             android:layout_width="285dp"
             android:layout_height="56dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="45dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.68"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -79,7 +81,7 @@
 
             <TextView
                 android:id="@+id/weightText"
-                android:layout_width="match_parent"
+                android:layout_width="173dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="WEIGHT"
@@ -97,8 +99,9 @@
             android:id="@+id/height_linearLayout"
             android:layout_width="284dp"
             android:layout_height="59dp"
-            android:layout_marginTop="164dp"
+            android:layout_marginTop="115dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.68"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -110,7 +113,7 @@
 
             <TextView
                 android:id="@+id/heightText"
-                android:layout_width="match_parent"
+                android:layout_width="172dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="HEIGHT"
@@ -124,8 +127,9 @@
             android:id="@+id/BMI_linearLayout"
             android:layout_width="286dp"
             android:layout_height="66dp"
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="185dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.68"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -137,7 +141,7 @@
 
             <TextView
                 android:id="@+id/BMIText"
-                android:layout_width="match_parent"
+                android:layout_width="171dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="BMI"
@@ -151,8 +155,9 @@
             android:id="@+id/level_linearLayout"
             android:layout_width="285dp"
             android:layout_height="63dp"
-            android:layout_marginTop="320dp"
+            android:layout_marginTop="260dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.68"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -164,7 +169,7 @@
 
             <TextView
                 android:id="@+id/levelText"
-                android:layout_width="match_parent"
+                android:layout_width="174dp"
                 android:layout_height="match_parent"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
