@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import neu.madcourse.walkwithme.MainActivity;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class StepService3 extends Service implements SensorEventListener {
 
@@ -104,15 +105,19 @@ public class StepService3 extends Service implements SensorEventListener {
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         //stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        Log.d("Current User: ", LoginActivity.currentUser);
+
 
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
 
-        try{
-            //String address = user.getString("address","");
-            step_ref = mdb.getReference().child("users").child("Dan");
-        }catch (Exception e){
-        }
+
+//        //Log.d(TAG, LoginActivity.currentUser);
+//        if(LoginActivity.currentUser == null){
+//
+//        }
+        step_ref = mdb.getReference().child("users").child("DanNew");
+
         Log.d(TAG,"increate");
         fetchData();
     }
@@ -183,9 +188,19 @@ public class StepService3 extends Service implements SensorEventListener {
             if (delta > 6) {
                 step++;
             }
+            //persistSteps();
 
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+//            Log.e(TAG, "onSensorChanged: ");
+//            Log.d("onSensorChanged: ",LoginActivity.currentUser);
+//            if(step_ref.child("bmi") != null){
+//                Log.d("onSensorChanged: ",  "\"Step Count\" is not null");
+//            }else if(step_ref.child("Step Count").child(timestamp) == null){
+//                Log.d("onSensorChanged: ",  "timestamp is null");
+//            }
+
+            //step_ref.child("Step Count").child(timestamp)setValue(step);
+            persistSteps();
             data[5] = step;
         }
     }
@@ -197,7 +212,7 @@ public class StepService3 extends Service implements SensorEventListener {
     public void startForegroundService(){
         registerSensors();
         //startTime = SystemClock.uptimeMillis() + 1000;
-        startForeground(notification_id,getNotification("Starting Step Counter Service",""));
+        //startForeground(notification_id,getNotification("Starting Step Counter Service",""));
         handler.postDelayed(timerRunnable,1000);
         isActive = true;
     }
@@ -206,7 +221,7 @@ public class StepService3 extends Service implements SensorEventListener {
         unregisterSensors();
         handler.removeCallbacks(timerRunnable);
         isActive = false;
-        startForeground(notification_id,getNotification("Stopping  Step Counter Service",""));
+        //startForeground(notification_id,getNotification("Stopping  Step Counter Service",""));
         stopForeground(true);
         //elapsedTime = elapsedTime + timeInMilliseconds;
         if(persist)
@@ -224,8 +239,8 @@ public class StepService3 extends Service implements SensorEventListener {
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-            Notification notification = updateNoification();
-            startForeground(notification_id,notification);
+            //Notification notification = updateNoification();
+            //startForeground(notification_id,notification);
             handler.postDelayed(this, 1000);
         }
     };
@@ -278,6 +293,7 @@ public class StepService3 extends Service implements SensorEventListener {
     }
 
     private void persistSteps(){
+        Log.d(TAG, "persistSteps: ");
 
         try {
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -331,11 +347,16 @@ public class StepService3 extends Service implements SensorEventListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG,"inside fetche");
-                    if(dataSnapshot.child("Step Count").child(timestamp).exists()){
-                        Log.d(TAG,"fetched data");
+//                    if(!dataSnapshot.child("Step Count").exists()){
+//                        step_ref.child("Step Count").setValue("Step Count");
+//                    }
+                    if(dataSnapshot.child("Step Count").child(timestamp).exists()) {
+                        Log.d(TAG, "fetched data");
                         Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
-                        step = (int)steps.getSteps();
+                        step = (int) steps.getSteps();
+
                     }else{
+                        Log.d(TAG, "create new timestamp");
                         persistSteps();
                     }
 

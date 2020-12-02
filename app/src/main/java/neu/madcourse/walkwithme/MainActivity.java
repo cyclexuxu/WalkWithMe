@@ -19,7 +19,6 @@ import neu.madcourse.walkwithme.Test.StepsFragment2;
 
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 
-import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 
@@ -59,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(buttonGrid);
                 break;
         }
-    }
-
-    public void startProgressActivity(View view){
-        startActivity(new Intent(MainActivity.this, ProgressActivity.class));
     }
 
     public void startStepsFragment(View view){

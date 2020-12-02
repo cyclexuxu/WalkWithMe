@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +63,7 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.view.LineChartView;
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChangeListener{
 
@@ -111,10 +113,13 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         notices = (TextView)view.findViewById(R.id.accuracy_alert);
         startButton = view.findViewById(R.id.startButton);
         lineChart = (LineChartView) view.findViewById(R.id.line_chart);
+        Log.d("Current User: ", LoginActivity.currentUser);
 
         try{
             String address = user.getString("address","");
-            step_ref = mdb.getReference().child("users").child("Dan");
+            step_ref = mdb.getReference().child("users").child("DanNew");
+            //final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
             Steps preStep = new Steps(150, "2020-11-26");
             step_ref.child("Step Count").child("2020-11-26").setValue(preStep);
 
@@ -136,6 +141,14 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                         Snackbar.make(view,"Binding to the Step Counting Service , wait ... ", Snackbar.LENGTH_LONG).show();
                     }
                     else if (!service.isActive()) {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(), "Connect to Step Count Service", Toast.LENGTH_LONG).show();
+                            }
+                        });
                         startButton.setText("Stop");
                         notices.setText(" The sensor has a Latency of 10 seconds . ");
                         service.startForegroundService();
@@ -143,7 +156,15 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
 //                        startButton.setTextColor(ContextCompat.getColor(getActivity(),R.color.color1));
 
                     } else {
-                        startButton.setText("Start!");
+
+                        startButton.setText("Start");
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(), "Stop the Step Count Service", Toast.LENGTH_LONG).show();
+                            }
+                        });
                         service.stopForegroundService(true);
 //                        startButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.color2));
 //                        startButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.color1));
@@ -193,12 +214,8 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("HIHIHIHIHIHIHI", "1");
-        dayStepRecord = Integer.parseInt(user.getString("DAY_STEP_RECORD", "2000"));
-        Log.e("HIHIHIHIHIHIHI", "2");
-        dayRecordText.setText(dayStepRecord+"");
-        Log.e("HIHIHIHIHIHIHI", "3");
-
+        //dayStepRecord = Integer.parseInt(user.getString("DAY_STEP_RECORD", "2000"));
+        //dayRecordText.setText(dayStepRecord+"");
         Intent intent = new Intent(getActivity(), StepService3.class);
         getActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
         handler.postDelayed(timerRunnable, 0);
@@ -275,7 +292,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
 //                        startButton.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.color3));
 //                        startButton.setTextColor(ContextCompat.getColor(getActivity(),R.color.color1));
                     }else {
-                        startButton.setText("Start!");
+                        startButton.setText("Start");
 //                        startButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.color2));
 //                        startButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.color1));
                     }
@@ -345,7 +362,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         List<AxisValue> mAxisXValues = new ArrayList<>();
 
         for (int i = 0; i < days.length; i++) {
-            Log.d("days: ", " y " + days[i] +" x " + i+"");
+            //Log.d("days: ", " y " + days[i] +" x " + i+"");
             mPointValues.add(new PointValue(i, days[i]));
         }
 
@@ -392,9 +409,9 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
 
 
         //设置行为属性，支持缩放、滑动以及平移
-        lineChart.setInteractive(true);
+        //lineChart.setInteractive(true);
         lineChart.setZoomType(ZoomType.HORIZONTAL);
-        lineChart.setMaxZoom((float) 2);//最大方法比例
+        //lineChart.setMaxZoom((float) 2);//最大方法比例
         lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         lineChart.setLineChartData(data);
         lineChart.setVisibility(View.VISIBLE);
