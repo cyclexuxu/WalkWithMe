@@ -37,15 +37,13 @@ import java.util.Date;
 import java.util.HashMap;
 
 import neu.madcourse.walkwithme.MainActivity;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class StepService3 extends Service implements SensorEventListener {
 
     //Sensor related variables
     private SensorManager sensorManager;
-    private Sensor stepDetectorSensor;
     private Sensor accelerometer;
-    private Sensor magnetometer;
-    private Sensor stepCounter;
 
     int[] data = new int[6];
 
@@ -53,22 +51,6 @@ public class StepService3 extends Service implements SensorEventListener {
     //Variables used in calculations
     private double preMagnitude = 0;
     private int step = 0;
-    private long stepCount = 0;
-    private long lastSteps = 0;
-    private String compassOrientation;
-    private double lastDistance = 0;
-    private int prevStepCount = 0;
-    private long stepTimestamp = 0;
-    private long startTime = 0;
-    long timeInMilliseconds = 0;
-    long elapsedTime = 0;
-    long updatedTime = 0;
-    private int speed = 0;
-    private double distance = 0;
-    private float[] accelValues;
-    private float[] magnetValues;
-    private String timeString;
-    private String elapsedString;
 
     private FirebaseDatabase mdb;
     private DatabaseReference step_ref;
@@ -79,7 +61,7 @@ public class StepService3 extends Service implements SensorEventListener {
     private Handler handler = new Handler();
     String CHANNEL_ID = "WalkWithMe";
     int notification_id = 1711101;
-    String TAG = "service_error";
+    String TAG = "Step Service: ";
 
     private IBinder mBinder = new MyBinder();
 
@@ -100,21 +82,16 @@ public class StepService3 extends Service implements SensorEventListener {
         super.onCreate();
         createNotificationChannel();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        //stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        //magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        //stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
 
         try{
-            //String address = user.getString("address","");
-            step_ref = mdb.getReference().child("users").child("Dan");
+            step_ref = mdb.getReference().child("users").child(LoginActivity.currentUser);
         }catch (Exception e){
         }
-        Log.d(TAG,"increate");
-        fetchData();
+        accessData();
     }
 
     @Override
@@ -171,7 +148,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
         //Get sensor values
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelValues = event.values;
+            //accelValues = event.values;
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
@@ -237,8 +214,8 @@ public class StepService3 extends Service implements SensorEventListener {
 
     private void registerSensors(){
 
-        if(stepDetectorSensor != null)
-            sensorManager.registerListener(StepService3.this, stepDetectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
+//        if(stepDetectorSensor != null)
+//            sensorManager.registerListener(StepService3.this, stepDetectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         if(accelerometer != null)
             sensorManager.registerListener(StepService3.this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
@@ -255,7 +232,6 @@ public class StepService3 extends Service implements SensorEventListener {
 
     public HashMap<String, String> getData(){
         HashMap<String, String> data =  new HashMap<>();
-
         data.put("steps", step+"");
         return data;
     }
@@ -279,13 +255,9 @@ public class StepService3 extends Service implements SensorEventListener {
 
     private void persistSteps(){
 
-        try {
-            final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            Steps steps = new Steps(step, timestamp);
-            step_ref.child("Step Count").child(timestamp).setValue(steps);
-        }catch (Exception e){
-
-        }
+        final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        Steps steps = new Steps(step, timestamp);
+        step_ref.child("Step Count").child(timestamp).setValue(steps);
     }
 
     private Notification getNotification(String title, String body){
@@ -322,7 +294,7 @@ public class StepService3 extends Service implements SensorEventListener {
         }
     }
 
-    private void fetchData(){
+    private void accessData(){
 
         final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
         Log.d(TAG,"in fetch");

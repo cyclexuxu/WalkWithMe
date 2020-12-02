@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +63,7 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.view.LineChartView;
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChangeListener{
 
@@ -113,10 +115,10 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         lineChart = (LineChartView) view.findViewById(R.id.line_chart);
 
         try{
-            String address = user.getString("address","");
-            step_ref = mdb.getReference().child("users").child("Dan");
-            Steps preStep = new Steps(150, "2020-11-26");
-            step_ref.child("Step Count").child("2020-11-26").setValue(preStep);
+            //String address = user.getString("address","");
+            step_ref = mdb.getReference().child("users").child(LoginActivity.currentUser);
+//            Steps preStep = new Steps(150, "2020-11-26");
+//            step_ref.child("Step Count").child("2020-11-26").setValue(preStep);
 
         }catch (Exception e){
 
@@ -133,11 +135,21 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                 public void onClick(View v) {
 
                     if(!isBound){
-                        Snackbar.make(view,"Binding to the Step Counting Service , wait ... ", Snackbar.LENGTH_LONG).show();
+                        Handler handler = new Handler(Looper.getMainLooper());
+
+                        handler.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(service.getApplicationContext(), "Cannot bind to the Step Service, please wait", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        //Snackbar.make(view,"Binding to the Step Counting Service , wait ... ", Snackbar.LENGTH_LONG).show();
                     }
                     else if (!service.isActive()) {
                         startButton.setText("Stop");
-                        notices.setText(" The sensor has a Latency of 10 seconds . ");
+                        //notices.setText(" The sensor has a Latency of 10 seconds . ");
                         service.startForegroundService();
 //                        startButton.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.color3));
 //                        startButton.setTextColor(ContextCompat.getColor(getActivity(),R.color.color1));
