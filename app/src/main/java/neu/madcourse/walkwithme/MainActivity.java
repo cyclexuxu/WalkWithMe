@@ -1,6 +1,5 @@
 package neu.madcourse.walkwithme;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -8,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.Button;
@@ -25,6 +23,7 @@ import neu.madcourse.walkwithme.Test.StepsFragment2;
 
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 
+import neu.madcourse.walkwithme.rankingFra.RankFragment;
 import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 import neu.madcourse.walkwithme.userlog.LoginFragment;
