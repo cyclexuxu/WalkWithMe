@@ -20,7 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class RankFragment extends Fragment {
     private String LOG = "RANKING_ACTIVITY";
     private TextView tvCurrentUser;
     private SharedPreferences sharedPreferences;
+    private TextView etDateOfToday;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +61,14 @@ public class RankFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 
+        etDateOfToday = view.findViewById(R.id.etToday);
+        String dateOfToday = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        String title = "Today  is  " + dateOfToday;
+        etDateOfToday.setText(title);
+
         tvCurrentUser = view.findViewById(R.id.tvUserName);
+
+
         tvCurrentUser.setText(LoginActivity.currentUser);
 
         recyclerView = view.findViewById(R.id.recycler_view);
