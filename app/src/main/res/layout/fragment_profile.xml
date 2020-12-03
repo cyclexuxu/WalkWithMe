@@ -20,21 +20,22 @@
             android:id="@+id/userNameProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed-medium"
+            android:fontFamily="@font/autour_one"
             android:text="TextView"
-            android:textColor="@color/teal_700"
-            android:textSize="18sp"
+            android:textColor="#122c46"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.72"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.502" />
+            app:layout_constraintVertical_bias="0.55" />
 
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="186dp"
             android:layout_height="100dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="44dp"
             android:layout_marginBottom="16dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,7 +75,7 @@
 
             <ImageView
                 android:id="@+id/weightImage"
-                android:layout_width="131dp"
+                android:layout_width="118dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_weight"
                 android:visibility="visible" />
@@ -107,7 +108,7 @@
 
             <ImageView
                 android:id="@+id/heightImage"
-                android:layout_width="132dp"
+                android:layout_width="117dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_height" />
 
@@ -135,7 +136,7 @@
 
             <ImageView
                 android:id="@+id/BMIImage"
-                android:layout_width="134dp"
+                android:layout_width="119dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_bmi" />
 
@@ -163,7 +164,7 @@
 
             <ImageView
                 android:id="@+id/levelImage"
-                android:layout_width="133dp"
+                android:layout_width="117dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_level" />
 
