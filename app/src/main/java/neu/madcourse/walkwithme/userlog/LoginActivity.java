@@ -80,6 +80,11 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (username.equals("")) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 if (dataSnapshot.hasChild(username)) {
                     Log.i(TAG, "" + getApplicationContext());
                     Toast.makeText(getApplicationContext(), "username is already registered", Toast.LENGTH_SHORT).show();

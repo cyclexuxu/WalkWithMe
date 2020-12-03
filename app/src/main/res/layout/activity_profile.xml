@@ -97,7 +97,7 @@
                 android:id="@+id/weightImage"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/weight"
+                android:src="@drawable/ic_weight"
                 android:visibility="visible" />
 
             <TextView
@@ -129,7 +129,7 @@
                 android:id="@+id/heightImage"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/height" />
+                android:src="@drawable/ic_height" />
 
             <TextView
                 android:id="@+id/heightText"
@@ -156,7 +156,7 @@
                 android:id="@+id/BMIImage"
                 android:layout_width="62dp"
                 android:layout_height="56dp"
-                android:src="@drawable/bmi" />
+                android:src="@drawable/ic_bmi" />
 
             <TextView
                 android:id="@+id/BMIText"
@@ -183,7 +183,7 @@
                 android:id="@+id/levelImage"
                 android:layout_width="59dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/level" />
+                android:src="@drawable/ic_level" />
 
             <TextView
                 android:id="@+id/levelText"
