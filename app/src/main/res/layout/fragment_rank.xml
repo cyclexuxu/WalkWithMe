@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/llToday"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/etToday"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="#FF9800"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/currentUser"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llToday">
+
+        <TextView
+            android:id="@+id/tvRank"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="#FF9800"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/ivIcon"-->
+        <!--            android:layout_width="30dp"-->
+        <!--            android:layout_height="50dp"-->
+        <!--            android:src="@drawable/paw"-->
+        <!--            />-->
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="#FF9800"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSteps"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="#FF9800"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnLikeIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:soundEffectsEnabled="false"
+            android:src="@drawable/ic_action_like" />
+
+        <TextView
+            android:id="@+id/tvLikes"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="#FF9800"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/currentUser">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addNewFriend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+
+            android:layout_gravity="end|bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+
+            android:src="@drawable/ic_action_addfriend"
+            app:backgroundTint="#EC9696"
+            app:fabSize="mini" />
+    </RelativeLayout>
+
+</RelativeLayout>

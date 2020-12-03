@@ -19,8 +19,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.ranking.DRankingData;
 
 public class LoginActivity extends AppCompatActivity {
     public static String currentUser;
@@ -53,9 +55,10 @@ public class LoginActivity extends AppCompatActivity {
                         (password.equals(dataSnapshot.child(username).child("password").getValue()))) {
 
                     currentUser = username;
-                    Intent profileIntent = new Intent(LoginActivity.this, ProfileActivity.class);
-                    profileIntent.putExtra("username", username);
-                    startActivity(profileIntent);
+                    DRankingData dRankingData = new DRankingData();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
                     Log.i( TAG, "You successfully login");
                 } else {
                     Toast.makeText(getApplicationContext(),"Please login again", Toast.LENGTH_SHORT).show();
