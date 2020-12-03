@@ -5,10 +5,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/currentUser"
+        android:id="@+id/llToday"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/etToday"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="#FF9800"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/currentUser"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llToday">
 
         <TextView
             android:id="@+id/tvRank"
