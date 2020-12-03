@@ -47,7 +47,7 @@ public class RankFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         sharedPreferences =  getActivity().getSharedPreferences("rank", Context.MODE_PRIVATE);
-        DRankingData dRankingData = new DRankingData();
+        // DRankingData dRankingData = new DRankingData();
 
 
 
