@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import neu.madcourse.walkwithme.Test.Steps;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class DRankingData {
@@ -59,17 +60,22 @@ public class DRankingData {
         String currentUsername = LoginActivity.currentUser;
 
         // DatabaseReference databaseCurrentUser = FirebaseDatabase.getInstance().getReference("Users").child(currentUsername).child("Step Count").child(today);
-        DatabaseReference databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users").child(currentUsername).child("Step Count");
+        DatabaseReference databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users").child(currentUsername);
 
 
         databaseCurrentUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-
-                    String steps = dataSnapshot.child("steps").getValue().toString();
-                    Log.d(LOG, steps);
-                    currentUserStep = Integer.parseInt(steps);
+//                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+//                    String steps = dataSnapshot.child(today).child("steps").getValue().toString();
+//                    Log.d(LOG, steps);
+//                    currentUserStep = Integer.parseInt(steps);
+//                }
+                if(snapshot.child("Step Count").child(today).exists()) {
+                    Steps steps = snapshot.child("Step Count").child(today).getValue(Steps.class);
+                    currentUserStep = (int) steps.getSteps();
+                } else {
+                    currentUserStep = 0;
                 }
             }
 
@@ -106,8 +112,8 @@ public class DRankingData {
         Random random = new Random();
         Log.d("usernames.size(): ",usernames.size()+"");
         for (String username : usernames) {
-            int steps = random.nextInt(15000);
-            int likes = random.nextInt(20);
+            int steps = random.nextInt(1500);
+            int likes = random.nextInt(usernames.size());
             Log.e("Loop username", username);
             if (username.equals(LoginActivity.currentUser)) {
                 steps = currentUserStep;

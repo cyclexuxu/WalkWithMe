@@ -49,6 +49,7 @@ public class RankAdapter extends RecyclerView.Adapter {
         viewHolderClass.tvSteps.setText(String.valueOf(itemRank.getSteps()));
         viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
 
+
         //  add like action
         // viewHolderClass.getLikeStatus()
         viewHolderClass.ibLike.setOnClickListener(new View.OnClickListener(){
@@ -68,12 +69,11 @@ public class RankAdapter extends RecyclerView.Adapter {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        textClick = false;
                     }
                 });
             }
         });
-
     }
 
     @Override

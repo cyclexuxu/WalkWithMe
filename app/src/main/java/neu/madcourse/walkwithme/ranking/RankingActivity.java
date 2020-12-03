@@ -39,7 +39,7 @@ public class RankingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ranking);
 
 
-        DRankingData dRankingData = new DRankingData();
+        // DRankingData dRankingData = new DRankingData();
 
         tvCurrentUser = findViewById(R.id.tvUserName);
         tvCurrentUser.setText(LoginActivity.currentUser);
