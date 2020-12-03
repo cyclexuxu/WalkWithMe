@@ -18,6 +18,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import neu.madcourse.walkwithme.MainActivity;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class StepService3 extends Service implements SensorEventListener {
 
@@ -53,25 +55,9 @@ public class StepService3 extends Service implements SensorEventListener {
     //Variables used in calculations
     private double preMagnitude = 0;
     private int step = 0;
-    private long stepCount = 0;
-    private long lastSteps = 0;
-    private String compassOrientation;
-    private double lastDistance = 0;
-    private int prevStepCount = 0;
-    private long stepTimestamp = 0;
-    private long startTime = 0;
-    long timeInMilliseconds = 0;
-    long elapsedTime = 0;
-    long updatedTime = 0;
-    private int speed = 0;
-    private double distance = 0;
-    private float[] accelValues;
-    private float[] magnetValues;
-    private String timeString;
-    private String elapsedString;
-
     private FirebaseDatabase mdb;
     private DatabaseReference step_ref;
+    private int totalStep = 0;
 
     private boolean isActive = false;
 
@@ -80,16 +66,15 @@ public class StepService3 extends Service implements SensorEventListener {
     String CHANNEL_ID = "WalkWithMe";
     int notification_id = 1711101;
     String TAG = "service_error";
+    public static String currentUser = LoginActivity.currentUser;
 
     private IBinder mBinder = new MyBinder();
 
     public class MyBinder extends Binder {
         private StepService3 service;
-
         public MyBinder() {
             this.service = StepService3.this;
         }
-
         public StepService3 getService() {
             return service;
         }
@@ -100,21 +85,17 @@ public class StepService3 extends Service implements SensorEventListener {
         super.onCreate();
         createNotificationChannel();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        //stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        //magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        //stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
+        Log.d(TAG, currentUser);
 
         try{
-            //String address = user.getString("address","");
-            step_ref = mdb.getReference().child("users").child("Dan");
+            step_ref = mdb.getReference().child("users").child(currentUser);
         }catch (Exception e){
         }
-        Log.d(TAG,"increate");
-        fetchData();
+        accessData();
     }
 
     @Override
@@ -164,6 +145,7 @@ public class StepService3 extends Service implements SensorEventListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopForegroundService(true);
     }
 
     @Override
@@ -171,7 +153,6 @@ public class StepService3 extends Service implements SensorEventListener {
 
         //Get sensor values
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelValues = event.values;
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
@@ -182,10 +163,32 @@ public class StepService3 extends Service implements SensorEventListener {
 
             if (delta > 6) {
                 step++;
+                totalStep++;
             }
 
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+            Handler handler1 = new Handler(Looper.getMainLooper());
+
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+                }
+            });
+
+            Handler handler2 = new Handler(Looper.getMainLooper());
+
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    step_ref.child("Total Steps").setValue(totalStep);
+                }
+            });
+
+//            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+//            step_ref.child("Total Steps").setValue(totalStep);
             data[5] = step;
         }
     }
@@ -197,20 +200,20 @@ public class StepService3 extends Service implements SensorEventListener {
     public void startForegroundService(){
         registerSensors();
         //startTime = SystemClock.uptimeMillis() + 1000;
-        startForeground(notification_id,getNotification("Starting Step Counter Service",""));
+        //startForeground(notification_id,getNotification("Starting Step Counter Service",""));
         handler.postDelayed(timerRunnable,1000);
         isActive = true;
     }
 
-    public void stopForegroundService(boolean persist){
+    public void stopForegroundService(boolean update){
         unregisterSensors();
         handler.removeCallbacks(timerRunnable);
         isActive = false;
-        startForeground(notification_id,getNotification("Stopping  Step Counter Service",""));
+        //startForeground(notification_id,getNotification("Stopping  Step Counter Service",""));
         stopForeground(true);
         //elapsedTime = elapsedTime + timeInMilliseconds;
-        if(persist)
-            persistSteps();
+        if(update)
+           updateSteps();
     }
 
     public void resetCount(){
@@ -224,8 +227,8 @@ public class StepService3 extends Service implements SensorEventListener {
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-            Notification notification = updateNoification();
-            startForeground(notification_id,notification);
+//            Notification notification = updateNoification();
+//            startForeground(notification_id,notification);
             handler.postDelayed(this, 1000);
         }
     };
@@ -277,12 +280,13 @@ public class StepService3 extends Service implements SensorEventListener {
         return notification;
     }
 
-    private void persistSteps(){
+    private void updateSteps(){
 
         try {
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             Steps steps = new Steps(step, timestamp);
             step_ref.child("Step Count").child(timestamp).setValue(steps);
+            step_ref.child("Total Steps").setValue(totalStep);
         }catch (Exception e){
 
         }
@@ -301,6 +305,7 @@ public class StepService3 extends Service implements SensorEventListener {
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this,9,intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+                .setPriority(-2)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setContentIntent(resultPendingIntent)
@@ -322,21 +327,23 @@ public class StepService3 extends Service implements SensorEventListener {
         }
     }
 
-    private void fetchData(){
+    private void accessData(){
 
         final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-        Log.d(TAG,"in fetch");
+        Log.d(TAG,"access firebase data");
         try{
             step_ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d(TAG,"inside fetche");
+                    Log.d(TAG, currentUser);
+                    if(dataSnapshot.child("Total Steps").exists()){
+                        totalStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString());
+                    }
                     if(dataSnapshot.child("Step Count").child(timestamp).exists()){
-                        Log.d(TAG,"fetched data");
                         Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
                         step = (int)steps.getSteps();
                     }else{
-                        persistSteps();
+                        updateSteps();
                     }
 
                     int[] tmp = {0, 0, 0, 0, 0, 0};
@@ -367,4 +374,12 @@ public class StepService3 extends Service implements SensorEventListener {
             Log.d(TAG,"fetch exception " + e.getLocalizedMessage());
         }
     }
+
+//    @Override
+//    public void onDestroy() {
+//       service.stop();
+//        player.release();
+//        Toast.makeText(this, "Service stopped...", Toast.LENGTH_SHORT).show();
+//        Log.i(TAG, "onCreate() , service stopped...");
+//    }
 }
