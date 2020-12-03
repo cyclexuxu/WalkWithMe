@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import neu.madcourse.walkwithme.MainActivity;
+import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class StepService3 extends Service implements SensorEventListener {
@@ -59,6 +60,7 @@ public class StepService3 extends Service implements SensorEventListener {
     private DatabaseReference step_ref;
     private int totalStep = 0;
     private int prevStep = 0;
+    private boolean sendMessage = false;
 
 
     private boolean isActive = false;
@@ -66,7 +68,7 @@ public class StepService3 extends Service implements SensorEventListener {
     private SharedPreferences user;
     private Handler handler = new Handler();
     String CHANNEL_ID = "WalkWithMe";
-    int notification_id = 1711101;
+    int notification_id = 1;
     String TAG = "service_error";
     public static String currentUser = LoginActivity.currentUser;
 
@@ -190,7 +192,7 @@ public class StepService3 extends Service implements SensorEventListener {
     public void startForegroundService(){
         registerSensors();
         //startTime = SystemClock.uptimeMillis() + 1000;
-        //startForeground(notification_id,getNotification("Starting Step Counter Service",""));
+        //startForeground(notification_id,getNotification("Starting Step Counter Service","", 1));
         handler.postDelayed(timerRunnable,1000);
         isActive = true;
     }
@@ -199,7 +201,7 @@ public class StepService3 extends Service implements SensorEventListener {
         unregisterSensors();
         handler.removeCallbacks(timerRunnable);
         isActive = false;
-        //startForeground(notification_id,getNotification("Stopping  Step Counter Service",""));
+        //startForeground(notification_id,getNotification("Stopping  Step Counter Service","", 1));
         stopForeground(true);
         //elapsedTime = elapsedTime + timeInMilliseconds;
         if(update)
@@ -217,8 +219,16 @@ public class StepService3 extends Service implements SensorEventListener {
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-//            Notification notification = updateNoification();
-//            startForeground(notification_id,notification);
+//            if(step >= 100 && !sendMessage) {
+//                Notification notification = updateNoification();
+//
+//                NotificationManager notificationManager =
+//                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//                notificationManager.notify(2, notification);
+//                //startForeground(2, notification);
+//                sendMessage = true;
+//            }
             handler.postDelayed(this, 1000);
         }
     };
@@ -265,7 +275,7 @@ public class StepService3 extends Service implements SensorEventListener {
         body += data.get("distance") + "                ";
         body += data.get("duration");
 
-        Notification notification = getNotification("STEPS TAKEN :  " + data.get("steps"),body);
+        Notification notification = getNotification(NofiticationCenter.REACH_DAILY_GOAL,body, 2);
 
         return notification;
     }
@@ -282,7 +292,7 @@ public class StepService3 extends Service implements SensorEventListener {
         }
     }
 
-    private Notification getNotification(String title, String body){
+    private Notification getNotification(String title, String body, int id){
 
         Intent resetIntent = new Intent(this,StepService3.class);
         resetIntent.setAction(Constants.RESET_COUNT);
@@ -293,11 +303,11 @@ public class StepService3 extends Service implements SensorEventListener {
         PendingIntent stopPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
 
         Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,9,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,id,intent,PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setPriority(-2)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setSmallIcon(R.drawable.happy)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(true)
                 .build();
@@ -306,11 +316,11 @@ public class StepService3 extends Service implements SensorEventListener {
     }
 
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
                     "WALKWITHME",
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_HIGH
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
@@ -367,11 +377,4 @@ public class StepService3 extends Service implements SensorEventListener {
         }
     }
 
-//    @Override
-//    public void onDestroy() {
-//       service.stop();
-//        player.release();
-//        Toast.makeText(this, "Service stopped...", Toast.LENGTH_SHORT).show();
-//        Log.i(TAG, "onCreate() , service stopped...");
-//    }
 }
