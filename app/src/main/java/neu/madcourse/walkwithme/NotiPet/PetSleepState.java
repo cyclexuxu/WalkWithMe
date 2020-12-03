@@ -20,8 +20,8 @@ public class PetSleepState extends PetState{
     @Override
     public PetState tip() {
         if (cHealth != 0){
-            cHappiness = Math.min(100, cKnowledge + ONE_NEWS);
-            PetState newState = new PetHappyState();
+            cKnowledge = Math.min(100, cKnowledge + ONE_NEWS);
+            PetState newState = new PetTipState();
             return newState;
         } else {
             System.out.println("Feed Me first!");
