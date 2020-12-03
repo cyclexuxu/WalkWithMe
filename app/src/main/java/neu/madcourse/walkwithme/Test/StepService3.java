@@ -58,6 +58,8 @@ public class StepService3 extends Service implements SensorEventListener {
     private FirebaseDatabase mdb;
     private DatabaseReference step_ref;
     private int totalStep = 0;
+    private int prevStep = 0;
+
 
     private boolean isActive = false;
 
@@ -166,26 +168,14 @@ public class StepService3 extends Service implements SensorEventListener {
                 totalStep++;
             }
 
+
             final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            Handler handler1 = new Handler(Looper.getMainLooper());
+//            step_ref.child("Total Steps").setValue(totalStep);
+//            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 
-            handler.post(new Runnable() {
+            step_ref.child("Total Steps").setValue(totalStep);
+            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 
-                @Override
-                public void run() {
-                    step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
-                }
-            });
-
-            Handler handler2 = new Handler(Looper.getMainLooper());
-
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    step_ref.child("Total Steps").setValue(totalStep);
-                }
-            });
 
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 //            step_ref.child("Total Steps").setValue(totalStep);
@@ -244,7 +234,7 @@ public class StepService3 extends Service implements SensorEventListener {
             sensorManager.registerListener(StepService3.this, stepDetectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         if(accelerometer != null)
-            sensorManager.registerListener(StepService3.this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(StepService3.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
@@ -338,10 +328,12 @@ public class StepService3 extends Service implements SensorEventListener {
                     Log.d(TAG, currentUser);
                     if(dataSnapshot.child("Total Steps").exists()){
                         totalStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString());
+                        //prevStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString());
                     }
                     if(dataSnapshot.child("Step Count").child(timestamp).exists()){
                         Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
                         step = (int)steps.getSteps();
+                        prevStep = (int)steps.getSteps();
                     }else{
                         updateSteps();
                     }

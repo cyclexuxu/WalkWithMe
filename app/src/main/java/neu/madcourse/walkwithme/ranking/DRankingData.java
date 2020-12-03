@@ -89,6 +89,7 @@ public class DRankingData {
                     String name = ds.child("username").getValue(String.class);
                     usernames.add(name);
                 }
+                Log.d("onDataChange: ", usernames.size()+"");
                 setRandomStepsAndLikes(usernames);
             }
 
@@ -103,9 +104,11 @@ public class DRankingData {
     private void setRandomStepsAndLikes(List<String> usernames) {
         itemRanks = new ArrayList<>();
         Random random = new Random();
+        Log.d("usernames.size(): ",usernames.size()+"");
         for (String username : usernames) {
             int steps = random.nextInt(15000);
             int likes = random.nextInt(20);
+            Log.e("Loop username", username);
             if (username.equals(LoginActivity.currentUser)) {
                 steps = currentUserStep;
                 Log.d(LOG, String.valueOf(steps));
