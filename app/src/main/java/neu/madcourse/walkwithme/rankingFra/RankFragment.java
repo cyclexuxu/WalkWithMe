@@ -1,17 +1,19 @@
-package neu.madcourse.walkwithme.ranking;
+package neu.madcourse.walkwithme.rankingFra;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,29 +25,44 @@ import java.util.Collections;
 import java.util.List;
 
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.ranking.DRankingData;
+import neu.madcourse.walkwithme.ranking.ItemRank;
+import neu.madcourse.walkwithme.ranking.RankAdapter;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
-public class RankingActivity extends AppCompatActivity {
+public class RankFragment extends Fragment {
     private List<ItemRank> itemRankList;
     private RecyclerView recyclerView;
     private RankAdapter rankAdapter;
     private DatabaseReference databaseReference;
     private String LOG = "RANKING_ACTIVITY";
     private TextView tvCurrentUser;
+    private SharedPreferences sharedPreferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ranking);
 
-
+        sharedPreferences =  getActivity().getSharedPreferences("rank", Context.MODE_PRIVATE);
         DRankingData dRankingData = new DRankingData();
 
-        tvCurrentUser = findViewById(R.id.tvUserName);
+
+
+
+
+//        userStr = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+//        mdb = FirebaseDatabase.getInstance();
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+
+        tvCurrentUser = view.findViewById(R.id.tvUserName);
         tvCurrentUser.setText(LoginActivity.currentUser);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         itemRankList = new ArrayList<>();
 
         // fetch data from firebase
@@ -64,7 +81,7 @@ public class RankingActivity extends AppCompatActivity {
                     ItemRank itemRank = new ItemRank(username, steps, likesReceived);
                     itemRankList.add(itemRank);
                 }
-                processItemRankList(itemRankList);
+                processItemRankList(view, itemRankList);
                 // need to filter out the current user
 
                 // pass the fetched data to adapter
@@ -77,34 +94,41 @@ public class RankingActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_rank, container, false);
     }
 
 
-    private void processItemRankList(List<ItemRank> itemRankList) {
+    private void processItemRankList(@NonNull final View view, List<ItemRank> itemRankList) {
         sortBySteps(itemRankList);
-        addRankIdToEachItem(itemRankList);
+        addRankIdToEachItem(view, itemRankList);
     }
 
-    private void addRankIdToEachItem(List<ItemRank> itemRankList) {
+    private void addRankIdToEachItem(@NonNull final View view, List<ItemRank> itemRankList) {
         int indexOfCurrentUser = -1;
         for (int i = 0; i < itemRankList.size(); i++) {
             ItemRank currentItem = itemRankList.get(i);
             currentItem.setRankId(i + 1);
             if (currentItem.getUsername().equals(LoginActivity.currentUser)) {
                 indexOfCurrentUser = i;
-                setCurrentUserStatus(currentItem);
+                setCurrentUserStatus(view, currentItem);
             }
         }
         itemRankList.remove(indexOfCurrentUser);
 
     }
 
-    private void setCurrentUserStatus(ItemRank currentItem) {
-        TextView tvRank = findViewById(R.id.tvRank);
+    private void setCurrentUserStatus(@NonNull final View view, ItemRank currentItem) {
+        TextView tvRank = view.findViewById(R.id.tvRank);
         tvRank.setText(String.valueOf(currentItem.getRankId()));
-        TextView tvSteps = findViewById(R.id.tvSteps);
+        TextView tvSteps = view.findViewById(R.id.tvSteps);
         tvSteps.setText(String.valueOf(currentItem.getSteps()));
-        TextView tvLikes = findViewById(R.id.tvLikes);
+        TextView tvLikes = view.findViewById(R.id.tvLikes);
         tvLikes.setText(String.valueOf(currentItem.getLikesReceived()));
 
     }

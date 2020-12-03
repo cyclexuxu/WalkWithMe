@@ -23,6 +23,7 @@ import neu.madcourse.walkwithme.Test.StepsFragment2;
 
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 
+import neu.madcourse.walkwithme.rankingFra.RankFragment;
 import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 import neu.madcourse.walkwithme.userlog.LogoutFragment;
