@@ -112,15 +112,15 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         startButton = view.findViewById(R.id.startButton);
         lineChart = (LineChartView) view.findViewById(R.id.line_chart);
 
-        try{
-            String address = user.getString("address","");
-            step_ref = mdb.getReference().child("users").child("Dan");
-            Steps preStep = new Steps(150, "2020-11-26");
-            step_ref.child("Step Count").child("2020-11-26").setValue(preStep);
-
-        }catch (Exception e){
-
-        }
+//        try{
+//            String address = user.getString("address","");
+//            step_ref = mdb.getReference().child("users").child("Dan");
+//            Steps preStep = new Steps(150, "2020-11-26");
+//            step_ref.child("Step Count").child("2020-11-26").setValue(preStep);
+//
+//        }catch (Exception e){
+//
+//        }
 
         if(!checkSensors())
             startButton.setEnabled(false);
@@ -345,7 +345,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         List<AxisValue> mAxisXValues = new ArrayList<>();
 
         for (int i = 0; i < days.length; i++) {
-            Log.d("days: ", " y " + days[i] +" x " + i+"");
+            //Log.d("days: ", " y " + days[i] +" x " + i+"");
             mPointValues.add(new PointValue(i, days[i]));
         }
 

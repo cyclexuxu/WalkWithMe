@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import neu.madcourse.walkwithme.MainActivity;
+import neu.madcourse.walkwithme.Test.Constants;
+import neu.madcourse.walkwithme.Test.StepService3;
 import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.ranking.DRankingData;
@@ -55,11 +57,13 @@ public class LoginActivity extends AppCompatActivity {
                         (password.equals(dataSnapshot.child(username).child("password").getValue()))) {
 
                     currentUser = username;
+                    StepService3.currentUser = username;
                     DRankingData dRankingData = new DRankingData();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
                     Log.i( TAG, "You successfully login");
+                    Log.i( TAG, currentUser);
                 } else {
                     Toast.makeText(getApplicationContext(),"Please login again", Toast.LENGTH_SHORT).show();
                 }
@@ -68,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
     }
 
     public void onRegisterClick(View view) {
@@ -75,6 +80,11 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (username.equals("")) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 if (dataSnapshot.hasChild(username)) {
                     Log.i(TAG, "" + getApplicationContext());
                     Toast.makeText(getApplicationContext(), "username is already registered", Toast.LENGTH_SHORT).show();
