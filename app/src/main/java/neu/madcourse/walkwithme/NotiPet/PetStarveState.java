@@ -16,10 +16,6 @@ public class PetStarveState extends PetState{
         throw new PetStarvingException();
     }
 
-    @Override
-    public PetState earnMeat() {
-        return null;
-    }
 
     @Override
     public PetState timeout() {

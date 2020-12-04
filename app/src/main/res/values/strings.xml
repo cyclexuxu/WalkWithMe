@@ -23,4 +23,5 @@
         <item>"Drink 8 cups of water a day!"</item>
         <item>"Relax, embrace the nature."</item>
     </string-array>
+    <string name="petLevelString">Level %1$d</string>
 </resources>

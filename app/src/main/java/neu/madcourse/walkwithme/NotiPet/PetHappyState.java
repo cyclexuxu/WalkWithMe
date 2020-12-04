@@ -20,18 +20,13 @@ public class PetHappyState extends PetState {
     @Override
     public PetState tip() {
         if (cHealth != 0){
-            cKnowledge = Math.min(100, cKnowledge + ONE_NEWS);
+            setcKnowledge(Math.min(100, cKnowledge + ONE_NEWS));
             PetState newState = new PetTipState();
             return newState;
         } else {
             System.out.println("Feed Me first!");
             return new PetStarveState();
         }
-    }
-
-    @Override
-    public PetState earnMeat() {
-        return null;
     }
 
     @Override
