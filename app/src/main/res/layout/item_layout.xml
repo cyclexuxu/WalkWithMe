@@ -39,7 +39,7 @@
         android:id="@+id/btnLikeIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="#FFFFFF"
+        android:background="#40FFFFFF"
         android:clickable="true"
         android:soundEffectsEnabled="true"
         android:src="@drawable/ic_action_dislike" />

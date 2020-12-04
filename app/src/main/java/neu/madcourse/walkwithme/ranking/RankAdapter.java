@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.ranking;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class RankAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         ViewHolderClass viewHolderClass = new ViewHolderClass(view);
-
+        // textClick = true;
         return viewHolderClass;
     }
 
@@ -48,7 +49,6 @@ public class RankAdapter extends RecyclerView.Adapter {
         viewHolderClass.tvUsername.setText(itemRank.getUsername());
         viewHolderClass.tvSteps.setText(String.valueOf(itemRank.getSteps()));
         viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
-
 
         //  add like action
         // viewHolderClass.getLikeStatus()
@@ -63,13 +63,15 @@ public class RankAdapter extends RecyclerView.Adapter {
                         if (textClick) {
                             viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
                             viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
+                            itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
+                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
+                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
+                            itemRank.setLikeClicked(true);
                             textClick = false;
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        textClick = false;
                     }
                 });
             }
