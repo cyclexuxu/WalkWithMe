@@ -61,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "username is already registered", Toast.LENGTH_SHORT).show();
                 } else if (username.length() != 0 && password.length() != 0 && weight.getText().toString() != "" && height.getText().toString() != "") {
                     mDatabase.child("users").child(user.getUsername()).setValue(user);
+                    mDatabase.child("users").child(user.getUsername()).child("level").setValue(1);
                     mDatabase.child("users").child(user.getUsername()).child("meatNum").setValue(3);
                     mDatabase.child("users").child(user.getUsername()).child("healthNum").setValue(0);
                     mDatabase.child("users").child(user.getUsername()).child("happinessNum").setValue(0);

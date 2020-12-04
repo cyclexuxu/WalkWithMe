@@ -58,6 +58,9 @@ public class RankFragment extends Fragment {
         setRetainInstance(true);
     }
 
+
+
+
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 

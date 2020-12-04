@@ -7,15 +7,26 @@ public class PetHappyState extends PetState {
 
     @Override
     public PetState music() {
-        cHappiness = Math.min(100, cHappiness + ONE_MUSIC);
-        return this;
+        if (cHealth != 0){
+            cHappiness = Math.min(100, cHappiness + ONE_MUSIC);
+            PetState newState = new PetHappyState();
+            return newState;
+        } else {
+            System.out.println("Feed Me first!");
+            return new PetStarveState();
+        }
     }
 
     @Override
     public PetState tip() {
-        cKnowledge = Math.min(100, cKnowledge + ONE_NEWS);
-        PetState newState = new PetTipState();
-        return newState;
+        if (cHealth != 0){
+            cKnowledge = Math.min(100, cKnowledge + ONE_NEWS);
+            PetState newState = new PetTipState();
+            return newState;
+        } else {
+            System.out.println("Feed Me first!");
+            return new PetStarveState();
+        }
     }
 
     @Override

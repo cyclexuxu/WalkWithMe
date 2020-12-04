@@ -52,6 +52,7 @@ public class User {
         this.time = timeStamp;
         this.weight = weight;
         this.height = height;
-        this.BMI = 30;
+        //this.BMI = 30;
+        this.BMI = (int)((weight + 0.0d) / (height * height)) + 0.0d;
     }
 }

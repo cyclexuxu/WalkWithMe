@@ -31,6 +31,7 @@ public class ProfileFragment extends Fragment {
     private TextView levelProfile;
     private SharedPreferences userStr;
     private FirebaseDatabase mdb;
+    private DatabaseReference mDatabase;
     private static final String TAG = "Profile page";
 
     @Override
@@ -71,7 +72,15 @@ public class ProfileFragment extends Fragment {
                         weight = String.valueOf(user.child("weight").getValue(Double.class));
                         height = String.valueOf(user.child("height").getValue(Double.class));
                         bmi = String.valueOf(user.child("bmi").getValue(Double.class));
-                        level = "1"; // to be updated
+                        int steps = user.child("Total Steps").getValue(Integer.class);
+                        int oldLevel = user.child("level").getValue(Integer.class);
+                        int newLevel = processSteps(steps);
+                        level = String.valueOf(newLevel);
+//                        if (oldLevel != newLevel) {
+//                            // do notification
+//
+//                        }
+                        userRef.child(name).child("level").setValue(newLevel);
                         break;
                     }
                 }
@@ -89,5 +98,15 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+    }
+
+    private int processSteps(int steps) {
+        if (steps <= 2000) {
+            return 1;
+        } else {
+            steps -= 2000;
+            int n = 2;
+            return n + steps / 3500;
+        }
     }
 }

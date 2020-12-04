@@ -52,7 +52,6 @@ public class PetActivity extends AppCompatActivity {
     ImageView[] meatViews = new ImageView[7];
 
     AlarmManager alarmManager;
-    Context context;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference knowledgeNumReference;
     DatabaseReference meatNumReference;
@@ -135,6 +134,11 @@ public class PetActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 petState.setcHappiness(snapshot.getValue(Integer.class));
+                if (petState.getcHappiness() <= 0){
+                    petState = new PetStarveState();
+                } else {
+                    petState = new PetSleepState();
+                }
                 showCorgi();
             }
 
