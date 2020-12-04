@@ -40,6 +40,7 @@ import java.util.Random;
 import io.grpc.internal.SharedResourceHolder;
 import neu.madcourse.walkwithme.NotiPet.InsufficientMeatException;
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
+import neu.madcourse.walkwithme.NotiPet.PetHappyState;
 import neu.madcourse.walkwithme.NotiPet.PetSleepState;
 import neu.madcourse.walkwithme.NotiPet.PetStarveState;
 import neu.madcourse.walkwithme.NotiPet.PetStarvingException;
@@ -104,7 +105,9 @@ public class PetFragment extends Fragment {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        petState = new PetSleepState();
+        petState = mediaPlayer != null && mediaPlayer.isPlaying() ?
+                new PetHappyState():
+                new PetSleepState();
 
         meatNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("meatNum");
         healthNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("healthNum");
@@ -130,11 +133,6 @@ public class PetFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 petState.setcKnowledge(snapshot.getValue(Integer.class));
                 Log.e("Data of Knowledge", String.valueOf(petState.getcKnowledge()));
-                if (petState.getcHealth() <= 0){
-                    petState = new PetStarveState();
-                } else {
-                    petState = new PetSleepState();
-                }
                 showCorgi();
             }
 
@@ -151,8 +149,6 @@ public class PetFragment extends Fragment {
                 petState.setcHealth(snapshot.getValue(Integer.class));
                 if (petState.getcHealth() <= 0) {
                     petState = new PetStarveState();
-                } else {
-                    petState = new PetSleepState();
                 }
                 showCorgi();
             }
@@ -168,11 +164,6 @@ public class PetFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 petState.setcHappiness(snapshot.getValue(Integer.class));
-                if (petState.getcHealth() <= 0){
-                    petState = new PetStarveState();
-                } else {
-                    petState = new PetSleepState();
-                }
                 showCorgi();
             }
 
@@ -193,7 +184,7 @@ public class PetFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 corgi.setImageResource(R.drawable.run);
-//                beginTranslationAnimation();
+                beginTranslationAnimation();
                 return true;
             }
         });
@@ -238,6 +229,8 @@ public class PetFragment extends Fragment {
                     mediaPlayer.stop();
                     mediaPlayer.release();
                     mediaPlayer = null;
+                    petState = petState.timeout();
+                    showCorgi();
                 } else {
                     musicButton.setText("Stop");
                     try {
@@ -246,19 +239,19 @@ public class PetFragment extends Fragment {
                         int songID = songCount % 3;
                         mediaPlayer = MediaPlayer.create(getContext(), songBase[songID]);
                         songCount++;
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                petState = petState.timeout();
+                                showCorgi();
+                            }
+                        });
                         mediaPlayer.start();
 
                     } catch (PetStarvingException e) {
                         showToast("I'm starving, feed me first.");
                         return;
                     }
-                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "music", new AlarmManager.OnAlarmListener() {
-                        @Override
-                        public void onAlarm() {
-                            petState = petState.timeout();
-                            showCorgi();
-                        }
-                    }, null);
                     showCorgi();
                 }
             }
@@ -317,21 +310,21 @@ public class PetFragment extends Fragment {
         }
     }
 
-//    private void beginTranslationAnimation(){
-//        DisplayMetrics displayMetrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-//        int height = displayMetrics.heightPixels;
-//        ObjectAnimator animator = ObjectAnimator.ofFloat(corgi, "translationY", -height / 6, 0);
-//        animator.setInterpolator(new PetFragment().JumpInterpolator());
-//        animator.setDuration(3000);
-//        animator.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                showCorgi();
-//            }
-//        });
-//        animator.start();
-//    }
+    private void beginTranslationAnimation(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(corgi, "translationY", -height / 6, 0);
+        animator.setInterpolator(new JumpInterpolator());
+        animator.setDuration(3000);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showCorgi();
+            }
+        });
+        animator.start();
+    }
 
     private void showToast(String message){
         int duration = Toast.LENGTH_LONG;
