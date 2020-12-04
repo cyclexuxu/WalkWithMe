@@ -50,7 +50,9 @@ public class RankAdapter extends RecyclerView.Adapter {
         viewHolderClass.tvSteps.setText(String.valueOf(itemRank.getSteps()));
         viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
 
+        viewHolderClass.checkLikeStatus(itemRank);
         //  add like action
+
         // viewHolderClass.getLikeStatus()
         viewHolderClass.ibLike.setOnClickListener(new View.OnClickListener(){
 
@@ -78,6 +80,7 @@ public class RankAdapter extends RecyclerView.Adapter {
         });
     }
 
+
     @Override
     public int getItemCount() {
         return itemRankList.size();
@@ -95,5 +98,26 @@ public class RankAdapter extends RecyclerView.Adapter {
             tvLikes = itemView.findViewById(R.id.tvLikes);
             ibLike = itemView.findViewById(R.id.btnLikeIcon);
         }
+
+        public void checkLikeStatus(ItemRank itemRank) {
+            String id = String.valueOf(itemRank.getRankId());
+            DatabaseReference isClicked =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
+            isClicked.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Boolean isLikedClicked = (Boolean) snapshot.getValue();
+                    if (isLikedClicked) {
+                        ibLike.setImageResource(R.drawable.ic_action_like);
+                    }
+                    // Log.d(LOG, String.valueOf(isLikedClicked) + "~~~~~~~~~~~~~~");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
+
 }
