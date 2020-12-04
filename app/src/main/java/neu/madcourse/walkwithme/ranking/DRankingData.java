@@ -17,10 +17,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import neu.madcourse.walkwithme.Test.Steps;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class DRankingData {
@@ -31,6 +33,7 @@ public class DRankingData {
     private String LOG = "DRankingData";
     private String today;
     protected int currentUserStep;
+    protected HashMap<String, Integer> map = new HashMap<>();
 
     // private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -86,10 +89,19 @@ public class DRankingData {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    String name = ds.child("username").getValue(String.class);
-                    usernames.add(name);
+                    Log.d("onDataChange: ", ds.getKey());
+                    String name = ds.getKey();
+                    //usernames.add(name);
+                    int step = 0;
+                    if(ds.child("Step Count").child("2020-12-02").exists()){
+                        Steps steps = ds.child("Step Count").child("2020-12-02").getValue(Steps.class);
+                        step = (int)steps.getSteps();
+                    }
+                    Log.d("onDataChange before hashmap: ", name);
+                    Log.d("onDataChange before hashmap: ", step + "");
+                    map.put(name, step);
                 }
-                Log.d("onDataChange: ", usernames.size()+"");
+                Log.d("onDataChange HashMap ", map+"");
                 setRandomStepsAndLikes(usernames);
             }
 
