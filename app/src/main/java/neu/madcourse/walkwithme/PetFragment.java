@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,6 +64,8 @@ public class PetFragment extends Fragment {
     ProgressBar happinessBar;
     ProgressBar knowledgeBar;
 
+    TextView levelText;
+
     ImageView[] meatViews = new ImageView[7];
 
     AlarmManager alarmManager;
@@ -71,6 +74,9 @@ public class PetFragment extends Fragment {
     DatabaseReference meatNumReference;
     DatabaseReference happinessNumReference;
     DatabaseReference healthNumReference;
+    DatabaseReference redeemedSteps;
+    DatabaseReference totalSteps;
+    DatabaseReference petLevel;
 
     static MediaPlayer mediaPlayer;
 
@@ -78,6 +84,7 @@ public class PetFragment extends Fragment {
 
     static final int[] songBase = {R.raw.happy, R.raw.i_dont_care, R.raw.mamacita};
     static int songCount = 0;
+
 
     @Nullable
     @Override
@@ -94,6 +101,7 @@ public class PetFragment extends Fragment {
         happinessBar = (ProgressBar) view.findViewById(R.id.happinessProgress);
         knowledgeBar = (ProgressBar) view.findViewById(R.id.knowledgeProgress);
         alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+        levelText = view.findViewById(R.id.levelText);
 
         meatViews[0] = view.findViewById(R.id.meat1);
         meatViews[1] = view.findViewById(R.id.meat2);
@@ -113,6 +121,11 @@ public class PetFragment extends Fragment {
         healthNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("healthNum");
         happinessNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("happinessNum");
         knowledgeNumReference = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("knowledgeNum");
+        redeemedSteps = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("redeemedSteps");
+        petLevel = firebaseDatabase.getReference("users").child(LoginActivity.currentUser).child("petLevel");
+
+        redeemSteps();
+        updateLevel();
 
         meatNumReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -196,8 +209,7 @@ public class PetFragment extends Fragment {
             public void onClick(View view) {
                 try {
                     petState = petState.feed();
-                    meatNumReference.setValue(petState.getMeat());
-                    healthNumReference.setValue(petState.getcHealth());
+                    updateDb();
                 } catch (InsufficientMeatException e) {
                     showToast("Not enough meat");
                     return;
@@ -235,7 +247,7 @@ public class PetFragment extends Fragment {
                     musicButton.setText("Stop");
                     try {
                         petState = petState.music();
-                        happinessNumReference.setValue(petState.getcHappiness());
+                        updateDb();
                         int songID = songCount % 3;
                         mediaPlayer = MediaPlayer.create(getContext(), songBase[songID]);
                         songCount++;
@@ -269,7 +281,7 @@ public class PetFragment extends Fragment {
                     String[] tip_lab = res.getStringArray(R.array.tips_lab);
                     showToast(tip_lab[tipID]);
                     petState = petState.tip();
-                    knowledgeNumReference.setValue(petState.getcKnowledge());
+                    updateDb();
                 } catch (PetStarvingException e) {
                     showToast("I'm starving, feed me first.");
                     return;
@@ -293,6 +305,9 @@ public class PetFragment extends Fragment {
         happinessBar.setProgress(petState.getcHappiness());
         knowledgeBar.setProgress(petState.getcKnowledge());
 
+        levelText.setText(getString(R.string.petLevelString, petState.getPetLevel()));
+
+
         for (int i = 0; i < 7; i++) {
             if (i < petState.getMeat()) {
                 meatViews[i].setVisibility(View.VISIBLE);
@@ -300,7 +315,14 @@ public class PetFragment extends Fragment {
                 meatViews[i].setVisibility(View.INVISIBLE);
             }
         }
+    }
 
+    private void updateDb() {
+        healthNumReference.setValue(petState.getcHealth());
+        happinessNumReference.setValue(petState.getcHappiness());
+        knowledgeNumReference.setValue(petState.getcKnowledge());
+        petLevel.setValue(petState.getPetLevel());
+        meatNumReference.setValue(petState.getMeat());
     }
 
     public class JumpInterpolator implements TimeInterpolator {
@@ -332,6 +354,48 @@ public class PetFragment extends Fragment {
         toast.show();
     }
 
+    private void redeemSteps(){
+        DatabaseReference diffSteps = FirebaseDatabase.getInstance().getReference().child("users").child(LoginActivity.currentUser);
+        diffSteps.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int totalStep = snapshot.child("Total Steps").getValue(Integer.class);
+                int redeemedStep = snapshot.child("redeemedSteps").getValue(Integer.class);
+                int meatNum = snapshot.child("meatNum").getValue(Integer.class);
+                if (totalStep - redeemedStep < 500){
+                    return;
+                } else {
+                    int meatReward = Math.min((totalStep - redeemedStep) / 500, 7 - meatNum);
+                    meatNumReference.setValue(meatNum + meatReward);
+                    redeemedSteps.setValue(totalStep);
+                }
+                showCorgi();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    private void updateLevel(){
+        DatabaseReference petLevel = FirebaseDatabase.getInstance().getReference().child("users").child(LoginActivity.currentUser).child("petLevel");
+        petLevel.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int curLevel = petState.getPetLevel();
+                petState.setPetLevel(curLevel);
+                showCorgi();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }
 
 
