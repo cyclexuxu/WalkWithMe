@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.Test;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -88,6 +89,7 @@ public class StepService3 extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        setAlarm();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
@@ -192,7 +194,7 @@ public class StepService3 extends Service implements SensorEventListener {
     public void startForegroundService(){
         registerSensors();
         //startTime = SystemClock.uptimeMillis() + 1000;
-        //startForeground(notification_id,getNotification("Starting Step Counter Service","", 1));
+        startForeground(notification_id,getNotification("Starting Step Counter Service","", 1));
         handler.postDelayed(timerRunnable,1000);
         isActive = true;
     }
@@ -201,7 +203,7 @@ public class StepService3 extends Service implements SensorEventListener {
         unregisterSensors();
         handler.removeCallbacks(timerRunnable);
         isActive = false;
-        //startForeground(notification_id,getNotification("Stopping  Step Counter Service","", 1));
+        startForeground(notification_id,getNotification("Stopping  Step Counter Service","", 1));
         stopForeground(true);
         //elapsedTime = elapsedTime + timeInMilliseconds;
         if(update)
@@ -219,16 +221,16 @@ public class StepService3 extends Service implements SensorEventListener {
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-//            if(step >= 100 && !sendMessage) {
-//                Notification notification = updateNoification();
-//
-//                NotificationManager notificationManager =
-//                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//                notificationManager.notify(2, notification);
-//                //startForeground(2, notification);
-//                sendMessage = true;
-//            }
+            if(step >= 100 && !sendMessage) {
+                Notification notification = updateNoification();
+
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                notificationManager.notify(2, notification);
+                //startForeground(2, notification);
+                sendMessage = true;
+            }
             handler.postDelayed(this, 1000);
         }
     };
@@ -307,9 +309,11 @@ public class StepService3 extends Service implements SensorEventListener {
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.happy),97,128,false))
                 .setSmallIcon(R.drawable.happy)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(true)
+                .setAutoCancel(true)
                 .build();
 
         return notification;
@@ -374,6 +378,27 @@ public class StepService3 extends Service implements SensorEventListener {
             });
         }catch (Exception e){
             Log.d(TAG,"fetch exception " + e.getLocalizedMessage());
+        }
+    }
+    //set alarm to check today's goal and steps at 5pm every day notification
+    private void setAlarm(){
+        Log.d("setAlarm: ", "set alarm");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 11);
+
+        if (calendar.getTime().compareTo(new Date()) < 0)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        Intent intent = new Intent(getApplicationContext(), NotiReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        }else{
+            Log.d("setAlarm: ", "set alarm is null");
         }
     }
 
