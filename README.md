@@ -6,7 +6,7 @@ This is a cute android app will motivate you to take more walks.
 # Key features
 
 
-- Two Objectives for the Pet Section in this App:
+- Three Objectives for the Pet Section in this App:
 - 1) It is designed for increasing the user engagement through interesting interaction with a virtual pet.
 - 2) It is designed for motivating user's fitness activity through the feature of "walking for earnining your pet's food".
 - 3) It is designed for a preliminary test on the integration of music-listening features and news-reading features in a fitness management app. 
