@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.752"
+            app:layout_constraintVertical_bias="0.72"
             app:rowCount="1">
 
             <ImageView
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.867"
+            app:layout_constraintVertical_bias="0.84"
             app:rowCount="1">
 
             <Button
