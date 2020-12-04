@@ -4,6 +4,9 @@ import neu.madcourse.walkwithme.R;
 
 public class PetHappyState extends PetState {
 
+    public PetHappyState() {
+        isPlayingMusic = true;
+    }
 
     @Override
     public PetState music() {
@@ -31,6 +34,7 @@ public class PetHappyState extends PetState {
 
     @Override
     public PetState timeout() {
+        isPlayingMusic = false;
         return new PetSleepState();
     }
 

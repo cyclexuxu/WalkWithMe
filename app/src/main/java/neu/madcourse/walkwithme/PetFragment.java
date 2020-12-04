@@ -54,6 +54,14 @@ import static androidx.core.content.ContextCompat.getSystemService;
 
 public class PetFragment extends Fragment {
 
+    AlarmManager.OnAlarmListener alarmListener = new AlarmManager.OnAlarmListener() {
+        @Override
+        public void onAlarm() {
+            petState = petState.timeout();
+            showCorgi();
+        }
+    };
+
     ImageView corgi;
     PetState petState;
 
@@ -80,7 +88,7 @@ public class PetFragment extends Fragment {
     DatabaseReference petLevel;
 
     static MediaPlayer mediaPlayer;
-
+    static Context context;
     static final String TAG = "Pet page";
 
     static final int[] songBase = {R.raw.happy, R.raw.i_dont_care, R.raw.mamacita};
@@ -97,6 +105,7 @@ public class PetFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getContext();
         corgi = (ImageView) view.findViewById(R.id.corgiImage);
 
         healthBar = (ProgressBar) view.findViewById(R.id.healthProgress);
@@ -194,13 +203,11 @@ public class PetFragment extends Fragment {
 
         showCorgi();
 
-        corgi.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+        corgi.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 corgi.setImageResource(R.drawable.run);
                 beginTranslationAnimation();
-                return true;
             }
         });
 
@@ -216,13 +223,7 @@ public class PetFragment extends Fragment {
                     showToast("Not enough meat");
                     return;
                 }
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "eat", new AlarmManager.OnAlarmListener() {
-                    @Override
-                    public void onAlarm() {
-                        petState = petState.timeout();
-                        showCorgi();
-                    }
-                }, null);
+                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "eat", alarmListener, null);
                 showCorgi();
             }
         });
@@ -249,6 +250,7 @@ public class PetFragment extends Fragment {
                     musicButton.setText("Stop");
                     try {
                         petState = petState.music();
+                        alarmManager.cancel(alarmListener);
                         updateDb();
                         int songID = songCount % 3;
                         mediaPlayer = MediaPlayer.create(getContext(), songBase[songID]);
@@ -256,6 +258,9 @@ public class PetFragment extends Fragment {
                         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mediaPlayer) {
+                                musicButton.setText("Music");
+                                mediaPlayer.release();
+                                mediaPlayer = null;
                                 petState = petState.timeout();
                                 showCorgi();
                             }
@@ -288,13 +293,7 @@ public class PetFragment extends Fragment {
                     showToast("I'm starving, feed me first.");
                     return;
                 }
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "tips", new AlarmManager.OnAlarmListener() {
-                    @Override
-                    public void onAlarm() {
-                        petState = petState.timeout();
-                        showCorgi();
-                    }
-                }, null);
+                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "tips", alarmListener, null);
                 showCorgi();
             }
         });
@@ -307,7 +306,7 @@ public class PetFragment extends Fragment {
         happinessBar.setProgress(petState.getcHappiness());
         knowledgeBar.setProgress(petState.getcKnowledge());
 
-        levelText.setText(getString(R.string.petLevelString, petState.getPetLevel()));
+        levelText.setText(context.getString(R.string.petLevelString, petState.getPetLevel()));
 
 
         for (int i = 0; i < 7; i++) {
@@ -388,11 +387,10 @@ public class PetFragment extends Fragment {
 
 
     private void updateLevel(){
-        DatabaseReference petLevel = FirebaseDatabase.getInstance().getReference().child("users").child(LoginActivity.currentUser).child("petLevel");
         petLevel.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int curLevel = petState.getPetLevel();
+                int curLevel = snapshot.getValue(Integer.class);
                 petState.setPetLevel(curLevel);
                 showCorgi();
             }
