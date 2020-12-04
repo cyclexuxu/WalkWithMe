@@ -14,11 +14,11 @@ Pet Section
   - 3) It is designed for a preliminary test on the integration of music-listening features and news-reading features in a fitness management app. 
   
 - The user engagement will be embodied in these five aspects:
-  - Owning: You will own a cute a cartoon Pet corgi who will accompany you exercise. Once you touch it, it will run. If there is no interaction for a while, the pet will go back to sleep.
+  - Owning: You will own a cute a cartoon Pet corgi who will accompany your exercise. Once you touch it, it will run. If there is no interaction for a while, the pet will go back to sleep.
   - Feeding: Every 500 more steps you walk, you will earn one piece of meat. Feeding your pet three times a day will prevent its starving. Once you feed your pet, the value of the health property of your pet will increase.
   - Listening: Pet corgi likes music. Once you listen to the music, the happiness value of the pet will increase. Hope the music can motivate your daily fitness as well as enrich your walking journey.
   - Reading: The more read the tips, the greater value of your pet's knowledge indicator will be. Reading tips is not only a good way to know more about your pet, but also a good way to gain more knowledge of fitness.
-  - Challenging: It is an upgrade game. Pet's level is allowed to upgrade if three main attribute values achieved 100. The more you walk and interact with the pet, the faster you my upgrade your pet's level.
+  - Challenging: It is an upgrade game. Pet's level is allowed to upgrade if three main attributes' values are all achieved 100. The more you walk and interact with the pet, the faster your pet's level will be upgraded.
 
 # Walk through
 
