@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import io.grpc.internal.SharedResourceHolder;
+import neu.madcourse.walkwithme.NotiPet.CustomToast;
 import neu.madcourse.walkwithme.NotiPet.InsufficientMeatException;
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 import neu.madcourse.walkwithme.NotiPet.PetHappyState;
@@ -350,8 +351,8 @@ public class PetFragment extends Fragment {
 
     private void showToast(String message){
         int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(getContext(), message, duration);
-        toast.show();
+        CustomToast customToast= CustomToast.makeText(getContext(), message, 3, 180,200);
+        customToast.show();
     }
 
     private void redeemSteps(){
