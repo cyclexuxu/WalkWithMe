@@ -85,6 +85,7 @@ public class PetFragment extends Fragment {
 
     static final int[] songBase = {R.raw.happy, R.raw.i_dont_care, R.raw.mamacita};
     static int songCount = 0;
+    CustomToast customToast;
 
 
     @Nullable
@@ -350,8 +351,13 @@ public class PetFragment extends Fragment {
     }
 
     private void showToast(String message){
-        int duration = Toast.LENGTH_LONG;
-        CustomToast customToast= CustomToast.makeText(getContext(), message, 3, 180,200);
+        int duration = CustomToast.LENGTH_LONG;
+        if (customToast == null){
+            customToast= CustomToast.makeText(getContext(), message, duration, 120,230);
+        } else {
+            customToast.setText(message);
+        }
+
         customToast.show();
     }
 
