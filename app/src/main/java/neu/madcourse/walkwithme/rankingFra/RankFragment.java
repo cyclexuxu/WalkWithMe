@@ -45,58 +45,39 @@ public class RankFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        sharedPreferences =  getActivity().getSharedPreferences("rank", Context.MODE_PRIVATE);
-        // DRankingData dRankingData = new DRankingData();
-
-
-
-
-
-//        userStr = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-//        mdb = FirebaseDatabase.getInstance();
+        sharedPreferences = getActivity().getSharedPreferences("rank", Context.MODE_PRIVATE);
         setRetainInstance(true);
     }
-
-
-
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 
         etDateOfToday = view.findViewById(R.id.etToday);
         String dateOfToday = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-        String title = "Today  is  " + dateOfToday;
+        String title = dateOfToday + "  You ranked here";
         etDateOfToday.setText(title);
-
         tvCurrentUser = view.findViewById(R.id.tvUserName);
-
-
         tvCurrentUser.setText(LoginActivity.currentUser);
-
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         itemRankList = new ArrayList<>();
-
         // fetch data from firebase
         // databaseReference = FirebaseDatabase.getInstance().getReference("users");
         databaseReference = FirebaseDatabase.getInstance().getReference("Rankings");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     // ItemRank itemRank = ds.child("username");
                     String username = ds.child("username").getValue(String.class);
-
                     // Log.d(LOG, String.valueOf(ds.child("Step Count").getValue(Long.class)));
                     int steps = Integer.parseInt(String.valueOf(ds.child("steps").getValue(Long.class)));
-                    int likesReceived =  Integer.parseInt(String.valueOf(ds.child("likesReceived").getValue(Long.class)));
+                    int likesReceived = Integer.parseInt(String.valueOf(ds.child("likesReceived").getValue(Long.class)));
                     ItemRank itemRank = new ItemRank(username, steps, likesReceived);
                     itemRankList.add(itemRank);
                 }
                 processItemRankList(view, itemRankList);
                 // need to filter out the current user
-
                 // pass the fetched data to adapter
                 rankAdapter = new RankAdapter(itemRankList);
                 recyclerView.setAdapter(rankAdapter);
@@ -104,10 +85,8 @@ public class RankFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
     }
 
     @Nullable
@@ -133,7 +112,6 @@ public class RankFragment extends Fragment {
             }
         }
         itemRankList.remove(indexOfCurrentUser);
-
     }
 
     private void setCurrentUserStatus(@NonNull final View view, ItemRank currentItem) {
@@ -143,7 +121,6 @@ public class RankFragment extends Fragment {
         tvSteps.setText(String.valueOf(currentItem.getSteps()));
         TextView tvLikes = view.findViewById(R.id.tvLikes);
         tvLikes.setText(String.valueOf(currentItem.getLikesReceived()));
-
     }
 
     private void sortBySteps(List<ItemRank> itemRankList) {

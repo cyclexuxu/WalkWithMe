@@ -5,6 +5,7 @@ public class ItemRank {
     private String username;
     private int steps;
     private int likesReceived;
+    private boolean isLikeClicked;
 
     public ItemRank(String username, int steps, int likesReceived) {
         this.username = username;
@@ -44,5 +45,11 @@ public class ItemRank {
         this.likesReceived = likesReceived;
     }
 
+    public boolean isLikeClicked() {
+        return isLikeClicked;
+    }
 
+    public void setLikeClicked(boolean likeClicked) {
+        isLikeClicked = likeClicked;
+    }
 }
