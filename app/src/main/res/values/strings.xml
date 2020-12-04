@@ -12,11 +12,10 @@
     <string name="register">Register</string>
     <string-array name = "tips_lab">
         <item>"I'm a Corgi, I am hungry if you don't feed me."</item>
-        <item>"I can be feed 3 times a day."</item>
         <item>"I was born with 3 pieces of free meats."</item>
         <item>"500 steps win one piece of meat!"</item>
         <item>"If I am starving, I cannot do anything."</item>
-        <item>"Reading tips and increase my knowledge!"</item>
+        <item>"Read tips, increase my knowledge!"</item>
         <item>"Listen to music makes me happy."</item>
         <item>"Walk with me! Let's go!"</item>
         <item>"Consider taking regular walk-breaks."</item>

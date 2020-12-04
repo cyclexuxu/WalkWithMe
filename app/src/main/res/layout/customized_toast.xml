@@ -19,17 +19,17 @@
         android:duration="1000"
         android:elevation="10dp"
         android:fillBefore="true"
+        android:fontFamily="@font/baloo"
         android:fromAlpha="0"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
+        android:shadowColor="#BB000000"
+        android:shadowRadius="1"
         android:textAlignment="center"
         android:textColor="#557571"
         android:textSize="17sp"
-        android:toAlpha="1.0"
-        android:shadowRadius="2"
-        android:shadowColor="#BB000000"
-        />
+        android:toAlpha="1.0" />
 
 </LinearLayout>

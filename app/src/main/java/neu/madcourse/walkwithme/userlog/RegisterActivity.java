@@ -66,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
                     mDatabase.child("users").child(user.getUsername()).child("healthNum").setValue(0);
                     mDatabase.child("users").child(user.getUsername()).child("happinessNum").setValue(0);
                     mDatabase.child("users").child(user.getUsername()).child("knowledgeNum").setValue(0);
+                    mDatabase.child("users").child(user.getUsername()).child("petLevel").setValue(0);
+                    mDatabase.child("users").child(user.getUsername()).child("redeemedSteps").setValue(0);
                     //Toast.makeText(getApplicationContext(), username + " successfully registered", Toast.LENGTH_SHORT).show();
                     // go to profile
                     LoginActivity.currentUser = username;

@@ -283,7 +283,7 @@ public class PetFragment extends Fragment {
             public void onClick(View view) {
                 try {
                     Random random = new Random();
-                    int tipID = random.nextInt(11);
+                    int tipID = random.nextInt(10);
                     Resources res = getResources();
                     String[] tip_lab = res.getStringArray(R.array.tips_lab);
                     showToast(tip_lab[tipID]);
