@@ -7,6 +7,7 @@ import android.animation.TimeInterpolator;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -30,6 +31,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
 
 import neu.madcourse.walkwithme.NotiPet.InsufficientMeatException;
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
@@ -64,7 +67,12 @@ public class PetFragment extends Fragment {
     DatabaseReference happinessNumReference;
     DatabaseReference healthNumReference;
 
+    static MediaPlayer mediaPlayer;
+
     static final String TAG = "Pet page";
+
+    static final int[] songBase = {R.raw.happy, R.raw.i_dont_care, R.raw.mamacita};
+    static int songCount = 0;
 
     @Nullable
     @Override
@@ -209,26 +217,46 @@ public class PetFragment extends Fragment {
                 showCorgi();
             }
         });
+
         musicButton = (Button) view.findViewById(R.id.musicButton);
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            musicButton.setText("Stop");
+        } else {
+            musicButton.setText("Music");
+        }
         musicButton.setOnClickListener(new View.OnClickListener(){
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                try {
-                    petState = petState.music();
-                } catch (PetStarvingException e) {
-                    showToast("I'm starving, feed me first.");
-                    return;
-                }
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "music", new AlarmManager.OnAlarmListener() {
-                    @Override
-                    public void onAlarm() {
-                        petState = petState.timeout();
-                        showCorgi();
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                    musicButton.setText("Music");
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                } else {
+                    musicButton.setText("Stop");
+                    try {
+                        petState = petState.music();
+                        happinessNumReference.setValue(petState.getcHappiness());
+                        int songID = songCount % 3;
+                        mediaPlayer = MediaPlayer.create(getContext(), songBase[songID]);
+                        songCount++;
+                        mediaPlayer.start();
+
+                    } catch (PetStarvingException e) {
+                        showToast("I'm starving, feed me first.");
+                        return;
                     }
-                }, null);
-                showCorgi();
+                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, 3000, "music", new AlarmManager.OnAlarmListener() {
+                        @Override
+                        public void onAlarm() {
+                            petState = petState.timeout();
+                            showCorgi();
+                        }
+                    }, null);
+                    showCorgi();
+                }
             }
         });
 
@@ -239,6 +267,7 @@ public class PetFragment extends Fragment {
             public void onClick(View view) {
                 try {
                     petState = petState.tip();
+                    knowledgeNumReference.setValue(petState.getcKnowledge());
                 } catch (PetStarvingException e) {
                     showToast("I'm starving, feed me first.");
                     return;
