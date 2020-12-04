@@ -10,4 +10,17 @@
     <string name="weight">Please enter your Weight</string>
     <string name="height">Please enter your Height</string>
     <string name="register">Register</string>
+    <string-array name = "tips_lab">
+        <item>"I'm a Corgi, I am hungry if you don't feed me."</item>
+        <item>"I can be feed three times a day."</item>
+        <item>"Your pet will be given 3 pieces of meat when you register this app"</item>
+        <item>"Every 1000 steps you walk, you will win a piece of meat for me."</item>
+        <item>"If I am starving, I cannot do anything."</item>
+        <item>"You can increase my knowledge through reading our tips."</item>
+        <item>"You can make me happy through listen to music."</item>
+        <item>"You can play with me by touching me."</item>
+        <item>"Consider taking regular walk-breaks."</item>
+        <item>"Drink 8 cups of water a day!"</item>
+        <item>"Relax, embrace the nature."</item>
+    </string-array>
 </resources>
