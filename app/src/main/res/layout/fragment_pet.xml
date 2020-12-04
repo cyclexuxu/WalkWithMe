@@ -122,7 +122,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:backgroundTint="#E8A746"
+                android:fontFamily="@font/baloo"
                 android:text="Feed"
+                android:textSize="18sp"
                 app:layout_column="0"
                 app:layout_row="0" />
 
@@ -132,6 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:backgroundTint="#DD7474"
+                android:fontFamily="@font/baloo"
+                android:textSize="18sp"
                 app:layout_column="1"
                 app:layout_row="0" />
 
@@ -141,7 +145,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:backgroundTint="#1FAB89"
+                android:fontFamily="@font/baloo"
                 android:text="Tips"
+                android:textSize="18sp"
                 app:layout_column="2"
                 app:layout_row="0" />
 
@@ -186,6 +192,7 @@
                 android:id="@+id/healthTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo"
                 android:text="Health"
                 app:layout_column="0"
                 app:layout_row="1" />
@@ -198,6 +205,7 @@
                 android:layout_marginStart="5dp"
                 android:max="100"
                 android:progress="30"
+                android:progressTint="#DD7474"
                 android:secondaryProgressTint="#E73838"
                 app:layout_column="1"
                 app:layout_row="1" />
@@ -206,6 +214,7 @@
                 android:id="@+id/happinessTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo"
                 android:text="Happiness"
                 app:layout_column="0"
                 app:layout_row="2" />
@@ -218,6 +227,7 @@
                 android:layout_marginStart="5dp"
                 android:max="100"
                 android:progress="0"
+                android:progressTint="#DD7474"
                 android:secondaryProgressTint="#DB3232"
                 app:layout_column="1"
                 app:layout_row="2" />
@@ -226,6 +236,7 @@
                 android:id="@+id/knowledgeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo"
                 android:text="Knowledge"
                 app:layout_column="0"
                 app:layout_row="3" />
@@ -238,6 +249,7 @@
                 android:layout_marginStart="5dp"
                 android:max="100"
                 android:progress="0"
+                android:progressTint="#DD7474"
                 android:secondaryProgressTint="#D23535"
                 app:layout_column="1"
                 app:layout_row="3" />

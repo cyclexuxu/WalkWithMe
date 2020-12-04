@@ -1,6 +1,7 @@
 package neu.madcourse.walkwithme.NotiPet;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,23 @@ public class CustomToast {
     Toast toast;
     TextView toastView;
     Context context;
+
+
+//    private static CustomToast instance = null;
+//
+//    public CustomToast(Context context, Handler handler) {
+//    }
+//
+//    public static CustomToast getInstance(Context context){
+//        if (instance == null){
+//            synchronized ((CustomToast.class)){
+//                if (instance == null){
+//                    instance = new CustomToast(context);
+//                }
+//            }
+//        }
+//        return instance;
+//    }
 
     public CustomToast(Context context){
         toast = new Toast(context);

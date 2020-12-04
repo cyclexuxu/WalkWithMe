@@ -4,16 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/toast_Image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bulb"
+        />
+
     <TextView
         android:id="@+id/per_Toast"
         android:layout_width="298dp"
-        android:layout_height="68dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape"
+        android:duration="1000"
+        android:elevation="10dp"
+        android:fillBefore="true"
+        android:fromAlpha="0"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
+        android:textAlignment="center"
         android:textColor="#557571"
-        android:textSize="18sp" />
+        android:textSize="17sp"
+        android:toAlpha="1.0"
+        android:shadowRadius="2"
+        android:shadowColor="#BB000000"
+        />
 
 </LinearLayout>
