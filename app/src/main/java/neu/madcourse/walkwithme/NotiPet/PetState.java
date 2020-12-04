@@ -6,7 +6,7 @@ public abstract class PetState {
     protected static int cHappiness = 0;
     protected static int cKnowledge = 0;
     protected static int meat = 3;
-
+    protected static boolean isPlayingMusic = false;
 
 
     protected static int petLevel = 0;

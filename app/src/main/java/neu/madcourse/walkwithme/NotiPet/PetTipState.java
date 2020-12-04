@@ -32,6 +32,9 @@ public class PetTipState extends PetState {
 
     @Override
     public PetState timeout() {
+        if (isPlayingMusic) {
+            return new PetHappyState();
+        }
         return new PetSleepState();
     }
 
