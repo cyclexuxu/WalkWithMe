@@ -7,6 +7,7 @@ import android.animation.TimeInterpolator;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,9 +32,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.rpc.context.AttributeContext;
 
 import java.io.IOException;
+import java.util.Random;
 
+import io.grpc.internal.SharedResourceHolder;
 import neu.madcourse.walkwithme.NotiPet.InsufficientMeatException;
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 import neu.madcourse.walkwithme.NotiPet.PetSleepState;
@@ -266,6 +270,11 @@ public class PetFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
+                    Random random = new Random();
+                    int tipID = random.nextInt(11);
+                    Resources res = getResources();
+                    String[] tip_lab = res.getStringArray(R.array.tips_lab);
+                    showToast(tip_lab[tipID]);
                     petState = petState.tip();
                     knowledgeNumReference.setValue(petState.getcKnowledge());
                 } catch (PetStarvingException e) {
