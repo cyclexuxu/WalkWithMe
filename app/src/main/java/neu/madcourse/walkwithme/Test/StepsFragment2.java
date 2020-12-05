@@ -170,14 +170,14 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
             }
         });
 
-        Button resetButton = (Button) view.findViewById(R.id.resetButton);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isBound && service.isActive())
-                    service.resetCount();
-            }
-        });
+//        Button resetButton = (Button) view.findViewById(R.id.resetButton);
+//        resetButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(isBound && service.isActive())
+//                    service.resetCount();
+//            }
+//        });
 
         //drawChart();
 
