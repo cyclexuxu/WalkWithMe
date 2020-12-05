@@ -9,6 +9,11 @@ public class NofiticationConstants{
     public static final NotificationMessage L4 = new NotificationMessage("Woo Hoo \uD83D\uDC4F \uD83D\uDC4F \uD83D\uDC4F", "You made it to level 4!", 3, R.drawable.fireworks);
     public static final NotificationMessage L5 = new NotificationMessage("❤Amazing❤", "You've reached level 5!", 4, R.drawable.fireworks);
 
+    public static final NotificationMessage b1elowGoal = new NotificationMessage("\uD83D\uDD08 Almost there", "Only few steps away from your daily goal! \uD83D\uDEB6\u200D♂️ \uD83D\uDEB6\u200D♂️", 5, R.drawable.happy);
+
+    public static final NotificationMessage b1elowGoal2 = new NotificationMessage("\uD83D\uDE30 Looks like you forgot....", "It't not too late to meet your daily goal!️", 5, R.drawable.sleep);
+
+
 
 
 
