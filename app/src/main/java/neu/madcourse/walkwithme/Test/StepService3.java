@@ -52,6 +52,7 @@ public class StepService3 extends Service implements SensorEventListener {
     private Sensor stepCounter;
 
     int[] historyData = new int[6];
+    private String timestamp = "";
 
 
     //Variables used in calculations
@@ -120,9 +121,9 @@ public class StepService3 extends Service implements SensorEventListener {
                 Log.d(TAG,"starting service");
                 break;
 
-            case Constants.RESET_COUNT :
-                resetCount();
-                break;
+//            case Constants.RESET_COUNT :
+//                resetCount();
+//                break;
 
             case Constants.STOP_SAVE_COUNT :
                 stopForegroundService(true);
@@ -180,17 +181,22 @@ public class StepService3 extends Service implements SensorEventListener {
             }
 
 
-            final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+            final String now = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 //            step_ref.child("Total Steps").setValue(totalStep);
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+            if(now.equals(timestamp)) {
 
-            step_ref.child("Total Steps").setValue(totalStep);
-            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+                step_ref.child("Total Steps").setValue(totalStep);
+                step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
+            }else{
+                resetSteps();
+            }
 
 
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 //            step_ref.child("Total Steps").setValue(totalStep);
-            historyData[FIVE_DAY] = step;
+                historyData[FIVE_DAY] = step;
+            
         }
     }
 
@@ -215,13 +221,6 @@ public class StepService3 extends Service implements SensorEventListener {
         //elapsedTime = elapsedTime + timeInMilliseconds;
         if(update)
            updateSteps();
-    }
-
-    public void resetCount(){
-        step = 0;
-        //distance = 0;
-        //startTime = SystemClock.uptimeMillis();
-        //updatedTime = elapsedTime;
     }
 
     //Runnable that calculates the elapsed time since the user presses the "start" button
@@ -318,13 +317,22 @@ public class StepService3 extends Service implements SensorEventListener {
     private void updateSteps(){
 
         try {
-            final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+            timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             Steps steps = new Steps(step, timestamp);
             step_ref.child("Step Count").child(timestamp).setValue(steps);
             step_ref.child("Total Steps").setValue(totalStep);
         }catch (Exception e){
 
         }
+    }
+    
+    private void resetSteps(){
+        //Daily reset step to 0
+        Log.d(TAG, "resetSteps: ");
+        timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        step = 0;
+        Steps steps = new Steps(step, timestamp);
+        step_ref.child("Step Count").child(timestamp).setValue(steps);
     }
 
 //    private Notification getNotification(String title, String body, int id){
@@ -366,7 +374,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
     private void accessData(){
 
-        final String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
         Log.d(TAG,"access firebase data");
         try{
             step_ref.addValueEventListener(new ValueEventListener() {
@@ -394,9 +402,9 @@ public class StepService3 extends Service implements SensorEventListener {
                         Calendar cal = Calendar.getInstance();
                         cal.add(Calendar.DATE, -i);
                         Date todate1 = cal.getTime();
-                        String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(todate1);
-                        if (dataSnapshot.child("Step Count").child(timestamp).exists()) {
-                            Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
+                        String tmptimestamp = new SimpleDateFormat("yyyy-MM-dd").format(todate1);
+                        if (dataSnapshot.child("Step Count").child(tmptimestamp).exists()) {
+                            Steps steps = dataSnapshot.child("Step Count").child(tmptimestamp).getValue(Steps.class);
                             step = (int) steps.getSteps();
                             tmp[FIVE_DAY - i] = step;
                         }
