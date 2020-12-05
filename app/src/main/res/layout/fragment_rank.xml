@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EFBBCF"
+    android:backgroundTint="#EFBBCF"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -15,7 +17,7 @@
             android:id="@+id/etToday"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:textColor="#FF9800"
+            android:fontFamily="@font/baloo"
             android:textStyle="bold"
             />
 
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="#FF9800"
+            android:fontFamily="@font/baloo"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -52,7 +54,7 @@
             android:layout_weight="0.4"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="#FF9800"
+            android:fontFamily="@font/baloo"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -63,7 +65,7 @@
             android:layout_weight="0.4"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="#FF9800"
+            android:fontFamily="@font/baloo"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -71,7 +73,8 @@
             android:id="@+id/btnLikeIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="#FFFFFF"
+            android:background="#EFBBCF"
+            android:backgroundTint="#EFBBCF"
             android:soundEffectsEnabled="false"
             android:src="@drawable/ic_action_like" />
 
@@ -81,8 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:padding="10dp"
+            android:fontFamily="@font/baloo"
             android:textAlignment="center"
-            android:textColor="#FF9800"
             android:textSize="20sp"
             android:textStyle="bold" />
 
