@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.Test;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,6 +10,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
@@ -26,6 +28,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +44,9 @@ import java.util.HashMap;
 import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
+
+import static androidx.core.app.ActivityCompat.requestPermissions;
+
 
 public class StepService3 extends Service implements SensorEventListener {
 
@@ -99,7 +105,9 @@ public class StepService3 extends Service implements SensorEventListener {
 
         setAlarm();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
 
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
@@ -171,32 +179,39 @@ public class StepService3 extends Service implements SensorEventListener {
             float y = event.values[1];
             float z = event.values[2];
 
-            double magnitude = Math.sqrt(x * x + y * y + z * z);
-            double delta = magnitude - preMagnitude;
-            preMagnitude = magnitude;
 
-            if (delta > 6) {
-                step++;
-                totalStep++;
-            }
+                double lastMagnitude = preMagnitude;
+                double magnitude = Math.sqrt(x * x + y * y + z * z);
+                double delta = magnitude - preMagnitude;
+                preMagnitude = magnitude;
+
+                if (delta > 3 && lastMagnitude != 0) {
+                    step++;
+                    totalStep++;
+                }
+//            Log.d(TAG, "Type of DETECOR: " + event.sensor.getType());
+//            if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+//                Log.d(TAG, "onSensorChanged: Step detected");
+//                step++;
+//            }
 
 
             final String now = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 //            step_ref.child("Total Steps").setValue(totalStep);
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
-            if(now.equals(timestamp)) {
+            if (now.equals(timestamp)) {
 
                 step_ref.child("Total Steps").setValue(totalStep);
                 step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
-            }else{
+            } else {
                 resetSteps();
             }
 
 
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 //            step_ref.child("Total Steps").setValue(totalStep);
-                historyData[FIVE_DAY] = step;
-            
+            historyData[FIVE_DAY] = step;
+
         }
     }
 
@@ -242,26 +257,26 @@ public class StepService3 extends Service implements SensorEventListener {
 
             NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
 
-            if(totalStep >= 191 && currentLevel == 1){
-                Log.d("Lv1 sent notification", currentLevel + "");
-                //notificationCenter.createNotification(NofiticationConstants.L2);
-                step_ref.child("level").setValue(2);
-                currentLevel = 2;
-            }
-
-            if(totalStep >= 195 && currentLevel == 2){
-                Log.d("Lv2 sent notification", currentLevel + "");
-                //notificationCenter.createNotification(NofiticationConstants.L3);
-                step_ref.child("level").setValue(3);
-                currentLevel = 3;
-            }
-
-            if(totalStep >= 200 && currentLevel == 3){
-                Log.d("Lv3 sent notification", currentLevel + "");
-                //notificationCenter.createNotification(NofiticationConstants.L4);
-                step_ref.child("level").setValue(4);
-                currentLevel = 4;
-            }
+//            if(totalStep >= 191 && currentLevel == 1){
+//                Log.d("Lv1 sent notification", currentLevel + "");
+//                //notificationCenter.createNotification(NofiticationConstants.L2);
+//                step_ref.child("level").setValue(2);
+//                currentLevel = 2;
+//            }
+//
+//            if(totalStep >= 195 && currentLevel == 2){
+//                Log.d("Lv2 sent notification", currentLevel + "");
+//                //notificationCenter.createNotification(NofiticationConstants.L3);
+//                step_ref.child("level").setValue(3);
+//                currentLevel = 3;
+//            }
+//
+//            if(totalStep >= 200 && currentLevel == 3){
+//                Log.d("Lv3 sent notification", currentLevel + "");
+//                //notificationCenter.createNotification(NofiticationConstants.L4);
+//                step_ref.child("level").setValue(4);
+//                currentLevel = 4;
+//            }
 
             handler.postDelayed(this, 1000);
         }
@@ -424,8 +439,8 @@ public class StepService3 extends Service implements SensorEventListener {
     private void setAlarm(){
         Log.d("setAlarm: ", "set alarm");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 00);
-        calendar.set(Calendar.MINUTE, 38);
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        calendar.set(Calendar.MINUTE, 59);
 
         if (calendar.getTime().compareTo(new Date()) < 0)
             calendar.add(Calendar.DAY_OF_MONTH, 1);

@@ -160,9 +160,9 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
         Log.v(TAG, "On Stop, Starting CheckRecentRun service...");
         startService(new Intent(this,  CheckAppRunService.class));
-        Intent startIntent = new Intent(this, StepService3.class);
-        startIntent.setAction(Constants.START_FOREGROUND);
-        startService(startIntent);
+//        Intent startIntent = new Intent(this, StepService3.class);
+//        startIntent.setAction(Constants.START_FOREGROUND);
+//        startService(startIntent);
 
     }
 

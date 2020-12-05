@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.R;
@@ -49,7 +51,17 @@ public class NotiReceiver extends BroadcastReceiver {
 
 
         getStep();
+//        try{
+//            Log.d(TAG, "onReceive: start to sleep");
+//            Thread.sleep(60000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         Log.d(TAG, "step: " + step + " goal: " + StepsFragment2.dailyGoal);
+
+        //sleep 5s to wait getStep() finish
+
         if(step <= StepsFragment2.dailyGoal){
 //            NotificationHelper notificationHelper = new NotificationHelper(context);
 //            notificationHelper.createNotification();
