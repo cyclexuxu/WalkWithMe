@@ -65,7 +65,7 @@ import neu.madcourse.walkwithme.R;
 
 public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChangeListener{
 
-    static int dailyGoal = 2000;
+    static int dailyGoal = 0;
 
     //Activity Views
     private TextView dayRecordText;
@@ -232,18 +232,19 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        if( stepCounter != null ){
-            notices.setText(" Step Counter Sensor available . ");
-
-            if( magnetometer == null || accelerometer == null ){
-                notices.setText( notices.getText().toString() + "\n Magnetometer or Accelerometer not available cannot calculate Direction . ");
-            }else{
-                notices.setText( notices.getText().toString() + "\n Rest All necessary sensors available .");
-            }
-
-            return true;
-
-        }else if( stepDetectorSensor != null){
+//        if( stepCounter != null ){
+//            notices.setText(" Step Counter Sensor available . ");
+//
+//            if( magnetometer == null || accelerometer == null ){
+//                notices.setText( notices.getText().toString() + "\n Magnetometer or Accelerometer not available cannot calculate Direction . ");
+//            }else{
+//                notices.setText( notices.getText().toString() + "\n Rest All necessary sensors available .");
+//            }
+//
+//            return true;
+//
+//        }else
+        if( stepDetectorSensor != null){
             notices.setText("Step Detector Sensor available . ");
             if( magnetometer == null || accelerometer == null ){
                 notices.setText( notices.getText().toString() + "\n Magnetometer or Accelerometer not available cannot calculate Direction . ");
