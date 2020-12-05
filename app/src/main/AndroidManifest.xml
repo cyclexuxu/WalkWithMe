@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" ></uses-permission>
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" ></uses-permission>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" ></uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +19,11 @@
 
         <service
             android:name=".Test.StepService3"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".Test.CheckAppRunService"
             android:enabled="true"
             android:exported="true" />
 

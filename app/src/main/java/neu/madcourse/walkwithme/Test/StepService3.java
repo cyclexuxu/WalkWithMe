@@ -51,7 +51,7 @@ public class StepService3 extends Service implements SensorEventListener {
     private Sensor magnetometer;
     private Sensor stepCounter;
 
-    int[] data = new int[6];
+    int[] historyData = new int[6];
 
 
     //Variables used in calculations
@@ -62,6 +62,7 @@ public class StepService3 extends Service implements SensorEventListener {
     private int totalStep = 0;
     private int prevStep = 0;
     private boolean sendMessage = false;
+    private int currentLevel = 1;
 
 
     private boolean isActive = false;
@@ -72,6 +73,11 @@ public class StepService3 extends Service implements SensorEventListener {
     int notification_id = 1;
     String TAG = "service_error";
     public static String currentUser = LoginActivity.currentUser;
+    private static Long MILLISECS_PER_DAY = 86400000L;
+    private static Long MILLISECS_PER_MIN = 60000L;
+    private static int FIVE_DAY = 5;
+
+    private static long delay = MILLISECS_PER_MIN * 3; //3 minutes
 
     private IBinder mBinder = new MyBinder();
 
@@ -88,7 +94,8 @@ public class StepService3 extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel();
+        //createNotificationChannel();
+
         setAlarm();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -183,7 +190,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 //            step_ref.child("Total Steps").setValue(totalStep);
-            data[5] = step;
+            historyData[FIVE_DAY] = step;
         }
     }
 
@@ -194,7 +201,7 @@ public class StepService3 extends Service implements SensorEventListener {
     public void startForegroundService(){
         registerSensors();
         //startTime = SystemClock.uptimeMillis() + 1000;
-        startForeground(notification_id,getNotification("Starting Step Counter Service","", 1));
+        //startForeground(notification_id,getNotification("Starting Step Counter Service","", 1));
         handler.postDelayed(timerRunnable,1000);
         isActive = true;
     }
@@ -203,7 +210,7 @@ public class StepService3 extends Service implements SensorEventListener {
         unregisterSensors();
         handler.removeCallbacks(timerRunnable);
         isActive = false;
-        startForeground(notification_id,getNotification("Stopping  Step Counter Service","", 1));
+        //startForeground(notification_id,getNotification("Stopping  Step Counter Service","", 1));
         stopForeground(true);
         //elapsedTime = elapsedTime + timeInMilliseconds;
         if(update)
@@ -221,16 +228,42 @@ public class StepService3 extends Service implements SensorEventListener {
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-            if(step >= 100 && !sendMessage) {
-                Notification notification = updateNoification();
+//            if(step >= 110 && !sendMessage) {
+//                //Notification notification = updateNoification();
+//
+//                //NotificationManager notificationManager =
+//                        //(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//                //notificationManager.notify(2, notification);
+//                //startForeground(2, notification);
+//                NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
+//                notificationCenter.createNotification();
+//                sendMessage = true;
+//            }
 
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
 
-                notificationManager.notify(2, notification);
-                //startForeground(2, notification);
-                sendMessage = true;
+            if(totalStep >= 191 && currentLevel == 1){
+                Log.d("Lv1 sent notification", currentLevel + "");
+                //notificationCenter.createNotification(NofiticationConstants.L2);
+                step_ref.child("level").setValue(2);
+                currentLevel = 2;
             }
+
+            if(totalStep >= 195 && currentLevel == 2){
+                Log.d("Lv2 sent notification", currentLevel + "");
+                //notificationCenter.createNotification(NofiticationConstants.L3);
+                step_ref.child("level").setValue(3);
+                currentLevel = 3;
+            }
+
+            if(totalStep >= 200 && currentLevel == 3){
+                Log.d("Lv3 sent notification", currentLevel + "");
+                //notificationCenter.createNotification(NofiticationConstants.L4);
+                step_ref.child("level").setValue(4);
+                currentLevel = 4;
+            }
+
             handler.postDelayed(this, 1000);
         }
     };
@@ -266,21 +299,21 @@ public class StepService3 extends Service implements SensorEventListener {
     }
 
     public int[] getDays(){
-        return data;
+        return historyData;
     }
 
-    private Notification updateNoification(){
-
-        String body = "";
-        HashMap<String, String> data = getData();
-
-        body += data.get("distance") + "                ";
-        body += data.get("duration");
-
-        Notification notification = getNotification(NofiticationCenter.REACH_DAILY_GOAL,body, 2);
-
-        return notification;
-    }
+//    private Notification updateNoification(){
+//
+//        String body = "";
+//        HashMap<String, String> data = getData();
+//
+//        body += data.get("distance") + "                ";
+//        body += data.get("duration");
+//
+//        //Notification notification = getNotification(NofiticationConstants.REACH_DAILY_GOAL,body, 2);
+//
+//        return notification;
+//    }
 
     private void updateSteps(){
 
@@ -294,42 +327,42 @@ public class StepService3 extends Service implements SensorEventListener {
         }
     }
 
-    private Notification getNotification(String title, String body, int id){
-
-        Intent resetIntent = new Intent(this,StepService3.class);
-        resetIntent.setAction(Constants.RESET_COUNT);
-        PendingIntent resetPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
-
-        Intent stopIntent = new Intent(this,StepService3.class);
-        resetIntent.setAction(Constants.STOP_SAVE_COUNT);
-        PendingIntent stopPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
-
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,id,intent,PendingIntent.FLAG_ONE_SHOT);
-        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.happy),97,128,false))
-                .setSmallIcon(R.drawable.happy)
-                .setContentIntent(resultPendingIntent)
-                .setOngoing(true)
-                .setAutoCancel(true)
-                .build();
-
-        return notification;
-    }
-
-    private void createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "WALKWITHME",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
-        }
-    }
+//    private Notification getNotification(String title, String body, int id){
+//
+//        Intent resetIntent = new Intent(this,StepService3.class);
+//        resetIntent.setAction(Constants.RESET_COUNT);
+//        PendingIntent resetPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
+//
+//        Intent stopIntent = new Intent(this,StepService3.class);
+//        resetIntent.setAction(Constants.STOP_SAVE_COUNT);
+//        PendingIntent stopPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
+//
+//        Intent intent = new Intent(this, MainActivity.class);
+//        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,id,intent,PendingIntent.FLAG_ONE_SHOT);
+//        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+//                .setContentTitle(title)
+//                .setContentText(body)
+//                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.happy),97,128,false))
+//                .setSmallIcon(R.drawable.happy)
+//                .setContentIntent(resultPendingIntent)
+//                .setOngoing(true)
+//                .setAutoCancel(true)
+//                .build();
+//
+//        return notification;
+//    }
+//
+//    private void createNotificationChannel() {
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//            NotificationChannel serviceChannel = new NotificationChannel(
+//                    CHANNEL_ID,
+//                    "WALKWITHME",
+//                    NotificationManager.IMPORTANCE_HIGH
+//            );
+//            NotificationManager manager = getSystemService(NotificationManager.class);
+//            manager.createNotificationChannel(serviceChannel);
+//        }
+//    }
 
     private void accessData(){
 
@@ -340,23 +373,24 @@ public class StepService3 extends Service implements SensorEventListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG, currentUser);
+                    currentLevel = dataSnapshot.child("level").getValue(Integer.class);
                     if(dataSnapshot.child("Total Steps").exists()){
-                        totalStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString());
-                        //prevStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString());
+                        totalStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString()); //get previous total steps
                     }
                     if(dataSnapshot.child("Step Count").child(timestamp).exists()){
                         Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
-                        step = (int)steps.getSteps();
+                        step = (int)steps.getSteps(); //get previous steps
                         prevStep = (int)steps.getSteps();
                     }else{
+                        sendMessage = true; //reset sendmessage when new timestamp created
                         updateSteps();
                     }
 
+                    //Fetch previous days steps data
                     int[] tmp = {0, 0, 0, 0, 0, 0};
-                    for (int i = 0; i <= 5; i++) {
+                    for (int i = 0; i <= FIVE_DAY; i++) {
 
                         int step = 0;
-                        Log.d("FIREBASE ", "FOR LOOP");
                         Calendar cal = Calendar.getInstance();
                         cal.add(Calendar.DATE, -i);
                         Date todate1 = cal.getTime();
@@ -364,23 +398,21 @@ public class StepService3 extends Service implements SensorEventListener {
                         if (dataSnapshot.child("Step Count").child(timestamp).exists()) {
                             Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
                             step = (int) steps.getSteps();
-                            tmp[5 - i] = step;
+                            tmp[FIVE_DAY - i] = step;
                         }
                     }
-                    data = tmp;
-
+                    historyData = tmp;
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d(TAG,"fetch canceled");
                 }
             });
         }catch (Exception e){
-            Log.d(TAG,"fetch exception " + e.getLocalizedMessage());
+            Log.d(TAG,"exception " + e.getLocalizedMessage());
         }
     }
-    //set alarm to check today's goal and steps at 5pm every day notification
+    //set alarm to check today's goal and steps at 6pm every day notification
     private void setAlarm(){
         Log.d("setAlarm: ", "set alarm");
         Calendar calendar = Calendar.getInstance();
