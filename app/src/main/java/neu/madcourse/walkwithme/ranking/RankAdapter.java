@@ -53,18 +53,20 @@ public class RankAdapter extends RecyclerView.Adapter {
         viewHolderClass.checkLikeStatus(itemRank);
         //  add like action
 
+        String id = String.valueOf(itemRank.getRankId());
+        DatabaseReference likeRef =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
         // viewHolderClass.getLikeStatus()
         viewHolderClass.ibLike.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 textClick = true;
-                likeReference.addValueEventListener(new ValueEventListener() {
+                likeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (textClick) {
                             viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
-                            viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
+                            //viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
                             itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
                             likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
                             likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
@@ -101,13 +103,18 @@ public class RankAdapter extends RecyclerView.Adapter {
 
         public void checkLikeStatus(ItemRank itemRank) {
             String id = String.valueOf(itemRank.getRankId());
-            DatabaseReference isClicked =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
-            isClicked.addValueEventListener(new ValueEventListener() {
+            DatabaseReference isClickedRef =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
+            isClickedRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Boolean isLikedClicked = (Boolean) snapshot.getValue();
                     if (isLikedClicked) {
                         ibLike.setImageResource(R.drawable.ic_action_like);
+                        tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
+                        // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
+                        // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
+                    } else {
+                        ibLike.setImageResource(R.drawable.ic_action_dislike);
                     }
                     // Log.d(LOG, String.valueOf(isLikedClicked) + "~~~~~~~~~~~~~~");
                 }
