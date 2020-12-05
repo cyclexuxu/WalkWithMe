@@ -65,6 +65,8 @@ import neu.madcourse.walkwithme.R;
 
 public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChangeListener{
 
+    static int dailyGoal = 2000;
+
     //Activity Views
     private TextView dayRecordText;
     private TextView stepText;
@@ -75,7 +77,8 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     LineChartView lineChart;
     private Handler handler = new Handler();
 
-    private SharedPreferences user;
+    private SharedPreferences settings;
+    SharedPreferences.Editor editor;
     private int dayStepRecord;
 
     private FirebaseDatabase mdb;
@@ -89,7 +92,10 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        settings = getActivity().getSharedPreferences("WalkWithMe", Context.MODE_PRIVATE);
+        editor = settings.edit();
+        editor.putInt("dailyGoal", 2000);
+        editor.commit();
         mdb = FirebaseDatabase.getInstance();
         setRetainInstance(true);
     }
@@ -194,7 +200,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     public void onResume() {
         super.onResume();
         Log.e("HIHIHIHIHIHIHI", "1");
-        dayStepRecord = Integer.parseInt(user.getString("DAY_STEP_RECORD", "2000"));
+        //dayStepRecord = Integer.parseInt(user.getString("DAY_STEP_RECORD", "2000"));
         Log.e("HIHIHIHIHIHIHI", "2");
         dayRecordText.setText(dayStepRecord+"");
         Log.e("HIHIHIHIHIHIHI", "3");
@@ -287,10 +293,6 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         }
     };
 
-
-
-
-
     public void showDialog()
     {
         final Dialog d = new Dialog(getActivity());
@@ -317,9 +319,11 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
             @Override
             public void onClick(View v) {
                 dayStepRecord  = Integer.parseInt(displayedValues[np.getValue() - 2]);
-                dayRecordText.setText(dayStepRecord);
-                user.edit().putString("DAY_STEP_RECORD",displayedValues[np.getValue() - 2]).apply();
-                user.edit().putBoolean(todayDate + "_step",true).apply();
+                dayRecordText.setText(dayStepRecord+"");
+                dailyGoal = dayStepRecord;
+                Log.d("Set Goal", "set goal to  "+ dailyGoal);
+//                user.edit().putString("DAY_STEP_RECORD",displayedValues[np.getValue() - 2]).apply();
+//                user.edit().putBoolean(todayDate + "_step",true).apply();
                 d.dismiss();
             }
         });

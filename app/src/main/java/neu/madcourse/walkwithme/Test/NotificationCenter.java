@@ -67,7 +67,7 @@ public class NotificationCenter {
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_walkwithme);
         mBuilder.setContentTitle(notificationMessage.title)
                 .setContentText(notificationMessage.body)
-                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), NofiticationConstants.L2.imgSrc),110,110,false))
+                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), notificationMessage.imgSrc),110,110,false))
                 .setAutoCancel(true)
                 .setContentIntent(resultPendingIntent);
 

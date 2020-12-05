@@ -102,7 +102,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
-        Log.d(TAG, currentUser);
+        //Log.d(TAG, currentUser);
 
         try{
             step_ref = mdb.getReference().child("users").child(currentUser);
@@ -372,7 +372,7 @@ public class StepService3 extends Service implements SensorEventListener {
             step_ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d(TAG, currentUser);
+                    //Log.d(TAG, currentUser);
                     currentLevel = dataSnapshot.child("level").getValue(Integer.class);
                     if(dataSnapshot.child("Total Steps").exists()){
                         totalStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString()); //get previous total steps
@@ -416,8 +416,8 @@ public class StepService3 extends Service implements SensorEventListener {
     private void setAlarm(){
         Log.d("setAlarm: ", "set alarm");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE, 38);
 
         if (calendar.getTime().compareTo(new Date()) < 0)
             calendar.add(Calendar.DAY_OF_MONTH, 1);
