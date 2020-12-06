@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.ranking;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class RankAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         ViewHolderClass viewHolderClass = new ViewHolderClass(view);
-
+        // textClick = true;
         return viewHolderClass;
     }
 
@@ -49,32 +50,38 @@ public class RankAdapter extends RecyclerView.Adapter {
         viewHolderClass.tvSteps.setText(String.valueOf(itemRank.getSteps()));
         viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
 
-
+        viewHolderClass.checkLikeStatus(itemRank);
         //  add like action
+
+        String id = String.valueOf(itemRank.getRankId());
+        DatabaseReference likeRef =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
         // viewHolderClass.getLikeStatus()
         viewHolderClass.ibLike.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 textClick = true;
-                likeReference.addValueEventListener(new ValueEventListener() {
+                likeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (textClick) {
                             viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
-                            viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
+                            //viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
+                            itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
+                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
+                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
+                            itemRank.setLikeClicked(true);
                             textClick = false;
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        textClick = false;
                     }
                 });
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -93,5 +100,31 @@ public class RankAdapter extends RecyclerView.Adapter {
             tvLikes = itemView.findViewById(R.id.tvLikes);
             ibLike = itemView.findViewById(R.id.btnLikeIcon);
         }
+
+        public void checkLikeStatus(ItemRank itemRank) {
+            String id = String.valueOf(itemRank.getRankId());
+            DatabaseReference isClickedRef =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
+            isClickedRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Boolean isLikedClicked = (Boolean) snapshot.getValue();
+                    if (isLikedClicked) {
+                        ibLike.setImageResource(R.drawable.ic_action_like);
+                        tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
+                        // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
+                        // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
+                    } else {
+                        ibLike.setImageResource(R.drawable.ic_action_dislike);
+                    }
+                    // Log.d(LOG, String.valueOf(isLikedClicked) + "~~~~~~~~~~~~~~");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
+
 }

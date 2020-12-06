@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import neu.madcourse.walkwithme.Test.CheckAppRunService;
 import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.profile.ProfileFragment;
 import neu.madcourse.walkwithme.ranking.RankingActivity;
@@ -33,6 +37,11 @@ import neu.madcourse.walkwithme.userlog.LogoutFragment;
 public class MainActivity extends AppCompatActivity {
     private Button login;
     FragmentTransaction fragmentTransaction;
+    private SharedPreferences settings;
+    SharedPreferences.Editor editor;
+    public final static String CHANNEL = "WalkWithMe";
+    public final static String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +55,21 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new StepsFragment2()).commit();
         }
+
+        settings = getSharedPreferences(CHANNEL, MODE_PRIVATE);
+        editor = settings.edit();
+
+        //Is it the first time to use the app
+        if(!settings.contains("preRun")) {
+            Log.d(TAG, "This is the first time to run this app");
+            //enable notification
+           //editor.putLong("preRun", System.currentTimeMillis());
+            editor.putBoolean("notification", true);
+
+            Log.d(TAG, "Enable notification");
+        }
+        editor.putLong("preRun", System.currentTimeMillis());
+        editor.commit();
 
         Intent startIntent = new Intent(this, StepService3.class);
         startIntent.setAction(Constants.START_FOREGROUND);
@@ -103,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 //stopIntent.setAction(Constants.STOP_FOREGROUND);
                 stopService(stopIntent);
                 Intent login = new Intent(this, LoginActivity.class);
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(1); //close all notification for current users
                 startActivity(login);
                 break;
             case R.id.not_logout:
@@ -127,10 +153,27 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.nav_host_fragment, frag).commit();
         manager.executePendingTransactions();
     }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        editor.putLong("preRun", System.currentTimeMillis());
+        editor.commit();
+        Log.v(TAG, "On Stop, Starting CheckRecentRun service...");
+        startService(new Intent(this,  CheckAppRunService.class));
+//        Intent startIntent = new Intent(this, StepService3.class);
+//        startIntent.setAction(Constants.START_FOREGROUND);
+//        startService(startIntent);
+
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        editor.putLong("preRun", System.currentTimeMillis());
+        editor.commit();
+        Log.v(TAG, "On destory, Starting CheckRecentRun service...");
+        startService(new Intent(this,  CheckAppRunService.class));
+
         Intent stopIntent = new Intent(this, StepService3.class);
         stopIntent.setAction(Constants.STOP_FOREGROUND);
         startService(stopIntent);

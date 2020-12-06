@@ -65,6 +65,8 @@ import neu.madcourse.walkwithme.R;
 
 public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChangeListener{
 
+    static int dailyGoal = 0;
+
     //Activity Views
     private TextView dayRecordText;
     private TextView stepText;
@@ -75,7 +77,8 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     LineChartView lineChart;
     private Handler handler = new Handler();
 
-    private SharedPreferences user;
+    private SharedPreferences settings;
+    SharedPreferences.Editor editor;
     private int dayStepRecord;
 
     private FirebaseDatabase mdb;
@@ -89,7 +92,10 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        settings = getActivity().getSharedPreferences("WalkWithMe", Context.MODE_PRIVATE);
+        editor = settings.edit();
+        editor.putInt("dailyGoal", 2000);
+        editor.commit();
         mdb = FirebaseDatabase.getInstance();
         setRetainInstance(true);
     }
@@ -164,14 +170,14 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
             }
         });
 
-        Button resetButton = (Button) view.findViewById(R.id.resetButton);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isBound && service.isActive())
-                    service.resetCount();
-            }
-        });
+//        Button resetButton = (Button) view.findViewById(R.id.resetButton);
+//        resetButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(isBound && service.isActive())
+//                    service.resetCount();
+//            }
+//        });
 
         //drawChart();
 
@@ -194,7 +200,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     public void onResume() {
         super.onResume();
         Log.e("HIHIHIHIHIHIHI", "1");
-        dayStepRecord = Integer.parseInt(user.getString("DAY_STEP_RECORD", "2000"));
+        //dayStepRecord = Integer.parseInt(user.getString("DAY_STEP_RECORD", "2000"));
         Log.e("HIHIHIHIHIHIHI", "2");
         dayRecordText.setText(dayStepRecord+"");
         Log.e("HIHIHIHIHIHIHI", "3");
@@ -226,18 +232,19 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        if( stepCounter != null ){
-            notices.setText(" Step Counter Sensor available . ");
-
-            if( magnetometer == null || accelerometer == null ){
-                notices.setText( notices.getText().toString() + "\n Magnetometer or Accelerometer not available cannot calculate Direction . ");
-            }else{
-                notices.setText( notices.getText().toString() + "\n Rest All necessary sensors available .");
-            }
-
-            return true;
-
-        }else if( stepDetectorSensor != null){
+//        if( stepCounter != null ){
+//            notices.setText(" Step Counter Sensor available . ");
+//
+//            if( magnetometer == null || accelerometer == null ){
+//                notices.setText( notices.getText().toString() + "\n Magnetometer or Accelerometer not available cannot calculate Direction . ");
+//            }else{
+//                notices.setText( notices.getText().toString() + "\n Rest All necessary sensors available .");
+//            }
+//
+//            return true;
+//
+//        }else
+        if( stepDetectorSensor != null){
             notices.setText("Step Detector Sensor available . ");
             if( magnetometer == null || accelerometer == null ){
                 notices.setText( notices.getText().toString() + "\n Magnetometer or Accelerometer not available cannot calculate Direction . ");
@@ -287,10 +294,6 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         }
     };
 
-
-
-
-
     public void showDialog()
     {
         final Dialog d = new Dialog(getActivity());
@@ -317,9 +320,11 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
             @Override
             public void onClick(View v) {
                 dayStepRecord  = Integer.parseInt(displayedValues[np.getValue() - 2]);
-                dayRecordText.setText(dayStepRecord);
-                user.edit().putString("DAY_STEP_RECORD",displayedValues[np.getValue() - 2]).apply();
-                user.edit().putBoolean(todayDate + "_step",true).apply();
+                dayRecordText.setText(dayStepRecord+"");
+                dailyGoal = dayStepRecord;
+                Log.d("Set Goal", "set goal to  "+ dailyGoal);
+//                user.edit().putString("DAY_STEP_RECORD",displayedValues[np.getValue() - 2]).apply();
+//                user.edit().putBoolean(todayDate + "_step",true).apply();
                 d.dismiss();
             }
         });
@@ -362,9 +367,11 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         line.setCubic(false);//曲线是否平滑，即是曲线还是折线
         line.setFilled(false);//是否填充曲线的面积
         line.setHasLabels(true);//曲线的数据坐标是否加上备注
+
 //      line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
         line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
         line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
+
         lines.add(line);
         LineChartData data = new LineChartData();
         data.setLines(lines);
@@ -398,6 +405,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         lineChart.setLineChartData(data);
         lineChart.setVisibility(View.VISIBLE);
+
     }
 
 

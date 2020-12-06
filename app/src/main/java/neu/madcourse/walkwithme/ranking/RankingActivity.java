@@ -112,4 +112,5 @@ public class RankingActivity extends AppCompatActivity {
     private void sortBySteps(List<ItemRank> itemRankList) {
         Collections.sort(itemRankList, (itemOne, itemTwo) -> itemTwo.getSteps() - itemOne.getSteps());
     }
+
 }
