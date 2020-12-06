@@ -1,34 +1,21 @@
-package neu.madcourse.walkwithme.Test;
+package neu.madcourse.walkwithme.Pedometer;
 
-import android.Manifest;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,11 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import neu.madcourse.walkwithme.MainActivity;
-import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
-
-import static androidx.core.app.ActivityCompat.requestPermissions;
 
 
 public class StepService3 extends Service implements SensorEventListener {
@@ -54,12 +37,9 @@ public class StepService3 extends Service implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor stepDetectorSensor;
     private Sensor accelerometer;
-    private Sensor magnetometer;
-    private Sensor stepCounter;
 
     int[] historyData = new int[6];
     private String timestamp = "";
-
 
     //Variables used in calculations
     private double preMagnitude = 0;
@@ -67,25 +47,17 @@ public class StepService3 extends Service implements SensorEventListener {
     private FirebaseDatabase mdb;
     private DatabaseReference step_ref;
     private int totalStep = 0;
-    private int prevStep = 0;
-    private boolean sendMessage = false;
-    private int currentLevel = 1;
-
+    private boolean sendMessage = false; //meet goal message
 
     private boolean isActive = false;
 
-    private SharedPreferences user;
     private Handler handler = new Handler();
     String CHANNEL_ID = "WalkWithMe";
     int notification_id = 1;
-    String TAG = "service_error";
+    String TAG = "Step Service";
     public static String currentUser = LoginActivity.currentUser;
-    private static Long MILLISECS_PER_DAY = 86400000L;
-    private static Long MILLISECS_PER_MIN = 60000L;
-    private static int FIVE_DAY = 5;
 
-    private static long delay = MILLISECS_PER_MIN * 3; //3 minutes
-
+    private static int SIX_DAY = 6; //DAY FACTORS TO GET STEP HISTORY
     private IBinder mBinder = new MyBinder();
 
     public class MyBinder extends Binder {
@@ -103,21 +75,18 @@ public class StepService3 extends Service implements SensorEventListener {
         super.onCreate();
         //createNotificationChannel();
 
-        setAlarm();
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        setAlarm(); //this alarm check daily goal and step at 5pm everyday
+        sensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
 
-        user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mdb = FirebaseDatabase.getInstance();
-        //Log.d(TAG, currentUser);
 
         try{
             step_ref = mdb.getReference().child("users").child(currentUser);
         }catch (Exception e){
         }
-        accessData();
+        accessData(); //fetch all data from fb
     }
 
     @Override
@@ -129,13 +98,6 @@ public class StepService3 extends Service implements SensorEventListener {
                 Log.d(TAG,"starting service");
                 break;
 
-//            case Constants.RESET_COUNT :
-//                resetCount();
-//                break;
-
-            case Constants.STOP_SAVE_COUNT :
-                stopForegroundService(true);
-
             case Constants.STOP_FOREGROUND :
                 Log.d(TAG,"stopping service");
                 stopForeground(true);
@@ -144,7 +106,6 @@ public class StepService3 extends Service implements SensorEventListener {
                 stopSelf();
                 break;
         }
-
         return START_STICKY;
     }
 
@@ -166,8 +127,9 @@ public class StepService3 extends Service implements SensorEventListener {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        Log.d("service", "service stop()");
         stopForegroundService(true);
+        super.onDestroy();
     }
 
     @Override
@@ -189,16 +151,8 @@ public class StepService3 extends Service implements SensorEventListener {
                     step++;
                     totalStep++;
                 }
-//            Log.d(TAG, "Type of DETECOR: " + event.sensor.getType());
-//            if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-//                Log.d(TAG, "onSensorChanged: Step detected");
-//                step++;
-//            }
-
 
             final String now = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-//            step_ref.child("Total Steps").setValue(totalStep);
-//            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
             if (now.equals(timestamp)) {
 
                 step_ref.child("Total Steps").setValue(totalStep);
@@ -210,7 +164,7 @@ public class StepService3 extends Service implements SensorEventListener {
 
 //            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
 //            step_ref.child("Total Steps").setValue(totalStep);
-            historyData[FIVE_DAY] = step;
+            historyData[SIX_DAY] = step;
 
         }
     }
@@ -222,7 +176,8 @@ public class StepService3 extends Service implements SensorEventListener {
     public void startForegroundService(){
         registerSensors();
         //startTime = SystemClock.uptimeMillis() + 1000;
-        //startForeground(notification_id,getNotification("Starting Step Counter Service","", 1));
+        NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
+        startForeground(notification_id,notificationCenter.getNotification(NofiticationConstants.SERVICE_START));
         handler.postDelayed(timerRunnable,1000);
         isActive = true;
     }
@@ -231,7 +186,8 @@ public class StepService3 extends Service implements SensorEventListener {
         unregisterSensors();
         handler.removeCallbacks(timerRunnable);
         isActive = false;
-        //startForeground(notification_id,getNotification("Stopping  Step Counter Service","", 1));
+        NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
+        startForeground(notification_id,notificationCenter.getNotification(NofiticationConstants.SERVICE_STOP));
         stopForeground(true);
         //elapsedTime = elapsedTime + timeInMilliseconds;
         if(update)
@@ -242,20 +198,13 @@ public class StepService3 extends Service implements SensorEventListener {
     private Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-//            if(step >= 110 && !sendMessage) {
-//                //Notification notification = updateNoification();
-//
-//                //NotificationManager notificationManager =
-//                        //(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//                //notificationManager.notify(2, notification);
-//                //startForeground(2, notification);
-//                NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
-//                notificationCenter.createNotification();
-//                sendMessage = true;
-//            }
-
             NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
+            //when goal is 0 , user hasn't set the goal yet, dont need to send notification
+            //Meet daily goal messgae
+            if(step >= StepsFragment2.dailyGoal && !sendMessage && StepsFragment2.dailyGoal != 0){
+                notificationCenter.createNotification(NofiticationConstants.meetGoal);
+                sendMessage = true;
+            }
 
 //            if(totalStep >= 191 && currentLevel == 1){
 //                Log.d("Lv1 sent notification", currentLevel + "");
@@ -298,8 +247,6 @@ public class StepService3 extends Service implements SensorEventListener {
     }
 
     private void unregisterSensors(){
-
-
         if(accelerometer != null)
             sensorManager.unregisterListener(StepService3.this, accelerometer);
 
@@ -316,19 +263,6 @@ public class StepService3 extends Service implements SensorEventListener {
         return historyData;
     }
 
-//    private Notification updateNoification(){
-//
-//        String body = "";
-//        HashMap<String, String> data = getData();
-//
-//        body += data.get("distance") + "                ";
-//        body += data.get("duration");
-//
-//        //Notification notification = getNotification(NofiticationConstants.REACH_DAILY_GOAL,body, 2);
-//
-//        return notification;
-//    }
-
     private void updateSteps(){
 
         try {
@@ -342,10 +276,11 @@ public class StepService3 extends Service implements SensorEventListener {
     }
     
     private void resetSteps(){
-        //Daily reset step to 0
+        //Daily reset step to 0, when pass 23:59
         Log.d(TAG, "resetSteps: ");
         timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
         step = 0;
+        sendMessage = false;
         Steps steps = new Steps(step, timestamp);
         step_ref.child("Step Count").child(timestamp).setValue(steps);
     }
@@ -396,22 +331,22 @@ public class StepService3 extends Service implements SensorEventListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //Log.d(TAG, currentUser);
-                    currentLevel = dataSnapshot.child("level").getValue(Integer.class);
+                    //currentLevel = dataSnapshot.child("level").getValue(Integer.class);
                     if(dataSnapshot.child("Total Steps").exists()){
                         totalStep = Integer.parseInt(dataSnapshot.child("Total Steps").getValue().toString()); //get previous total steps
                     }
                     if(dataSnapshot.child("Step Count").child(timestamp).exists()){
                         Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
                         step = (int)steps.getSteps(); //get previous steps
-                        prevStep = (int)steps.getSteps();
+                        //prevStep = (int)steps.getSteps();
                     }else{
                         sendMessage = true; //reset sendmessage when new timestamp created
                         updateSteps();
                     }
 
                     //Fetch previous days steps data
-                    int[] tmp = {0, 0, 0, 0, 0, 0};
-                    for (int i = 0; i <= FIVE_DAY; i++) {
+                    int[] tmp = {0, 0, 0, 0, 0, 0, 0};
+                    for (int i = 0; i <= SIX_DAY; i++) {
 
                         int step = 0;
                         Calendar cal = Calendar.getInstance();
@@ -421,7 +356,7 @@ public class StepService3 extends Service implements SensorEventListener {
                         if (dataSnapshot.child("Step Count").child(tmptimestamp).exists()) {
                             Steps steps = dataSnapshot.child("Step Count").child(tmptimestamp).getValue(Steps.class);
                             step = (int) steps.getSteps();
-                            tmp[FIVE_DAY - i] = step;
+                            tmp[SIX_DAY - i] = step;
                         }
                     }
                     historyData = tmp;
@@ -439,13 +374,13 @@ public class StepService3 extends Service implements SensorEventListener {
     private void setAlarm(){
         Log.d("setAlarm: ", "set alarm");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 11);
-        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 0);
 
         if (calendar.getTime().compareTo(new Date()) < 0)
             calendar.add(Calendar.DAY_OF_MONTH, 1);
 
-        Intent intent = new Intent(getApplicationContext(), NotiReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), MeetGoalReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 

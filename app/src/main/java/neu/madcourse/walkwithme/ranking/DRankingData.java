@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import neu.madcourse.walkwithme.Test.Steps;
-import neu.madcourse.walkwithme.userlog.LoginActivity;
+import neu.madcourse.walkwithme.Pedometer.Steps;
 
 public class DRankingData {
 
