@@ -87,12 +87,11 @@ public class PetFragment extends Fragment {
     DatabaseReference totalSteps;
     DatabaseReference petLevel;
 
-    static MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
     static Context context;
     static final String TAG = "Pet page";
 
     static final int[] songBase = {R.raw.happy, R.raw.i_dont_care, R.raw.mamacita};
-    static int songCount = 0;
     CustomToast customToast;
 
 
@@ -252,9 +251,9 @@ public class PetFragment extends Fragment {
                         petState = petState.music();
                         alarmManager.cancel(alarmListener);
                         updateDb();
-                        int songID = songCount % 3;
+                        Random random = new Random();
+                        int songID = random.nextInt(3);
                         mediaPlayer = MediaPlayer.create(getContext(), songBase[songID]);
-                        songCount++;
                         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mediaPlayer) {
