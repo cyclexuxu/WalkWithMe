@@ -33,6 +33,8 @@ import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 import neu.madcourse.walkwithme.userlog.LogoutFragment;
 
+import static neu.madcourse.walkwithme.PetFragment.mediaPlayer;
+
 
 public class MainActivity extends AppCompatActivity {
     private Button login;
@@ -123,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.yes_logout:
+                if (mediaPlayer != null && mediaPlayer.isPlaying()){
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                }
                 Intent stopIntent = new Intent(this, StepService3.class);
                 //stopIntent.setAction(Constants.STOP_FOREGROUND);
                 stopService(stopIntent);
