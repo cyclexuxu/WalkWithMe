@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#C3AED6"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="651dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:paddingHorizontal="16dp">
+
+
+        <EditText
+            android:id="@+id/dayRecordText"
+            android:layout_width="115dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="156dp"
+            android:layout_marginTop="24dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="30dp"
+            android:autoSizeMinTextSize="2sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="0"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/setgoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeMaxTextSize="30dp"
+            android:autoSizeMinTextSize="2sp"
+            android:autoSizeTextType="uniform"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:text="Set Goal"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/stepText"
+            android:layout_width="180dp"
+            android:layout_height="110dp"
+            android:layout_below="@+id/stepLabel"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.468"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.496"
+            tools:text="0" />
+
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/line_chart"
+            android:layout_width="368dp"
+            android:layout_height="249dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/chart_bk"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.816" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="276dp"
+            android:layout_height="255dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="64dp"
+            android:baselineAlignBottom="false"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.57"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/pngegg" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="129dp"
+            android:layout_height="54dp"
+
+            android:layout_marginTop="272dp"
+            android:background="@drawable/paw"
+            android:text="Start"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/line_chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

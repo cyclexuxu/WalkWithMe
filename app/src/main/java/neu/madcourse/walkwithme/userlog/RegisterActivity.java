@@ -71,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), username + " successfully registered", Toast.LENGTH_SHORT).show();
                     // go to profile
                     LoginActivity.currentUser = username;
+                    Log.d(TAG, "currentUser " + username);
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
