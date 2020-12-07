@@ -117,7 +117,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-
             android:src="@drawable/ic_action_addfriend"
             app:backgroundTint="#EC9696"
             app:fabSize="mini" />

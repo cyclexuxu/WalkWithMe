@@ -22,6 +22,7 @@ import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.Pedometer.StepService3;
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.ranking.DRankingData;
+import neu.madcourse.walkwithme.ranking.DRankingData2;
 
 public class LoginActivity extends AppCompatActivity {
     public static String currentUser;
@@ -55,7 +56,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     currentUser = username;
                     StepService3.currentUser = username;
-                    DRankingData dRankingData = new DRankingData();
+                    DRankingData2 dRankingData = new DRankingData2();
+                    dRankingData.getFriendsSteps();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);

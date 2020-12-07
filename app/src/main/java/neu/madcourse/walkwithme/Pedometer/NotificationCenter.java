@@ -47,7 +47,9 @@ public class NotificationCenter {
                     "WALKWITHME",
                     NotificationManager.IMPORTANCE_HIGH
             );
+            //serviceChannel.setShowBadge(false);
             mNotificationManager.createNotificationChannel(serviceChannel);
+
         }
 
         mNotificationManager.notify(notificationMessage.msgId /* Request Code */, getNotification(notificationMessage));

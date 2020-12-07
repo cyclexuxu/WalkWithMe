@@ -1,11 +1,15 @@
 package neu.madcourse.walkwithme.rankingFra;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,12 +32,11 @@ import java.util.Collections;
 import java.util.List;
 
 import neu.madcourse.walkwithme.R;
-import neu.madcourse.walkwithme.ranking.DRankingData;
 import neu.madcourse.walkwithme.ranking.ItemRank;
 import neu.madcourse.walkwithme.ranking.RankAdapter;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
-public class RankFragment extends Fragment {
+public class RankFragment extends Fragment{
     private List<ItemRank> itemRankList;
     private RecyclerView recyclerView;
     private RankAdapter rankAdapter;
@@ -41,6 +45,7 @@ public class RankFragment extends Fragment {
     private TextView tvCurrentUser;
     private SharedPreferences sharedPreferences;
     private TextView etDateOfToday;
+    List<String> usernames;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,8 +66,11 @@ public class RankFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         itemRankList = new ArrayList<>();
+        usernames = new ArrayList<>();
+
+
         // fetch data from firebase
-        // databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        //databaseReference = FirebaseDatabase.getInstance().getReference("users");
         databaseReference = FirebaseDatabase.getInstance().getReference("Rankings");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -85,6 +93,16 @@ public class RankFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        final FloatingActionButton search = view.findViewById(R.id.addNewFriend);
+        Log.d("Search Friends", "about to click");
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Search Friends", "onClick: click add friend");
+                startSearchDialog();
             }
         });
     }
@@ -125,5 +143,33 @@ public class RankFragment extends Fragment {
 
     private void sortBySteps(List<ItemRank> itemRankList) {
         Collections.sort(itemRankList, (itemOne, itemTwo) -> itemTwo.getSteps() - itemOne.getSteps());
+    }
+
+    public void startSearchDialog(){
+        final Dialog d = new Dialog(getActivity());
+        d.setTitle("SearchFriends");
+        d.setContentView(R.layout.dailog_search_friend);
+        Button exist = (Button) d.findViewById(R.id.exist);
+        Button add = (Button) d.findViewById(R.id.add);
+
+        add.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                //reset goal
+                Log.d("Search Friend", "add button is clicked");
+                d.dismiss();
+            }
+        });
+        exist.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Log.d("Search Friend", "exist button is clicked");
+                d.dismiss();
+            }
+        });
+        d.show();
+
     }
 }
