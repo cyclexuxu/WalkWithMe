@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                     currentUser = username;
                     StepService3.currentUser = username;
                     DRankingData2 dRankingData = new DRankingData2();
-                    dRankingData.getFriendsSteps();
+                    //dRankingData.getFriendsSteps();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
