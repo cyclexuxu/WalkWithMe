@@ -3,13 +3,12 @@
     package="neu.madcourse.walkwithme">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" ></uses-permission>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" ></uses-permission>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" ></uses-permission>
-    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <application
         android:allowBackup="true"
@@ -18,18 +17,17 @@
         android:roundIcon="@mipmap/ic_launcher_walkwithme_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
-        <activity android:name=".ranking.RankingActivity"></activity>
+        <activity android:name=".rankingFra.RankFragment2"></activity>
+        <activity android:name=".ranking.RankingActivity" />
 
         <service
             android:name=".Pedometer.StepService3"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".Pedometer.CheckAppRunService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".Notifications.NotificationService"
             android:enabled="true"
@@ -37,24 +35,19 @@
 
         <receiver android:name=".Pedometer.MeetGoalReceiver" />
 
-        <activity
-            android:name=".stepcounter.ProgressActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".userlog.LoginActivity" >
+        <activity android:name=".userlog.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".NotiPet.PetActivity" />
         <activity android:name=".userlog.RegisterActivity" />
         <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
-        </activity>
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

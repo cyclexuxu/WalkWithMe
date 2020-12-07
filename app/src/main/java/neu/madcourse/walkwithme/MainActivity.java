@@ -29,6 +29,7 @@ import neu.madcourse.walkwithme.Pedometer.StepsFragment2;
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 
 import neu.madcourse.walkwithme.rankingFra.RankFragment;
+import neu.madcourse.walkwithme.rankingFra.RankFragment2;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 import neu.madcourse.walkwithme.userlog.LogoutFragment;
 
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new StepsFragment2();
                     break;
                 case R.id.nav_rank:
-                    selectedFragment = new RankFragment();
+                    Log.d("MainActivity", "Click Rank: ");
+                    selectedFragment = new RankFragment2();
                     break;
                 case R.id.nav_pet:
                     selectedFragment = new PetFragment();

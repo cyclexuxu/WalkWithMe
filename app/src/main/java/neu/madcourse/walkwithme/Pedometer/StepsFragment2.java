@@ -170,10 +170,10 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         if(accelerometer == null ){
-            Toast.makeText(getContext(), "Sorry, we cannot find accelerometer sensor in your device", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Sorry, we cannot find accelerometer sensor in your device", Toast.LENGTH_SHORT).show();
             return false;
         }else{
-            Toast.makeText(getContext(), "Accelerometer sensor is available", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Accelerometer sensor is available", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -210,7 +210,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         final Dialog d = new Dialog(getActivity());
         d.setTitle("NumberPicker");
         d.setContentView(R.layout.dialog_set_goal);
-        Button cancel = (Button) d.findViewById(R.id.cancel);
+        Button cancel = (Button) d.findViewById(R.id.exist);
         Button set = (Button) d.findViewById(R.id.set);
         final NumberPicker numberPicker = (NumberPicker) d.findViewById(R.id.set_goal);
 
