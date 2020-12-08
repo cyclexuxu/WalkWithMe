@@ -132,37 +132,37 @@ public class DRankingData2 {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                Log.d(LOG, "onChildAdded: db2 detected add");
-                String username = snapshot.child("username").getValue(String.class);
-                Log.d(LOG, "onChildAdded: db2 detected add username " + username);
-                if(usernames.contains(username)){
-                    int likes = 0;
-                    if(snapshot.child("Likes").child(today).exists()){
-                        likes = snapshot.child("Likes").child(today).getValue(Integer.class);
-                        Log.d(LOG, "onChildAdded: db2 detected likes " + likes);
-                        //databaseReference1.child("Rankings").child(username).child("likesReceived").setValue(likes);
-                    }else{
-                        databaseReference2.child(username).child("Likes").child(today).setValue(0); //create likes
-                    }
-                    int newStep = 0;
-                    if (snapshot.child("Step Count").child(today).exists()){
-                        Steps steps = snapshot.child("Step Count").child(today).getValue(Steps.class);
-                        newStep = (int) steps.getSteps();
-                        //databaseReference1.child("Rankings").child(username).child("steps").setValue(newStep);
-                    }
-
-                    boolean liked = false;
-                    if(snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").exists()){
-                        Log.d(LOG, "liked exists");
-                        liked = snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").getValue(Boolean.class);
-
-                    }
-                    Log.d(LOG, "liked exists is " + liked);
-
-                    ItemRank itemRank = new ItemRank(username, newStep, likes, liked);
-                    databaseReference1.child("Rankings").child(username).setValue(itemRank);
-
-                }
+//                Log.d(LOG, "onChildAdded: db2 detected add");
+//                String username = snapshot.child("username").getValue(String.class);
+//                Log.d(LOG, "onChildAdded: db2 detected add username " + username);
+//                if(usernames.contains(username)){
+//                    int likes = 0;
+//                    if(snapshot.child("Likes").child(today).exists()){
+//                        likes = snapshot.child("Likes").child(today).getValue(Integer.class);
+//                        Log.d(LOG, "onChildAdded: db2 detected likes " + likes);
+//                        //databaseReference1.child("Rankings").child(username).child("likesReceived").setValue(likes);
+//                    }else{
+//                        databaseReference2.child(username).child("Likes").child(today).setValue(0); //create likes
+//                    }
+//                    int newStep = 0;
+//                    if (snapshot.child("Step Count").child(today).exists()){
+//                        Steps steps = snapshot.child("Step Count").child(today).getValue(Steps.class);
+//                        newStep = (int) steps.getSteps();
+//                        //databaseReference1.child("Rankings").child(username).child("steps").setValue(newStep);
+//                    }
+//
+//                    boolean liked = false;
+//                    if(snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").exists()){
+//                        Log.d(LOG, "liked exists");
+//                        liked = snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").getValue(Boolean.class);
+//
+//                    }
+//                    Log.d(LOG, "liked exists is " + liked);
+//
+//                    ItemRank itemRank = new ItemRank(username, newStep, likes, liked);
+//                    databaseReference1.child("Rankings").child(username).setValue(itemRank);
+//
+//                }
 
             }
 
@@ -191,6 +191,8 @@ public class DRankingData2 {
                     if(snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").exists()){
                         liked = snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").getValue(Boolean.class);
                     }
+
+                    Log.d(LOG, "liked " + liked);
 
                     ItemRank itemRank = new ItemRank(username, newStep, likes, liked);
                     databaseReference1.child("Rankings").child(username).setValue(itemRank);
@@ -284,7 +286,11 @@ public class DRankingData2 {
         for (int i = 0; i < itemRanks.size(); i++) {
             ItemRank current = itemRanks.get(i);
             current.setRankId(i + 1);
-            current.setLikeClicked(false);
+            if(current.isLikeClicked()){
+                current.setLikeClicked(true);
+            }else{
+                current.setLikeClicked(false);
+            }
             writeSingleRanking(current.getRankId() + "", current);
             // writeSingleRanking("RankingId" + idCount, current);
             idCount++;
