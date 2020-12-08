@@ -16,18 +16,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.userlog.LoginActivity;
 
-public class RankAdapter extends RecyclerView.Adapter {
+public class RankAdapter2 extends RecyclerView.Adapter {
     private String LOG = "RankAdapter";
     List<ItemRank> itemRankList;
     private boolean textClick;
-    private DatabaseReference likeReference = FirebaseDatabase.getInstance().getReference("Rankings");;
-
-    public RankAdapter(List<ItemRank> itemRankList) {
+    private static String TAG = "RANK ADAPTER 2";
+    private DatabaseReference likeReference = FirebaseDatabase.getInstance().getReference().child("users").child(LoginActivity.currentUser).child("Rankings"); //dy
+    public RankAdapter2(List<ItemRank> itemRankList) {
         this.itemRankList = itemRankList;
     }
 
@@ -54,31 +57,56 @@ public class RankAdapter extends RecyclerView.Adapter {
         viewHolderClass.checkLikeStatus(itemRank);
         //  add like action
 
-        String id = String.valueOf(itemRank.getRankId());
-        DatabaseReference likeRef =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
+        String friend = String.valueOf(itemRank.getUsername());
+        DatabaseReference likeRef =  FirebaseDatabase.getInstance().getReference().child("users").child(LoginActivity.currentUser).child("Rankings").child(friend);
+        DatabaseReference users =  FirebaseDatabase.getInstance().getReference().child("users");
         // viewHolderClass.getLikeStatus()
         viewHolderClass.ibLike.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Click the heart!");
+                Log.d(TAG, "Click the heart! Friend is  " + friend);
                 textClick = true;
-                likeRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (textClick) {
-                            viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
-                            //viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
-                            itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
-                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
-                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
-                            itemRank.setLikeClicked(true);
-                            textClick = false;
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
+                //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+                likeRef.child("likeClicked").setValue(true);
+                final String today = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+                //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+
+                itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
+                itemRank.setLikeClicked(true);
+
+                viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                likeRef.child("likeClicked").setValue(true);
+
+
+                users.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
+                likeRef.child("likesReceived").setValue(itemRank.getLikesReceived());
+
+//                likeRef.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (textClick) {
+//                            viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+//                            //viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
+//                            itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
+//                            likeReference.child(String.valueOf(itemRank.getUsername())).child("likesReceived").setValue(itemRank.getLikesReceived()); //dy
+//                            likeReference.child(String.valueOf(itemRank.getUsername())).child("likeClicked").setValue(true); //dy
+//                            itemRank.setLikeClicked(true);
+//                            textClick = false;
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                    }
+//                });
             }
         });
     }
@@ -103,13 +131,15 @@ public class RankAdapter extends RecyclerView.Adapter {
         }
 
         public void checkLikeStatus(ItemRank itemRank) {
-            String id = String.valueOf(itemRank.getRankId());
-            DatabaseReference isClickedRef =  FirebaseDatabase.getInstance().getReference("Rankings").child(id).child("likeClicked");
+            String id = String.valueOf(itemRank.getUsername());//dy
+            DatabaseReference isClickedRef =  FirebaseDatabase.getInstance().getReference().child("users").child(LoginActivity.currentUser).child("Rankings").child(id).child("likeClicked"); //dy
             isClickedRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Boolean isLikedClicked = (Boolean) snapshot.getValue();
+
                     if (isLikedClicked) {
+
                         ibLike.setImageResource(R.drawable.ic_action_like);
                         tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
                         // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
@@ -117,6 +147,9 @@ public class RankAdapter extends RecyclerView.Adapter {
                     } else {
                         ibLike.setImageResource(R.drawable.ic_action_dislike);
                     }
+
+
+
                     // Log.d(LOG, String.valueOf(isLikedClicked) + "~~~~~~~~~~~~~~");
                 }
 
