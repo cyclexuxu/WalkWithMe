@@ -11,6 +11,7 @@ public class ItemRank {
         this.username = username;
         this.steps = steps;
         this.likesReceived = likesReceived;
+        this.isLikeClicked = false;
     }
 
     public ItemRank(String username, int steps, int likesReceived, boolean likeClicked) {
@@ -19,6 +20,8 @@ public class ItemRank {
         this.likesReceived = likesReceived;
         this.isLikeClicked = likeClicked;
     }
+
+    public ItemRank(){}
 
     public int getRankId() {
         return rankId;

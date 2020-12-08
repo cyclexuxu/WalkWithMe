@@ -128,4 +128,6 @@ public class RankAdapter extends RecyclerView.Adapter {
         }
     }
 
+
+
 }

@@ -89,6 +89,9 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
         usernames = new ArrayList<>();
         map = new HashMap<>(); //easy to search friends
         viewTest= view;
+        itemRankList = new ArrayList<>();
+//        rankAdapter = new RankAdapter2(itemRankList);
+//        recyclerView.setAdapter(rankAdapter);
 
         //map all users step
         allUsers = FirebaseDatabase.getInstance().getReference().child("users");
@@ -120,16 +123,20 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
                 Log.d(LOG, "onChildAdded: ");
                 itemRankList = new ArrayList<>();
                 for(DataSnapshot d : snapshot.getChildren()) {
-                    String username = d.child("username").getValue(String.class);
-                    int steps = Integer.parseInt(String.valueOf(d.child("steps").getValue(Long.class)));
-                    int likesReceived = Integer.parseInt(String.valueOf(d.child("likesReceived").getValue(Long.class)));
-                    Log.d(LOG, "onDataChange: number of likes");
-                    //boolean likeClicked = Boolean.valueOf(d.child("likesClicked").getValue(String.class));
-                    //Log.d(LOG, "onDataChange: number of likes is " + likeClicked);
-                    ItemRank itemRank = new ItemRank(username, steps, likesReceived);
+//                    String username = d.child("username").getValue(String.class);
+//                    int steps = Integer.parseInt(String.valueOf(d.child("steps").getValue(Long.class)));
+//                    int likesReceived = Integer.parseInt(String.valueOf(d.child("likesReceived").getValue(Long.class)));
+//                    Log.d(LOG, "onDataChange: number of likes");
+//                    //boolean likeClicked = Boolean.valueOf(d.child("likesClicked").getValue(String.class));
+//                    //Log.d(LOG, "onDataChange: number of likes is " + likeClicked);
+//                    ItemRank itemRank = new ItemRank(username, steps, likesReceived);
+                    Log.d(LOG, "onChildAdded: key " + snapshot.getKey());
+                    ItemRank itemRank = d.getValue(ItemRank.class);
+                    Log.d(LOG, "onChildAdded: itemRank " + itemRank);
                     itemRankList.add(itemRank);
-                    map.put(username, itemRank);
-                    usernames.add(username);
+                    //itemRankList.add(itemRank);
+                    map.put(itemRank.getUsername(), itemRank);
+                    usernames.add(itemRank.getUsername());
 
                     Log.d(LOG, "Set Adapter...");
                     Log.d(LOG, itemRankList.toString());
@@ -139,8 +146,9 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
                 processItemRankList(view, itemRankList);
                 rankAdapter = new RankAdapter2(itemRankList);
                 //rankAdapter.setHasStableIds(true);
+                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 recyclerView.setAdapter(rankAdapter);
-               // ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                rankAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -148,6 +156,53 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
 
             }
         });
+
+        step_ref.child("Rankings").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                Log.d(LOG, "onChildAdded: key " + snapshot.getKey());
+//                ItemRank itemRank = snapshot.getValue(ItemRank.class);
+//                Log.d(LOG, "onChildAdded: itemRank " + itemRank);
+//                itemRankList.add(itemRank);
+//
+//                processItemRankList(view, itemRankList);
+//                rankAdapter = new RankAdapter2(itemRankList);
+//                //rankAdapter.setHasStableIds(true);
+//                //((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+//                recyclerView.setAdapter(rankAdapter);
+//                rankAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                ItemRank itemRank = snapshot.getValue(ItemRank.class);
+                String username = itemRank.getUsername();
+                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                rankAdapter.notifyDataSetChanged();
+
+//                ItemRank itemRank = snapshot.getValue(ItemRank.class);
+//                String username = itemRank.getUsername();
+//                allUsers.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
+//                rankAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 //
 
         final FloatingActionButton search = view.findViewById(R.id.addNewFriend);
