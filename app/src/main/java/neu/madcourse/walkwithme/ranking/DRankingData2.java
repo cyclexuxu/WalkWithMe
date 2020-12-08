@@ -155,7 +155,9 @@ public class DRankingData2 {
                     if(snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").exists()){
                         Log.d(LOG, "liked exists");
                         liked = snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").getValue(Boolean.class);
+
                     }
+                    Log.d(LOG, "liked exists is " + liked);
 
                     ItemRank itemRank = new ItemRank(username, newStep, likes, liked);
                     databaseReference1.child("Rankings").child(username).setValue(itemRank);
@@ -243,6 +245,7 @@ public class DRankingData2 {
                     if(dataSnapshot.child(LoginActivity.currentUser).child("Rankings").child(name).child("likeClicked").exists()){
                         Log.d(LOG, "liked exists");
                         liked = dataSnapshot.child(LoginActivity.currentUser).child("Rankings").child(name).child("likeClicked").getValue(Boolean.class);
+                        Log.d(LOG, "liked exists is " + liked);
                     }
 
                     ItemRank itemRank = new ItemRank(name, newStep, likes, liked);
