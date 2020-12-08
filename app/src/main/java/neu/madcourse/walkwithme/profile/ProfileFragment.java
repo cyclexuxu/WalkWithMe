@@ -72,7 +72,10 @@ public class ProfileFragment extends Fragment {
                         weight = String.valueOf(user.child("weight").getValue(Double.class));
                         height = String.valueOf(user.child("height").getValue(Double.class));
                         bmi = String.valueOf(user.child("bmi").getValue(Double.class));
-                        int steps = user.child("Total Steps").getValue(Integer.class);
+                        int steps = 0;
+                        if(user.hasChild("Total Steps")) {
+                            steps = user.child("Total Steps").getValue(Integer.class);
+                        }
                         int oldLevel = user.child("level").getValue(Integer.class);
                         int newLevel = processSteps(steps);
                         level = String.valueOf(newLevel);
