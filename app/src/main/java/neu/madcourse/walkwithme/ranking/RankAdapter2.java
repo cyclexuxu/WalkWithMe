@@ -64,6 +64,7 @@ public class RankAdapter2 extends RecyclerView.Adapter {
         viewHolderClass.ibLike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
                 Log.d(TAG, "Click the heart!");
                 Log.d(TAG, "Click the heart! Friend is  " + friend);
                 textClick = true;
@@ -71,37 +72,16 @@ public class RankAdapter2 extends RecyclerView.Adapter {
                 likeRef.child("likeClicked").setValue(true);
                 final String today = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 
-                //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
 
                 itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
-                itemRank.setLikeClicked(true);
 
-                viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
-
-
-                likeRef.child("likeClicked").setValue(true);
+                //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
 
 
                 users.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
+
                 likeRef.child("likesReceived").setValue(itemRank.getLikesReceived());
 
-//                likeRef.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (textClick) {
-//                            viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
-//                            //viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
-//                            itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
-//                            likeReference.child(String.valueOf(itemRank.getUsername())).child("likesReceived").setValue(itemRank.getLikesReceived()); //dy
-//                            likeReference.child(String.valueOf(itemRank.getUsername())).child("likeClicked").setValue(true); //dy
-//                            itemRank.setLikeClicked(true);
-//                            textClick = false;
-//                        }
-//                    }
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//                    }
-//                });
             }
         });
     }
@@ -131,21 +111,7 @@ public class RankAdapter2 extends RecyclerView.Adapter {
             isClickedRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Boolean isLikedClicked = (Boolean) snapshot.getValue();
 
-                    if (isLikedClicked) {
-
-                        ibLike.setImageResource(R.drawable.ic_action_like);
-                        tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
-                        // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
-                        // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
-                    } else {
-                        ibLike.setImageResource(R.drawable.ic_action_dislike);
-                    }
-
-
-
-                    // Log.d(LOG, String.valueOf(isLikedClicked) + "~~~~~~~~~~~~~~");
                 }
 
                 @Override
