@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.LogDescriptor;
@@ -46,11 +47,12 @@ import neu.madcourse.walkwithme.ranking.DRankingData;
 import neu.madcourse.walkwithme.ranking.DRankingData2;
 import neu.madcourse.walkwithme.ranking.ItemRank;
 import neu.madcourse.walkwithme.ranking.RankAdapter;
+import neu.madcourse.walkwithme.ranking.RankAdapter2;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class RankFragment2 extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
-    private RankAdapter rankAdapter;
+    private RankAdapter2 rankAdapter;
     private DatabaseReference allUsers;
     private DatabaseReference step_ref;
     private String LOG = "RANKING_ACTIVITY";
@@ -60,6 +62,7 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
     List<String> usernames;
     Map<String, ItemRank> map;
     private View viewTest = null;
+    List<ItemRank> itemRankList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,29 +124,95 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
         step_ref.child("Rankings").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<ItemRank> itemRankList = new ArrayList<>();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    // ItemRank itemRank = ds.child("username");
-                    String username = ds.child("username").getValue(String.class);
-                    int steps = Integer.parseInt(String.valueOf(ds.child("steps").getValue(Long.class)));
-                    int likesReceived = Integer.parseInt(String.valueOf(ds.child("likesReceived").getValue(Long.class)));
-                    ItemRank itemRank = new ItemRank(username, steps, likesReceived);
+                Log.d(LOG, "onChildAdded: ");
+                itemRankList = new ArrayList<>();
+                for(DataSnapshot d : snapshot.getChildren()) {
+                    String username = d.child("username").getValue(String.class);
+                    int steps = Integer.parseInt(String.valueOf(d.child("steps").getValue(Long.class)));
+                    int likesReceived = Integer.parseInt(String.valueOf(d.child("likesReceived").getValue(Long.class)));
+                    //Log.d(LOG, "onDataChange: number of likes");
+                    boolean likeClicked = d.child("likesClicked").getValue(Boolean.class) == null ? false : d.child("likesClicked").getValue(Boolean.class);
+                    ItemRank itemRank = new ItemRank(username, steps, likesReceived, likeClicked);
                     itemRankList.add(itemRank);
                     map.put(username, itemRank);
+                    usernames.add(username);
+                    // }
+//                processItemRankList(view, itemRankList);
+//                // need to filter out the current user
+//                // pass the fetched data to adapter
+//                rankAdapter = new RankAdapter(itemRankList);
+                    Log.d(LOG, "Set Adapter...");
+                    Log.d(LOG, itemRankList.toString());
                 }
+
+//                view.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
                 processItemRankList(view, itemRankList);
-                // need to filter out the current user
-                // pass the fetched data to adapter
-                rankAdapter = new RankAdapter(itemRankList);
-                Log.d(LOG, "Set Adapter...");
+                rankAdapter = new RankAdapter2(itemRankList);
+                //rankAdapter.setHasStableIds(true);
                 recyclerView.setAdapter(rankAdapter);
+               // ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        }) ;
+        });
+//        step_ref.child("Rankings").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                Log.d(LOG, "onChildAdded: ");
+//                String username = snapshot.child("username").getValue(String.class);
+//                Log.d(LOG, "changed user: " + username);
+//                if(!username.equals(LoginActivity.currentUser)) {
+//                    int steps = Integer.parseInt(String.valueOf(snapshot.child("steps").getValue(Long.class)));
+//                    int likesReceived = Integer.parseInt(String.valueOf(snapshot.child("likesReceived").getValue(Long.class)));
+//                    ItemRank itemRank = new ItemRank(username, steps, likesReceived);
+//                    ItemRank old = map.get(username);
+//                    int idx = usernames.indexOf(username);
+//                    Log.d(LOG, "onChildChanged: idx " + idx);
+//                    Log.d(LOG, "onChildChanged: list " + itemRankList);
+//                    //itemRankList.add(itemRank);
+//                    //replace
+//                    itemRankList.set(idx, itemRank);
+//                    map.put(username, itemRank);
+//                    // }
+////                processItemRankList(view, itemRankList);
+////                // need to filter out the current user
+////                // pass the fetched data to adapter
+////                rankAdapter = new RankAdapter(itemRankList);
+//                    Log.d(LOG, "Set Adapter...");
+//
+////                view.runOnUiThread(new Runnable() {
+////                    @Override
+////                    public void run() {
+//                    processItemRankList(view, itemRankList);
+//                    rankAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        }) ;
 
         final FloatingActionButton search = view.findViewById(R.id.addNewFriend);
         Log.d("Search Friends", "about to click");
@@ -198,7 +267,7 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
     }
 
     private void addRankIdToEachItem(@NonNull final View view, List<ItemRank> itemRankList) {
-        int indexOfCurrentUser = -1;
+        int indexOfCurrentUser = 0;
         for (int i = 0; i < itemRankList.size(); i++) {
             ItemRank currentItem = itemRankList.get(i);
             currentItem.setRankId(i + 1);

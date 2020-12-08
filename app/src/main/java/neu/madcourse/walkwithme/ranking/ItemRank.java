@@ -13,6 +13,13 @@ public class ItemRank {
         this.likesReceived = likesReceived;
     }
 
+    public ItemRank(String username, int steps, int likesReceived, boolean likeClicked) {
+        this.username = username;
+        this.steps = steps;
+        this.likesReceived = likesReceived;
+        this.isLikeClicked = likeClicked;
+    }
+
     public int getRankId() {
         return rankId;
     }
