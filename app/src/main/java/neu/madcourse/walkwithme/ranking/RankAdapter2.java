@@ -78,11 +78,6 @@ public class RankAdapter2 extends RecyclerView.Adapter {
 
                 viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
 
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 likeRef.child("likeClicked").setValue(true);
 
