@@ -358,8 +358,8 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
         Log.d("reSetAlarm: ", "set alarm to reset isClicked");
         //at 23:59
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,20);
-        calendar.set(Calendar.MINUTE, 49);
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        calendar.set(Calendar.MINUTE, 59);
 
         if (calendar.getTime().compareTo(new Date()) < 0)
             calendar.add(Calendar.DAY_OF_MONTH, 1);
