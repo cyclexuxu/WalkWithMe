@@ -16,16 +16,18 @@
         android:paddingHorizontal="16dp">
 
 
-        <EditText
+        <TextView
             android:id="@+id/dayRecordText"
             android:layout_width="115dp"
             android:layout_height="40dp"
-            android:layout_marginStart="156dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="152dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:autoSizeMaxTextSize="30dp"
             android:autoSizeMinTextSize="2sp"
             android:autoSizeTextType="uniform"
+            android:background="#FFFFFF"
+            android:backgroundTint="@android:color/holo_orange_light"
             android:gravity="center_vertical"
             android:padding="5dp"
             android:text="0"
@@ -36,10 +38,10 @@
 
         <Button
             android:id="@+id/setgoal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="87dp"
+            android:layout_height="43dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:autoSizeMaxTextSize="30dp"
             android:autoSizeMinTextSize="2sp"
             android:autoSizeTextType="uniform"

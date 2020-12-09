@@ -13,35 +13,41 @@
         android:layout_height="651dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginTop="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="-4dp"
         android:paddingHorizontal="16dp">
 
 
-        <EditText
+        <TextView
             android:id="@+id/dayRecordText"
             android:layout_width="115dp"
             android:layout_height="40dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:autoSizeMaxTextSize="30dp"
             android:autoSizeMinTextSize="2sp"
             android:autoSizeTextType="uniform"
+            android:background="#FFFFFF"
+            android:backgroundTint="@android:color/holo_orange_light"
             android:gravity="center_vertical"
             android:padding="5dp"
             android:text="0"
             android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/startButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/setgoal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="400dp"
+            android:layout_width="76dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="10dp"
             android:autoSizeMaxTextSize="30dp"
             android:autoSizeMinTextSize="2sp"
             android:autoSizeTextType="uniform"
@@ -51,8 +57,12 @@
             android:textAllCaps="false"
             android:textSize="20dp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/line_chart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toEndOf="@+id/dayRecordText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/stepText"
@@ -74,51 +84,49 @@
 
         <lecho.lib.hellocharts.view.LineChartView
             android:id="@+id/line_chart"
-            android:layout_width="368dp"
-            android:layout_height="249dp"
+            android:layout_width="351dp"
+            android:layout_height="209dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginTop="13dp"
             android:background="@drawable/chart_bk"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.956"
+            app:layout_constraintHorizontal_bias="0.916"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.469" />
+            app:layout_constraintTop_toBottomOf="@+id/dayRecordText"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="276dp"
+            android:layout_width="288dp"
             android:layout_height="255dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="8dp"
             android:baselineAlignBottom="false"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.072"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/pngegg" />
 
         <Button
             android:id="@+id/startButton"
-            android:layout_width="129dp"
-            android:layout_height="54dp"
+            android:layout_width="124dp"
+            android:layout_height="48dp"
 
-            android:layout_marginTop="272dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/paw"
             android:text="Start"
             android:textAllCaps="false"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/line_chart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.182"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.021" />
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
