@@ -34,6 +34,7 @@
             android:exported="true" />
 
         <receiver android:name=".Pedometer.MeetGoalReceiver" />
+        <receiver android:name=".ranking.ResetLikeButton" />
 
         <activity android:name=".userlog.LoginActivity">
             <intent-filter>

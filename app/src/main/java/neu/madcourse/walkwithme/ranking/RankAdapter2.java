@@ -68,8 +68,9 @@ public class RankAdapter2 extends RecyclerView.Adapter {
                 likeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(textClick) {
+                        //if(textClick) {
                             //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+                        if(!snapshot.child("likeClicked").getValue(Boolean.class)) {
                             Log.d(TAG, "Click the heart!");
                             Log.d(TAG, "Click the heart! Friend is  " + friend);
                             //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
@@ -79,8 +80,8 @@ public class RankAdapter2 extends RecyclerView.Adapter {
                             //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
                             users.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
                             likeRef.child("likesReceived").setValue(itemRank.getLikesReceived());
-                            textClick = false;
                         }
+                         //
                     }
 
                     @Override

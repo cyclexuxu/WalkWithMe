@@ -1,5 +1,7 @@
 package neu.madcourse.walkwithme.ranking;
 
+import java.util.Objects;
+
 public class ItemRank {
     private int rankId;
     private String username;
@@ -61,5 +63,21 @@ public class ItemRank {
 
     public void setLikeClicked(boolean likeClicked) {
         isLikeClicked = likeClicked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemRank itemRank = (ItemRank) o;
+        return steps == itemRank.steps &&
+                likesReceived == itemRank.likesReceived &&
+                isLikeClicked == itemRank.isLikeClicked &&
+                Objects.equals(username, itemRank.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, steps, likesReceived, isLikeClicked);
     }
 }

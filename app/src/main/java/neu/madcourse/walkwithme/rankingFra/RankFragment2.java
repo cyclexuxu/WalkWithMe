@@ -1,7 +1,10 @@
 package neu.madcourse.walkwithme.rankingFra;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,17 +41,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.grpc.internal.LogExceptionRunnable;
+import neu.madcourse.walkwithme.Pedometer.MeetGoalReceiver;
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.ranking.DRankingData;
 import neu.madcourse.walkwithme.ranking.DRankingData2;
 import neu.madcourse.walkwithme.ranking.ItemRank;
 import neu.madcourse.walkwithme.ranking.RankAdapter;
 import neu.madcourse.walkwithme.ranking.RankAdapter2;
+import neu.madcourse.walkwithme.ranking.ResetLikeButton;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
 public class RankFragment2 extends Fragment implements View.OnClickListener{
@@ -77,6 +84,8 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
         Log.d(LOG, "onViewCreated: ");
         //DRankingData2 dRankingData = new DRankingData2();
         //dRankingData.getFriendsSteps();
+        Log.d(LOG, "set alarm for likes button ");
+        reSetAlarm(view.getContext());
 
         etDateOfToday = view.findViewById(R.id.etToday);
         String dateOfToday = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -89,11 +98,7 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
         usernames = new ArrayList<>();
         map = new HashMap<>(); //easy to search friends
         viewTest= view;
-        itemRankList = new ArrayList<>();
-//        rankAdapter = new RankAdapter2(itemRankList);
-//        recyclerView.setAdapter(rankAdapter);
-
-        //map all users step
+        //itemRankList = new ArrayList<>();
         allUsers = FirebaseDatabase.getInstance().getReference().child("users");
         //getAllUsers();
         final String today = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -123,32 +128,21 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
                 Log.d(LOG, "onChildAdded: ");
                 itemRankList = new ArrayList<>();
                 for(DataSnapshot d : snapshot.getChildren()) {
-//                    String username = d.child("username").getValue(String.class);
-//                    int steps = Integer.parseInt(String.valueOf(d.child("steps").getValue(Long.class)));
-//                    int likesReceived = Integer.parseInt(String.valueOf(d.child("likesReceived").getValue(Long.class)));
-//                    Log.d(LOG, "onDataChange: number of likes");
-//                    //boolean likeClicked = Boolean.valueOf(d.child("likesClicked").getValue(String.class));
-//                    //Log.d(LOG, "onDataChange: number of likes is " + likeClicked);
-//                    ItemRank itemRank = new ItemRank(username, steps, likesReceived);
-                    Log.d(LOG, "onChildAdded: key " + snapshot.getKey());
                     ItemRank itemRank = d.getValue(ItemRank.class);
-                    Log.d(LOG, "onChildAdded: itemRank " + itemRank);
-                    itemRankList.add(itemRank);
-                    //itemRankList.add(itemRank);
-                    map.put(itemRank.getUsername(), itemRank);
-                    usernames.add(itemRank.getUsername());
-
-                    Log.d(LOG, "Set Adapter...");
-                    Log.d(LOG, itemRankList.toString());
+                        itemRankList.add(itemRank);
+                        map.put(itemRank.getUsername(), itemRank);
+                    //}
                 }
+
+
 
 //
                 processItemRankList(view, itemRankList);
-                rankAdapter = new RankAdapter2(itemRankList);
-                //rankAdapter.setHasStableIds(true);
-                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                recyclerView.setAdapter(rankAdapter);
-                rankAdapter.notifyDataSetChanged();
+                 rankAdapter = new RankAdapter2(itemRankList);
+                 recyclerView.setAdapter(rankAdapter);
+                 recyclerView.setItemAnimator(null);
+                 //map all users step
+                  rankAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -157,8 +151,10 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
             }
         });
 
+
 //        step_ref.child("Rankings").addChildEventListener(new ChildEventListener() {
 //            @Override
+//
 //            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 ////                Log.d(LOG, "onChildAdded: key " + snapshot.getKey());
 ////                ItemRank itemRank = snapshot.getValue(ItemRank.class);
@@ -166,31 +162,56 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
 ////                itemRankList.add(itemRank);
 ////
 ////                processItemRankList(view, itemRankList);
-////                rankAdapter = new RankAdapter2(itemRankList);
+////                //rankAdapter = new RankAdapter2(itemRankList);
 ////                //rankAdapter.setHasStableIds(true);
 ////                //((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-////                recyclerView.setAdapter(rankAdapter);
+////                //recyclerView.setAdapter(rankAdapter);
 ////                rankAdapter.notifyDataSetChanged();
 //            }
 //
 //            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                ItemRank itemRank = snapshot.getValue(ItemRank.class);
-//                String username = itemRank.getUsername();
-//
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
+//            public void onChildChanged(@NonNull DataSnapshot d, @Nullable String previousChildName) {
+//                Log.d(LOG, "onChildAdded: key " + d.getKey());
+//                ItemRank itemRank = d.getValue(ItemRank.class);
+//                Log.d(LOG, "onChildAdded: itemRank " + itemRank);
+//                String username = d.child("username").getValue(String.class);
+//                Log.d(LOG, "new itemRank: " + itemRank.toString());
+//                if(map.containsKey(username) && map.get(username) != null && !username.equals(LoginActivity.currentUser)){
+//                    ItemRank old = map.get(username);
+//                    Log.d(LOG, "old itemRank: " + old.toString());
+//                    if(!old.equals(itemRank)){
+//                        //need to update
+//                        //get index
+//                        Log.d(LOG, "Update user: " + username);
+//                        //Log.d(LOG, itemRankList.toString());
+//                        int idx = itemRankList.indexOf(old);
+//                        //replace
+//                        itemRankList.set(idx, itemRank);
+//                        //update map;
+//                        map.put(itemRank.getUsername(), itemRank);
+//                    }
+//                }else{
+//                    itemRankList.add(itemRank);
+//                    map.put(itemRank.getUsername(), itemRank);
 //                }
-//                allUsers.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
-//                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-//                rankAdapter.notifyDataSetChanged();
+//                //itemRankList.add(itemRank);
+//                // map.put(itemRank.getUsername(), itemRank);
+//                //usernames.add(itemRank.getUsername());
 //
-////                ItemRank itemRank = snapshot.getValue(ItemRank.class);
-////                String username = itemRank.getUsername();
-////                allUsers.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
-////                rankAdapter.notifyDataSetChanged();
+////                    Log.d(LOG, "Set Adapter...");
+//                //Log.d(LOG, itemRankList.toString());
+//
+//            //
+//            processItemRankList(view, itemRankList);
+//            //rankAdapter = new RankAdapter2(itemRankList);
+//            //rankAdapter.setHasStableIds(true);
+////                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+////                RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+////                if (animator instanceof SimpleItemAnimator) {
+////                    ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+////                }
+////                recyclerView.setAdapter(rankAdapter);
+//                rankAdapter.notifyDataSetChanged();
 //            }
 //
 //            @Override
@@ -208,7 +229,7 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
 //
 //            }
 //        });
-
+//
 
 //
 
@@ -330,5 +351,28 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
 
+    }
+
+    //set alarm to check today's goal and steps at 6pm every day notification
+    private void reSetAlarm(Context context){
+        Log.d("reSetAlarm: ", "set alarm to reset isClicked");
+        //at 23:59
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,20);
+        calendar.set(Calendar.MINUTE, 49);
+
+        if (calendar.getTime().compareTo(new Date()) < 0)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        Intent intent = new Intent(context, ResetLikeButton.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        }else{
+            Log.d("setAlarm: ", "set alarm is null");
+        }
     }
 }
