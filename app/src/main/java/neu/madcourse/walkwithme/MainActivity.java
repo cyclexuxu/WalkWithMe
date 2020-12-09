@@ -18,18 +18,18 @@ import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import neu.madcourse.walkwithme.Test.CheckAppRunService;
+import neu.madcourse.walkwithme.Pedometer.CheckAppRunService;
 import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.profile.ProfileFragment;
 import neu.madcourse.walkwithme.ranking.RankingActivity;
-import neu.madcourse.walkwithme.Test.Constants;
-import neu.madcourse.walkwithme.Test.StepService3;
-import neu.madcourse.walkwithme.Test.StepsFragment2;
+import neu.madcourse.walkwithme.Pedometer.Constants;
+import neu.madcourse.walkwithme.Pedometer.StepService3;
+import neu.madcourse.walkwithme.Pedometer.StepsFragment2;
 
 import neu.madcourse.walkwithme.NotiPet.PetActivity;
 
 import neu.madcourse.walkwithme.rankingFra.RankFragment;
-import neu.madcourse.walkwithme.stepcounter.ProgressActivity;
+import neu.madcourse.walkwithme.rankingFra.RankFragment2;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 import neu.madcourse.walkwithme.userlog.LogoutFragment;
 
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new StepsFragment2();
                     break;
                 case R.id.nav_rank:
-                    selectedFragment = new RankFragment();
+                    Log.d("MainActivity", "Click Rank: ");
+                    selectedFragment = new RankFragment2();
                     break;
                 case R.id.nav_pet:
                     selectedFragment = new PetFragment();
@@ -136,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent login = new Intent(this, LoginActivity.class);
                 NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel(1); //close all notification for current users
+                notificationManager.cancel(2); //level
+                notificationManager.cancel(3); //steps
                 startActivity(login);
                 break;
             case R.id.not_logout:
@@ -143,10 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(main);
                 break;
         }
-    }
-
-    public void startProgressActivity(View view){
-        startActivity(new Intent(MainActivity.this, ProgressActivity.class));
     }
 
     public void startStepsFragment(View view){
@@ -160,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.nav_host_fragment, frag).commit();
         manager.executePendingTransactions();
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -167,10 +167,6 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
         Log.v(TAG, "On Stop, Starting CheckRecentRun service...");
         startService(new Intent(this,  CheckAppRunService.class));
-//        Intent startIntent = new Intent(this, StepService3.class);
-//        startIntent.setAction(Constants.START_FOREGROUND);
-//        startService(startIntent);
-
     }
 
     @Override

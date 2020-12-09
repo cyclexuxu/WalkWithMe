@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.profile.ProfileActivity;
 import neu.madcourse.walkwithme.R;
+import neu.madcourse.walkwithme.ranking.DRankingData2;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText userName;
@@ -71,6 +72,8 @@ public class RegisterActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), username + " successfully registered", Toast.LENGTH_SHORT).show();
                     // go to profile
                     LoginActivity.currentUser = username;
+                    Log.d(TAG, "currentUser " + username);
+                    DRankingData2 dRankingData = new DRankingData2();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {

@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,11 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import neu.madcourse.walkwithme.MainActivity;
-import neu.madcourse.walkwithme.Test.Constants;
-import neu.madcourse.walkwithme.Test.StepService3;
-import neu.madcourse.walkwithme.profile.ProfileActivity;
+import neu.madcourse.walkwithme.Pedometer.StepService3;
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.ranking.DRankingData;
+import neu.madcourse.walkwithme.ranking.DRankingData2;
 
 public class LoginActivity extends AppCompatActivity {
     public static String currentUser;
@@ -58,7 +56,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     currentUser = username;
                     StepService3.currentUser = username;
-                    DRankingData dRankingData = new DRankingData();
+                    DRankingData2 dRankingData = new DRankingData2();
+                    //dRankingData.getFriendsSteps();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);

@@ -9,23 +9,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FCE38A"
 >
 
         <NumberPicker
-            android:id="@+id/numberPicker"
+            android:id="@+id/set_goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp" />
+            android:layout_margin="10dp"
+            android:theme="@style/AppTheme.Picker"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+           >
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/exist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/numberPicker"
@@ -36,7 +40,7 @@
                 android:text="Cancel" />
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"

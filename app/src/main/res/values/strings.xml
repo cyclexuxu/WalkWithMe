@@ -10,7 +10,7 @@
     <string name="weight">Please enter your Weight</string>
     <string name="height">Please enter your Height</string>
     <string name="register">Register</string>
-    <string-array name = "tips_lab">
+    <string-array name="tips_lab">
         <item>"I'm a Corgi, I am hungry if you don't feed me."</item>
         <item>"I was born with 3 pieces of free meats."</item>
         <item>"500 steps win one piece of meat!"</item>

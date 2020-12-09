@@ -1,4 +1,4 @@
-package neu.madcourse.walkwithme.Test;
+package neu.madcourse.walkwithme.Pedometer;
 
 public class NotificationMessage {
     public String title = "";

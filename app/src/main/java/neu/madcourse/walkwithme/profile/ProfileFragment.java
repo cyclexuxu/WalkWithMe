@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import neu.madcourse.walkwithme.Pedometer.NofiticationConstants;
+import neu.madcourse.walkwithme.Pedometer.NotificationCenter;
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
@@ -72,14 +74,26 @@ public class ProfileFragment extends Fragment {
                         weight = String.valueOf(user.child("weight").getValue(Double.class));
                         height = String.valueOf(user.child("height").getValue(Double.class));
                         bmi = String.valueOf(user.child("bmi").getValue(Double.class));
-                        int steps = user.child("Total Steps").getValue(Integer.class);
+                        int steps = 0;
+                        if(user.hasChild("Total Steps")) {
+                            steps = user.child("Total Steps").getValue(Integer.class);
+                        }
                         int oldLevel = user.child("level").getValue(Integer.class);
                         int newLevel = processSteps(steps);
                         level = String.valueOf(newLevel);
-//                        if (oldLevel != newLevel) {
-//                            // do notification
-//
-//                        }
+                        if (oldLevel != newLevel) {
+                            // do notification
+                            NotificationCenter notificationCenter = new NotificationCenter(getContext());
+                            if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 0) {
+                                notificationCenter.createNotification(NofiticationConstants.L2);
+                            } else if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 1) {
+                                notificationCenter.createNotification(NofiticationConstants.L3);
+                            } else if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 2) {
+                                notificationCenter.createNotification(NofiticationConstants.L4);
+                            } else if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 3) {
+                                notificationCenter.createNotification(NofiticationConstants.L5);
+                            }
+                        }
                         userRef.child(name).child("level").setValue(newLevel);
                         break;
                     }

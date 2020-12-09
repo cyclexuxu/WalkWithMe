@@ -6,9 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +28,8 @@ import java.util.List;
 
 import neu.madcourse.walkwithme.R;
 import neu.madcourse.walkwithme.userlog.LoginActivity;
+
+import static com.google.android.material.internal.ContextUtils.getActivity;
 
 public class RankingActivity extends AppCompatActivity {
     private List<ItemRank> itemRankList;
@@ -77,6 +83,7 @@ public class RankingActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 
