@@ -157,50 +157,57 @@ public class RankFragment2 extends Fragment implements View.OnClickListener{
             }
         });
 
-        step_ref.child("Rankings").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                Log.d(LOG, "onChildAdded: key " + snapshot.getKey());
-//                ItemRank itemRank = snapshot.getValue(ItemRank.class);
-//                Log.d(LOG, "onChildAdded: itemRank " + itemRank);
-//                itemRankList.add(itemRank);
+//        step_ref.child("Rankings").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+////                Log.d(LOG, "onChildAdded: key " + snapshot.getKey());
+////                ItemRank itemRank = snapshot.getValue(ItemRank.class);
+////                Log.d(LOG, "onChildAdded: itemRank " + itemRank);
+////                itemRankList.add(itemRank);
+////
+////                processItemRankList(view, itemRankList);
+////                rankAdapter = new RankAdapter2(itemRankList);
+////                //rankAdapter.setHasStableIds(true);
+////                //((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+////                recyclerView.setAdapter(rankAdapter);
+////                rankAdapter.notifyDataSetChanged();
+//            }
 //
-//                processItemRankList(view, itemRankList);
-//                rankAdapter = new RankAdapter2(itemRankList);
-//                //rankAdapter.setHasStableIds(true);
-//                //((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-//                recyclerView.setAdapter(rankAdapter);
-//                rankAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                ItemRank itemRank = snapshot.getValue(ItemRank.class);
-                String username = itemRank.getUsername();
-                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                rankAdapter.notifyDataSetChanged();
-
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 //                ItemRank itemRank = snapshot.getValue(ItemRank.class);
 //                String username = itemRank.getUsername();
+//
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 //                allUsers.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
+//                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 //                rankAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//
+////                ItemRank itemRank = snapshot.getValue(ItemRank.class);
+////                String username = itemRank.getUsername();
+////                allUsers.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
+////                rankAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
 
 //
