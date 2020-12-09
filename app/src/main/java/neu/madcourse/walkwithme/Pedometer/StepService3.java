@@ -1,6 +1,8 @@
 package neu.madcourse.walkwithme.Pedometer;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -73,7 +75,7 @@ public class StepService3 extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        //createNotificationChannel();
+        createNotificationChannel();
 
         setAlarm(); //this alarm check daily goal and step at 5pm everyday
         sensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
@@ -310,17 +312,17 @@ public class StepService3 extends Service implements SensorEventListener {
 //        return notification;
 //    }
 //
-//    private void createNotificationChannel() {
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//            NotificationChannel serviceChannel = new NotificationChannel(
-//                    CHANNEL_ID,
-//                    "WALKWITHME",
-//                    NotificationManager.IMPORTANCE_HIGH
-//            );
-//            NotificationManager manager = getSystemService(NotificationManager.class);
-//            manager.createNotificationChannel(serviceChannel);
-//        }
-//    }
+    private void createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "WALKWITHME",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+    }
 
     private void accessData(){
 

@@ -9,16 +9,16 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="651dp"
+        android:layout_width="789dp"
+        android:layout_height="391dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="-4dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="-4dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
         android:paddingHorizontal="16dp">
 
 
@@ -26,7 +26,7 @@
             android:id="@+id/dayRecordText"
             android:layout_width="115dp"
             android:layout_height="40dp"
-            android:layout_marginStart="76dp"
+            android:layout_marginStart="80dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:autoSizeMaxTextSize="30dp"
@@ -59,10 +59,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/line_chart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.256"
             app:layout_constraintStart_toEndOf="@+id/dayRecordText"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.631" />
 
         <TextView
             android:id="@+id/stepText"
@@ -84,34 +84,35 @@
 
         <lecho.lib.hellocharts.view.LineChartView
             android:id="@+id/line_chart"
-            android:layout_width="351dp"
-            android:layout_height="209dp"
+            android:layout_width="384dp"
+            android:layout_height="192dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="13dp"
             android:background="@drawable/chart_bk"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.916"
+            app:layout_constraintHorizontal_bias="0.961"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dayRecordText"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="288dp"
-            android:layout_height="255dp"
+            android:layout_width="274dp"
+            android:layout_height="249dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp"
             android:baselineAlignBottom="false"
             android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.035"
+            app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.429"
             app:srcCompat="@drawable/pngegg" />
 
         <Button
