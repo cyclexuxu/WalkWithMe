@@ -186,16 +186,18 @@ public class DRankingData2 {
                         newStep = (int) steps.getSteps();
                         //databaseReference1.child("Rankings").child(username).child("steps").setValue(newStep);
                     }
+//                    boolean liked = false;
+//                    if(snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").exists()){
+//                        Log.d(LOG, "liked exists");
+//                        liked = snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").getValue(Boolean.class);
+//                        Log.d(LOG, "liked exists is " + liked);
+//                    }
+//
+//                    Log.d(LOG, "liked " + liked);
 
-                    boolean liked = false;
-                    if(snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").exists()){
-                        liked = snapshot.child(LoginActivity.currentUser).child("Rankings").child(username).child("likeClicked").getValue(Boolean.class);
-                    }
-
-                    Log.d(LOG, "liked " + liked);
-
-                    ItemRank itemRank = new ItemRank(username, newStep, likes, liked);
-                    databaseReference1.child("Rankings").child(username).setValue(itemRank);
+                    //ItemRank itemRank = new ItemRank(username, newStep, likes, );
+                    databaseReference1.child("Rankings").child(username).child("steps").setValue(newStep);
+                    databaseReference1.child("Rankings").child(username).child("likesReceived").setValue(likes);
 
                 }
             }

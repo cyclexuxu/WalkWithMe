@@ -69,7 +69,7 @@ public class RankAdapter2 extends RecyclerView.Adapter {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(textClick) {
-                            viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+                            //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
                             Log.d(TAG, "Click the heart!");
                             Log.d(TAG, "Click the heart! Friend is  " + friend);
                             //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
@@ -77,7 +77,7 @@ public class RankAdapter2 extends RecyclerView.Adapter {
                             final String today = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
                             itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
                             //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
-                            //users.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
+                            users.child(itemRank.getUsername()).child("Likes").child(today).setValue(itemRank.getLikesReceived());
                             likeRef.child("likesReceived").setValue(itemRank.getLikesReceived());
                             textClick = false;
                         }
