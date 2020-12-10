@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F7D1BA"
     tools:context=".userlog.LogoutFragment">
 
     <Button
@@ -12,6 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="103dp"
+        android:backgroundTint="#E8A746"
         android:layout_marginTop="307dp"
         android:onClick="onClick"
         android:text="Yes" />
@@ -25,6 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="222dp"
         android:layout_marginTop="307dp"
+        android:backgroundTint="#1FAB89"
         android:onClick="onClick"
         android:text="No" />
 
