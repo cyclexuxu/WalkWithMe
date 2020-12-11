@@ -11,15 +11,17 @@ import android.util.Log;
 
 import neu.madcourse.walkwithme.MainActivity;
 
+//Service to check activity of app
+
 public class CheckAppRunService extends Service {
     //If user hasn't use the app for 3 days, send notification
 
     private final static String TAG = "CheckRecentPlay";
     private static Long MILLISECS_PER_DAY = 86400000L;
-    private static Long MILLISECS_PER_MIN = 60000L;
+
     private static String CHANNEL_ID = "WalkWithMe";
 
-    //private static long delay = MILLISECS_PER_MIN ;   // 30s (for testing)
+    //private static long delay = 5000L ;   // 5s (for testing)
     private static long delay = MILLISECS_PER_DAY * 3;   // 3 days
 
     @Override
@@ -30,8 +32,8 @@ public class CheckAppRunService extends Service {
         SharedPreferences settings = getSharedPreferences(MainActivity.CHANNEL, MODE_PRIVATE);
 
         // Are notifications enabled?
+        //when the app is running, notification is not enable
         if (settings.getBoolean("notification", true)) {
-            // Is it time for a notification?
             if (settings.getLong("preRun", Long.MAX_VALUE) < System.currentTimeMillis() - delay) {
                 NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
                 notificationCenter.createNotification(NofiticationConstants.THREE_DAYS_INACTIVE);

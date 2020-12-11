@@ -65,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
         if(!settings.contains("preRun")) {
             Log.d(TAG, "This is the first time to run this app");
             //enable notification
-           //editor.putLong("preRun", System.currentTimeMillis());
-            editor.putBoolean("notification", true);
+            editor.putLong("preRun", System.currentTimeMillis());
+
 
             Log.d(TAG, "Enable notification");
         }
+        editor.putBoolean("notification", false);
         editor.putLong("preRun", System.currentTimeMillis());
         editor.commit();
 
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         editor.putLong("preRun", System.currentTimeMillis());
+        editor.putBoolean("notification", true);
         editor.commit();
         Log.v(TAG, "On Stop, Starting CheckRecentRun service...");
         startService(new Intent(this,  CheckAppRunService.class));
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         editor.putLong("preRun", System.currentTimeMillis());
+        editor.putBoolean("notification", true);
         editor.commit();
         Log.v(TAG, "On destory, Starting CheckRecentRun service...");
         startService(new Intent(this,  CheckAppRunService.class));
