@@ -1,9 +1,41 @@
-# WalkWithMe
-This is a cute android app will motivate you to take more walks.
-# Authours
+Can you add a log there????
 
+
+
+# WalkWithMe
+
+Do you think walking along is too boring?
+Do you want to walk but need more motivation?
+Then Walk With Me is for you! Walk With Me is a FREE step counter app. It tracks your steps using your phone’s built-in pedometer.
+Track your steps, adopt a virtual pet, join group challenges, and accomplish together with your friends and family. Walk With Me makes it fun to keep healthy.
+
+**Adopt a Dog**
+
+-When you download the Walk With Me, choose and name your virtual dog
+ -The more steps you take, the happier your dog will be
+ -Your dog will show different reactions when you accomplish different step goals -Your dog will receive more bones when you walk more steps. That is your dog’s favorite treat
+
+\- Receive fun notifications from your dog
+
+**Friends & Family**
+
+-Easy to add your friends and family
+-Hold each other accountable
+
+**Simple**
+
+-No ads
+-No need to keep the app open while you’re walking -Clean and succinct interface
+
+**Now, let’s Walk With Me!**
 
 # Key features
+
+-Pedometer:  app tracks your daily steps using your Android's built-in pedometer. An intercative line chart will show the steps history in past 7 days
+
+-Step ranking: app allows users to add friends and families, and displays theirs steps ranking
+
+-Vitural pet
 
 
 Pet Section
@@ -21,6 +53,20 @@ Pet Section
   - Challenging: It is an upgrade game. Pet's level is allowed to upgrade if three main attributes' values are all achieved 100. The more you walk and interact with the pet, the faster your pet's level will be upgraded.
 
 # Walk through
+
+![Screen Shot 2020-12-11 at 1.24.52 PM](/Users/danyin/Desktop/Screen Shot 2020-12-11 at 1.24.52 PM.png)
+
+
+
+# Developed by
+
+Xiaoqing Hua
+
+Yu Fan
+
+Xu Yuan
+
+Dan Yin
 
 # Reference
 - Musics are credit from
