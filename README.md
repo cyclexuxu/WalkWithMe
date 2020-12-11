@@ -1,10 +1,12 @@
 
+
+
+
+# WalkWithMe - An step counter user will encourage you take more exercise
+
 <p align="center">
   <img height="185" width="185" src="screenshot/app_icon.png"/>
 </p>
-
-
-# WalkWithMe
 
 Do you think walking along is too boring?
 Do you want to walk but need more motivation?
