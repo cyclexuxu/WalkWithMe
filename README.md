@@ -68,6 +68,7 @@ Pet Section
    <img height="350" width="185" src="screenshot/ranking_page.png"/>
    <img height="350" width="185" src="screenshot/space.png"/>
   <img height="350" width="185" src="screenshot/pet_page.png"/>
+  <img height="350" width="185" src="screenshot/space.png"/>
   <img height="350" width="185" src="screenshot/profile_page.png"/>
 
 </p>
