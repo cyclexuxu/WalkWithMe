@@ -58,12 +58,15 @@ Pet Section
 
 <p align="center">
   <img height="350" width="185" src="screenshot/login_page.png"/>
+   <img height="350" width="185" src="screenshot/space.png"/>
   <img height="350" width="185" src="screenshot/Screen Shot 2020-12-11 at 1.24.52 PM.png"/>
-   <img height="350" width="185" src="screenshot/ranking_page.png"/>
+  
 </p>
 
 
 <p align="center">
+   <img height="350" width="185" src="screenshot/ranking_page.png"/>
+   <img height="350" width="185" src="screenshot/space.png"/>
   <img height="350" width="185" src="screenshot/pet_page.png"/>
   <img height="350" width="185" src="screenshot/profile_page.png"/>
 
