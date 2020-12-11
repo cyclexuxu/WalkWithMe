@@ -2,7 +2,7 @@
 
 
 
-# WalkWithMe
+# Walk With Me
 
 ## A step counter app that encourage you take more exercise
 
