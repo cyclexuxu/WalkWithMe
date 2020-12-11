@@ -52,7 +52,7 @@ import neu.madcourse.walkwithme.userlog.LoginActivity;
 import static android.content.Context.ALARM_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
-public class PetFragment extends Fragment {
+public class  PetFragment extends Fragment {
 
     AlarmManager.OnAlarmListener alarmListener = new AlarmManager.OnAlarmListener() {
         @Override
@@ -246,9 +246,10 @@ public class PetFragment extends Fragment {
                     petState = petState.timeout();
                     showCorgi();
                 } else {
-                    musicButton.setText("Stop");
+
                     try {
                         petState = petState.music();
+                        musicButton.setText("Stop");
                         alarmManager.cancel(alarmListener);
                         updateDb();
                         Random random = new Random();
