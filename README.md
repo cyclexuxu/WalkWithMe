@@ -63,6 +63,13 @@ Pet Section
 </p>
 
 
+<p align="center">
+  <img height="350" width="185" src="screenshot/pet_page.png"/>
+  <img height="350" width="185" src="screenshot/profile_page.png"/>
+
+</p>
+
+
 
 
 
