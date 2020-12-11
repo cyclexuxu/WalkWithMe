@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot user: dataSnapshot.getChildren()) {
-                    if (user.child("username").getValue().equals(userLogin)) {
+                    if (user.child("username").getValue() != null && user.child("username").getValue().equals(userLogin)) {
                         name = user.child("username").getValue(String.class);
                         weight = String.valueOf(user.child("weight").getValue(Double.class));
                         height = String.valueOf(user.child("height").getValue(Double.class));
