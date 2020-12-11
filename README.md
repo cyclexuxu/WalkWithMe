@@ -43,6 +43,11 @@ Track your steps, adopt a virtual pet, join group challenges, and accomplish tog
 - Respond to friends' steps recordings.
 - Add a new friend.
 
+## Notifications
+- Notify user when daily goal achieved.
+- Encourage user when daily goal is not achieved.
+- Notify user if the user has three days inactive status.
+
 ## Virtural pet(detail described below)
 
 
