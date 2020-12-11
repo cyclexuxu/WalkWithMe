@@ -17,8 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_walkwithme_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkWithMe">
-        <activity android:name=".rankingFra.RankFragment2"></activity>
-        <activity android:name=".ranking.RankingActivity" />
+        <activity android:name=".rankingFra.RankFragment2"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ranking.RankingActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".Pedometer.StepService3"
@@ -36,20 +38,23 @@
         <receiver android:name=".Pedometer.MeetGoalReceiver" />
         <receiver android:name=".ranking.ResetLikeButton" />
 
-        <activity android:name=".userlog.LoginActivity">
+        <activity android:name=".userlog.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotiPet.PetActivity" />
-        <activity android:name=".userlog.RegisterActivity" />
-        <activity android:name=".profile.ProfileActivity" />
+        <activity android:name=".NotiPet.PetActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".userlog.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".profile.ProfileActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
-
+            android:screenOrientation="portrait" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
