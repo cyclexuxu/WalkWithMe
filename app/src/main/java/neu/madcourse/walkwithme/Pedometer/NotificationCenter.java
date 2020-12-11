@@ -67,7 +67,8 @@ public class NotificationCenter {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(context,CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_walkwithme)
+                // .setSmallIcon(R.mipmap.ic_launcher_walkwithme)
+                .setSmallIcon(R.drawable.ic_notify)
                 .setContentTitle(notificationMessage.title)
                 .setContentText(notificationMessage.body)
                 .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), notificationMessage.imgSrc),110,110,false))
