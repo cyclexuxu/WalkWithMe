@@ -1,6 +1,6 @@
 
 
-<h1 align="center">Walk With Me</h1>
+<h1 align="left">Walk With Me</h1>
 
 ## A step counter app that encourage you take more exercise
 
