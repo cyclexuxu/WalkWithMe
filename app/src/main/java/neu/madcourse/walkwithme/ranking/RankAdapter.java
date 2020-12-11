@@ -65,15 +65,18 @@ public class RankAdapter extends RecyclerView.Adapter {
                 likeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (textClick) {
-                            viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
+                        //if (textClick) {
+                            //viewHolderClass.ibLike.setImageResource(R.drawable.ic_action_like);
                             //viewHolderClass.tvLikes.setText(String.valueOf(itemRank.getLikesReceived() + 1));
-                            itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
-                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
-                            likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
-                            itemRank.setLikeClicked(true);
-                            textClick = false;
-                        }
+                        Log.d("Click Heart", "onDataChange: " + snapshot.getValue(Boolean.class));
+                            if(snapshot.getValue(Boolean.class)) {
+                                itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
+                                likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
+                                likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
+                                itemRank.setLikeClicked(true);
+                            }
+//                            textClick = false;
+//                        }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -112,10 +115,13 @@ public class RankAdapter extends RecyclerView.Adapter {
                     if (isLikedClicked) {
                         ibLike.setImageResource(R.drawable.ic_action_like);
                         tvLikes.setText(String.valueOf(itemRank.getLikesReceived()));
+                        itemRank.setLikesReceived(itemRank.getLikesReceived() + 1);
+                        likeReference.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
+                        likeReference.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
                         // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likesReceived").setValue(itemRank.getLikesReceived());
                         // isClickedRef.child(String.valueOf(itemRank.getRankId())).child("likeClicked").setValue(true);
                     } else {
-                        ibLike.setImageResource(R.drawable.ic_action_dislike);
+                        //ibLike.setImageResource(R.drawable.ic_action_dislike);
                     }
                     // Log.d(LOG, String.valueOf(isLikedClicked) + "~~~~~~~~~~~~~~");
                 }

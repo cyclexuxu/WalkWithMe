@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
                         level = String.valueOf(newLevel);
                         if (oldLevel != newLevel) {
                             // do notification
-                            NotificationCenter notificationCenter = new NotificationCenter(getContext());
+                            NotificationCenter notificationCenter = new NotificationCenter(getActivity().getApplicationContext());
                             if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 0) {
                                 notificationCenter.createNotification(NofiticationConstants.L2);
                             } else if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 1) {

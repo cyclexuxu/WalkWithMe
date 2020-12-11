@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.Pedometer;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import neu.madcourse.walkwithme.MainActivity;

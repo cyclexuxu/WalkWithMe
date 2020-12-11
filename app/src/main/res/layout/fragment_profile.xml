@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#F7D1BA">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -20,10 +22,10 @@
             android:id="@+id/userNameProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/autour_one"
             android:text="TextView"
             android:textColor="#122c46"
             android:textSize="24sp"
+            android:fontFamily="@font/baloo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.72"
@@ -86,6 +88,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="WEIGHT"
+                android:fontFamily="@font/baloo"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -117,6 +120,7 @@
                 android:layout_width="172dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:fontFamily="@font/baloo"
                 android:text="HEIGHT"
                 android:textAlignment="center"
                 android:textSize="18sp"
@@ -146,6 +150,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="BMI"
+                android:fontFamily="@font/baloo"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textSize="18sp"
@@ -172,9 +177,9 @@
                 android:id="@+id/levelText"
                 android:layout_width="174dp"
                 android:layout_height="match_parent"
-                android:fontFamily="sans-serif-black"
                 android:gravity="center"
                 android:text="LEVEL"
+                android:fontFamily="@font/baloo"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
