@@ -54,7 +54,7 @@ Pet Section
 
 # Walk through
 
-![Screen Shot 2020-12-11 at 1.24.52 PM](/Users/danyin/Desktop/Screen Shot 2020-12-11 at 1.24.52 PM.png)
+![Screen Shot 2020-12-11 at 1.24.52 PM](/Users/danyin/Desktop/cs5520/WalkWithMe/screenshot/Screen Shot 2020-12-11 at 1.24.52 PM.png)
 
 
 
