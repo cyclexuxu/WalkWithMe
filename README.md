@@ -39,7 +39,7 @@ Track your steps, adopt a virtual pet, join group challenges, and accomplish tog
 - An intercative line chart will show the steps history in past 7 days
 
 ## Step ranking 
-- Dispaly users' steps and ranking among all the friends.
+- Display users' steps and ranking among all the friends.
 - Respond to friends' steps recordings.
 - Add a new friend.
 
