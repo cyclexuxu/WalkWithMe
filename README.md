@@ -55,7 +55,7 @@ Pet Section
 # Walk through
 
 <p align="center">
-  <img height="350" width="200" src="screenshot/Screen Shot 2020-12-11 at 1.24.52 PM.png"/>
+  <img height="350" width="185" src="screenshot/Screen Shot 2020-12-11 at 1.24.52 PM.png"/>
 </p>
 
 
