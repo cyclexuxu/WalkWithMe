@@ -36,12 +36,13 @@ Track your steps, adopt a virtual pet, join group challenges, and accomplish tog
 ## Pedometer
 
 - app tracks your daily steps using your Android's built-in pedometer.
-- An intercative line chart will show the steps history in past 7 days
+- An intercative line chart will show the steps history in past 7 days.
+- Allow user to set a daily step goal.
 
 ## Step ranking 
 - Display users' steps and ranking among all the friends.
 - Respond to friends' steps recordings.
-- Add a new friend.
+- Add new friends.
 
 ## Notifications
 - Notify user when daily goal achieved.
