@@ -35,7 +35,10 @@ Track your steps, adopt a virtual pet, join group challenges, and accomplish tog
 
 -Pedometer:  app tracks your daily steps using your Android's built-in pedometer. An intercative line chart will show the steps history in past 7 days
 
--Step ranking: app allows users to add friends and families, and displays theirs steps ranking
+-Step ranking: 
+- Dispaly users' steps and ranking among all the friends.
+- Respond to friends' steps recordings.
+- Add a new friend.
 
 -Vitural pet
 
