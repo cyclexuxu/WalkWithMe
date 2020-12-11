@@ -43,10 +43,10 @@ Track your steps, adopt a virtual pet, join group challenges, and accomplish tog
 - Respond to friends' steps recordings.
 - Add a new friend.
 
-## Vitural pet
+## Virtural pet(detail described below)
 
 
-Pet Section
+Virtual Pet
 ====
 - Three Objectives for the Pet Section in this App:
   - 1) It is designed for increasing the user engagement through interesting interaction with a virtual pet.
