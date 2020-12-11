@@ -16,12 +16,13 @@ import androidx.core.app.NotificationCompat;
 import neu.madcourse.walkwithme.MainActivity;
 import neu.madcourse.walkwithme.R;
 
+//Create notification channel and send notification
+
 public class NotificationCenter {
     //send notification
 
     private Context context;
     private static final String CHANNEL_ID = "WalkWithMe";
-    //NotificationManager manager = null;
 
     public NotificationCenter(Context context) {
         this.context = context;
@@ -33,10 +34,6 @@ public class NotificationCenter {
         Intent intent = new Intent(context , MainActivity.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
-                0 /* Request code */, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -67,7 +64,6 @@ public class NotificationCenter {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(context,CHANNEL_ID)
-                // .setSmallIcon(R.mipmap.ic_launcher_walkwithme)
                 .setSmallIcon(R.drawable.ic_notify)
                 .setContentTitle(notificationMessage.title)
                 .setContentText(notificationMessage.body)

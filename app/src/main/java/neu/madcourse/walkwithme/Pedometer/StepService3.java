@@ -37,7 +37,6 @@ public class StepService3 extends Service implements SensorEventListener {
 
     //Sensor related variables
     private SensorManager sensorManager;
-    private Sensor stepDetectorSensor;
     private Sensor accelerometer;
 
     int[] historyData = new int[6];
@@ -88,7 +87,7 @@ public class StepService3 extends Service implements SensorEventListener {
             step_ref = mdb.getReference().child("users").child(currentUser);
         }catch (Exception e){
         }
-        accessData(); //fetch all data from fb
+        accessData(); //fetch all data from firebase
     }
 
     @Override
@@ -137,7 +136,7 @@ public class StepService3 extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        //Get sensor values
+        //Convert accelerometer data to step count
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float x = event.values[0];
             float y = event.values[1];
@@ -163,10 +162,7 @@ public class StepService3 extends Service implements SensorEventListener {
                 resetSteps();
             }
 
-
-//            step_ref.child("Step Count").child(timestamp).child("steps").setValue(step);
-//            step_ref.child("Total Steps").setValue(totalStep);
-            historyData[SIX_DAY] = step;
+            historyData[SIX_DAY] = step; //update today step in line chart
 
         }
     }
@@ -177,7 +173,6 @@ public class StepService3 extends Service implements SensorEventListener {
 
     public void startForegroundService(){
         registerSensors();
-        //startTime = SystemClock.uptimeMillis() + 1000;
         NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
         startForeground(notification_id,notificationCenter.getNotification(NofiticationConstants.SERVICE_START));
         handler.postDelayed(timerRunnable,1000);
@@ -191,9 +186,8 @@ public class StepService3 extends Service implements SensorEventListener {
         NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
         startForeground(notification_id,notificationCenter.getNotification(NofiticationConstants.SERVICE_STOP));
         stopForeground(true);
-        //elapsedTime = elapsedTime + timeInMilliseconds;
         if(update)
-           updateSteps();
+           updateSteps(); //save data to firebase
     }
 
     //Runnable that calculates the elapsed time since the user presses the "start" button
@@ -203,31 +197,10 @@ public class StepService3 extends Service implements SensorEventListener {
             NotificationCenter notificationCenter = new NotificationCenter(getApplicationContext());
             //when goal is 0 , user hasn't set the goal yet, dont need to send notification
             //Meet daily goal messgae
-            if(step >= StepsFragment2.dailyGoal && !sendMessage && StepsFragment2.dailyGoal != 0){
+            if(step >= StepsFragment2.dailyGoal && !sendMessage && StepsFragment2.dailyGoal != 0) {
                 notificationCenter.createNotification(NofiticationConstants.meetGoal);
                 sendMessage = true;
             }
-
-//            if(totalStep >= 191 && currentLevel == 1){
-//                Log.d("Lv1 sent notification", currentLevel + "");
-//                //notificationCenter.createNotification(NofiticationConstants.L2);
-//                step_ref.child("level").setValue(2);
-//                currentLevel = 2;
-//            }
-//
-//            if(totalStep >= 195 && currentLevel == 2){
-//                Log.d("Lv2 sent notification", currentLevel + "");
-//                //notificationCenter.createNotification(NofiticationConstants.L3);
-//                step_ref.child("level").setValue(3);
-//                currentLevel = 3;
-//            }
-//
-//            if(totalStep >= 200 && currentLevel == 3){
-//                Log.d("Lv3 sent notification", currentLevel + "");
-//                //notificationCenter.createNotification(NofiticationConstants.L4);
-//                step_ref.child("level").setValue(4);
-//                currentLevel = 4;
-//            }
 
             handler.postDelayed(this, 1000);
         }
@@ -239,9 +212,6 @@ public class StepService3 extends Service implements SensorEventListener {
     }
 
     private void registerSensors(){
-
-        if(stepDetectorSensor != null)
-            sensorManager.registerListener(StepService3.this, stepDetectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         if(accelerometer != null)
             sensorManager.registerListener(StepService3.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
@@ -266,7 +236,6 @@ public class StepService3 extends Service implements SensorEventListener {
     }
 
     private void updateSteps(){
-
         try {
             timestamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             Steps steps = new Steps(step, timestamp);
@@ -287,31 +256,7 @@ public class StepService3 extends Service implements SensorEventListener {
         step_ref.child("Step Count").child(timestamp).setValue(steps);
     }
 
-//    private Notification getNotification(String title, String body, int id){
-//
-//        Intent resetIntent = new Intent(this,StepService3.class);
-//        resetIntent.setAction(Constants.RESET_COUNT);
-//        PendingIntent resetPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
-//
-//        Intent stopIntent = new Intent(this,StepService3.class);
-//        resetIntent.setAction(Constants.STOP_SAVE_COUNT);
-//        PendingIntent stopPendingIntent = PendingIntent.getService(this,0,resetIntent,0);
-//
-//        Intent intent = new Intent(this, MainActivity.class);
-//        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,id,intent,PendingIntent.FLAG_ONE_SHOT);
-//        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
-//                .setContentTitle(title)
-//                .setContentText(body)
-//                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.happy),97,128,false))
-//                .setSmallIcon(R.drawable.happy)
-//                .setContentIntent(resultPendingIntent)
-//                .setOngoing(true)
-//                .setAutoCancel(true)
-//                .build();
-//
-//        return notification;
-//    }
-//
+
     private void createNotificationChannel() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(

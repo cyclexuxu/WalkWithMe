@@ -14,10 +14,10 @@ public class GetHistory {
         return new Date(d.getYear(),d.getMonth(),d.getDate());
     }
 
-    public static Date add(Date d, int n)
+    public static Date add(Date day, int n)
     {
         Calendar calendar= Calendar.getInstance();
-        calendar.setTime(d);
+        calendar.setTime(day);
         calendar.add(Calendar.DAY_OF_MONTH,n);
         return calendar.getTime();
     }

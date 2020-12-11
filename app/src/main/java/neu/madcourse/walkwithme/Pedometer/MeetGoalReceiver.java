@@ -19,27 +19,25 @@ import java.util.Calendar;
 
 import neu.madcourse.walkwithme.userlog.LoginActivity;
 
+//BroadcastReceiver to check the goal and steps at 5pm
+
 public class MeetGoalReceiver extends BroadcastReceiver {
-    private static String CHANNEL_ID = "WalkWithMe";
     private static String TAG = "Notification Recever";
+    private final int STEP_THRESHOLD = 300;
     private FirebaseDatabase mdb;
     private DatabaseReference step_ref;
     private int step;
-    private SharedPreferences settings;
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: ");
         mdb = FirebaseDatabase.getInstance();
-        settings = context.getSharedPreferences("WalkWithMe", Context.MODE_PRIVATE);
-        //int goal = Integer.parseInt(settings.getString("dailyGoal", null));
-        //Log.d(TAG, "goal: " + goal);
 
         try{
             step_ref = mdb.getReference().child("users").child(LoginActivity.currentUser);
         }catch (Exception e){
         }
-        //get steps to check whether need to send notification
         getStep(context);
 
     }
@@ -50,19 +48,18 @@ public class MeetGoalReceiver extends BroadcastReceiver {
 
         Log.d(TAG,"access firebase data: " + timestamp);
         try{
-            step_ref.addValueEventListener(new ValueEventListener() {
+            step_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.child("Step Count").child(timestamp).exists()) {
                         Steps steps = dataSnapshot.child("Step Count").child(timestamp).getValue(Steps.class);
                         step = (int) steps.getSteps(); //get previous steps
-                        Log.d(TAG,"exist");
                     } else {
-                        step = 0;
+                        step = 0;// step is set to 0
                     }
                     Log.d(TAG,"Step: " + step);
                     Log.d(TAG,"Goal: " + StepsFragment2.dailyGoal);
-                    if(StepsFragment2.dailyGoal > step && StepsFragment2.dailyGoal - step <= 300){
+                    if(StepsFragment2.dailyGoal > step && StepsFragment2.dailyGoal - step <= STEP_THRESHOLD){
                         //close to goal
                         Log.d(TAG, "onDataChange: diff is less than 300");
                         notificationCenter.createNotification(NofiticationConstants.b1elowGoal);
@@ -70,9 +67,7 @@ public class MeetGoalReceiver extends BroadcastReceiver {
                         Log.d(TAG, "onDataChange: diff is more than 300");
                         notificationCenter.createNotification(NofiticationConstants.b1elowGoal2);
                     }
-
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }

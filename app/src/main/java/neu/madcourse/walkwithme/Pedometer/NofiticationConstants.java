@@ -3,6 +3,8 @@ package neu.madcourse.walkwithme.Pedometer;
 
 import neu.madcourse.walkwithme.R;
 
+//Notification msgs center
+
 public class NofiticationConstants{
     //id 1 = service
     //id 2 = level change

@@ -57,29 +57,19 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
     //Activity Views
     private TextView dayRecordText;
     private TextView stepText;
-    private TextView notices ;
     private Button startButton;
     LineChartView lineChart;
     private Handler handler = new Handler();
 
-    private SharedPreferences settings;
-    SharedPreferences.Editor editor;
     private int goal;
 
-    private FirebaseDatabase mdb;
-    private DatabaseReference step_ref;
-
     private StepService3 service = null;
-    private final String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
     private boolean isBound ;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        settings = getActivity().getSharedPreferences("WalkWithMe", Context.MODE_PRIVATE);
-        editor = settings.edit();
-        mdb = FirebaseDatabase.getInstance();
         setRetainInstance(true);
     }
 
@@ -119,7 +109,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
                     } else {
                         startButton.setText("Start Now");
                         service.stopForegroundService(true);
-                        checkSensors();
+                        //checkSensors();
                     }
                 }
             });
@@ -209,7 +199,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         }
     };
 
-    //set goal dialog, use numberpick
+    //set goal dialog, use number pick
     public void showDialog()
     {
         final Dialog d = new Dialog(getActivity());
@@ -275,7 +265,7 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
         }
 
 
-        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFFAFA"));  //折线的颜色（橙色）
+        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFFAFA"));
         List<Line> lines = new ArrayList<>();
         line.setShape(ValueShape.CIRCLE); //shape of points
         line.setFilled(true);//shadow area under lines
