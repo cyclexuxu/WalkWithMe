@@ -1,5 +1,8 @@
 Can you add a log there????
 
+<p align="center">
+  <img height="185" width="185" src="screenshot/app_icon.png"/>
+</p>
 
 
 # WalkWithMe
