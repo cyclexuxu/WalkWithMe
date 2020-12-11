@@ -1,5 +1,6 @@
 package neu.madcourse.walkwithme.profile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +36,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase mdb;
     private DatabaseReference mDatabase;
     private static final String TAG = "Profile page";
+    private Context context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,12 +80,15 @@ public class ProfileFragment extends Fragment {
                         if(user.hasChild("Total Steps")) {
                             steps = user.child("Total Steps").getValue(Integer.class);
                         }
+                        Log.i(TAG, "Total Steps: " + steps);
                         int oldLevel = user.child("level").getValue(Integer.class);
                         int newLevel = processSteps(steps);
                         level = String.valueOf(newLevel);
+                        Log.i(TAG, "oldLevel: " + oldLevel);
+                        Log.i(TAG, "newLevel: " + level);
                         if (oldLevel != newLevel) {
                             // do notification
-                            NotificationCenter notificationCenter = new NotificationCenter(getActivity().getApplicationContext());
+                            NotificationCenter notificationCenter = new NotificationCenter(context);
                             if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 0) {
                                 notificationCenter.createNotification(NofiticationConstants.L2);
                             } else if (steps > 2000 && ((steps - 2000 ) / 3500) % 4 == 1) {
@@ -122,5 +127,12 @@ public class ProfileFragment extends Fragment {
             int n = 2;
             return n + steps / 3500;
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        context=activity;
     }
 }
