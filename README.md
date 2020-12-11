@@ -2,7 +2,9 @@
 
 
 
-# WalkWithMe - An step counter user will encourage you take more exercise
+# WalkWithMe
+
+## A step counter app that encourage you take more exercise
 
 <p align="center">
   <img height="185" width="185" src="screenshot/app_icon.png"/>
