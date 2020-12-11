@@ -1,11 +1,13 @@
 package neu.madcourse.walkwithme.Pedometer;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -324,7 +326,4 @@ public class StepsFragment2 extends Fragment implements NumberPicker.OnValueChan
             }
         }
     }
-
-
-
 }
