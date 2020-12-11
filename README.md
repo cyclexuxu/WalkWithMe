@@ -1,8 +1,6 @@
 
 
-
-
-# Walk With Me
+<h1 align="center">Walk With Me</h1>
 
 ## A step counter app that encourage you take more exercise
 
