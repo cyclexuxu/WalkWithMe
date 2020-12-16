@@ -63,7 +63,6 @@
             android:id="@+id/stepText"
             android:layout_width="180dp"
             android:layout_height="110dp"
-            android:layout_below="@+id/stepLabel"
             android:layout_alignParentStart="true"
             android:gravity="center"
             android:textAlignment="center"
